@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -79,7 +78,7 @@ const UeberMich = () => {
                 <div className="bg-white p-8 rounded-lg shadow-md">
                   <div className="flex items-center mb-4">
                     <div className="bg-rueckenwind-light-purple p-3 rounded-full mr-4">
-                      <BriefCase className="h-6 w-6 text-rueckenwind-purple" />
+                      <Briefcase className="h-6 w-6 text-rueckenwind-purple" />
                     </div>
                     <h3 className="text-2xl font-display font-medium text-rueckenwind-purple">Wachsen durch Verantwortung</h3>
                   </div>
