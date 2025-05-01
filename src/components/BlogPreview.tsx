@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Facebook, Instagram, Twitter } from 'lucide-react';
+import { Facebook, Twitter } from 'lucide-react';
 
 interface BlogPost {
   id: number;
