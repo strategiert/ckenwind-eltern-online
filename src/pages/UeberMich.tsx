@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CTASection from '@/components/CTASection';
 import { Link } from 'react-router-dom';
+import { Book, BriefCase, GraduationCap, Heart, Users } from 'lucide-react';
 
 const UeberMich = () => {
   return (
@@ -35,47 +36,98 @@ const UeberMich = () => {
           </div>
         </section>
 
-        {/* Professional Background */}
+        {/* Professional Journey - Storytelling Format */}
         <section className="py-16 md:py-20">
           <div className="container-custom">
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-3xl md:text-4xl font-display font-semibold mb-8 text-center">Mein beruflicher Werdegang</h2>
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-display font-semibold mb-8 text-center">Meine Geschichte</h2>
               
-              <div className="space-y-8">
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                  <h3 className="text-xl font-display font-medium text-rueckenwind-purple mb-2">Ausbildung</h3>
-                  <ul className="list-disc pl-5 space-y-2 text-gray-700">
-                    <li>Kinder- und Jugendpsychotherapie - DGVT Hannover</li>
-                    <li>Master of Social Work (MSW) - HAWK Hochschule für angewandte Wissenschaft und Kunst Hildesheim/Holzminden/Göttingen</li>
-                    <li>Bachelor of Applied Science (BASc), Soziale Arbeit - HAWK Hochschule für angewandte Wissenschaft und Kunst Hildesheim/Holzminden/Göttingen</li>
-                  </ul>
-                </div>
-
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                  <h3 className="text-xl font-display font-medium text-rueckenwind-purple mb-2">Berufserfahrung</h3>
-                  <ul className="list-disc pl-5 space-y-2 text-gray-700">
-                    <li>Kinder- und Jugendlichenpsychotherapeutin - Kinderkrankenhaus Auf Der Bult (2021-heute)</li>
-                    <li>Teamleiter - Stadt Hannover, Teamleitung Jugendhilfe SPFH (2016-2021)</li>
-                    <li>Bereichsleiter - DRK Soziale Dienste Hannover, Flüchtlingshilfe Heimleitung (2014-2016)</li>
-                    <li>Schulsozialpädagogin - Grundschule Fridtjof-Nansen-Schule (2013-2014)</li>
-                  </ul>
+              <div className="prose prose-lg max-w-none text-gray-700 space-y-8">
+                <div className="bg-white p-8 rounded-lg shadow-md">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-rueckenwind-light-purple p-3 rounded-full mr-4">
+                      <Heart className="h-6 w-6 text-rueckenwind-purple" />
+                    </div>
+                    <h3 className="text-2xl font-display font-medium text-rueckenwind-purple">Der Beginn meiner Reise</h3>
+                  </div>
+                  <p className="mb-4">
+                    Meine Leidenschaft für die Arbeit mit Kindern begann früh. Als Kindergärtnerin erlebte ich die wundervolle Welt der kindlichen Entwicklung – und entdeckte dabei auch meine eigene Berufung. Ich spürte, dass ich mehr tun wollte, tiefer verstehen, wirkungsvoller helfen. Diese Neugier und der Wunsch zu verstehen führten mich auf einen Bildungsweg, der nie wirklich endete.
+                  </p>
+                  <p>
+                    Was mich antreibt? Die tiefe Überzeugung, dass jedes Kind und jede Familie es verdient, verstanden und unterstützt zu werden. Als Mutter von drei wundervollen Kindern – darunter ein Kind mit ADHS – und als jemand, der selbst mit ADHS lebt, kenne ich die Herausforderungen aus erster Hand. Diese persönliche Erfahrung gibt mir eine Perspektive, die über das Theoretische hinausgeht – sie ist gelebt, gefühlt und durchgestanden.
+                  </p>
                 </div>
                 
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                  <h3 className="text-xl font-display font-medium text-rueckenwind-purple mb-2">Ehrenamtliches Engagement</h3>
-                  <ul className="list-disc pl-5 space-y-2 text-gray-700">
-                    <li>Trauer- und Sterbebegleiterin - Hospizdienst Hannover</li>
-                    <li>Sozialarbeiter - Intiwawa</li>
-                  </ul>
+                <div className="bg-white p-8 rounded-lg shadow-md">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-rueckenwind-light-purple p-3 rounded-full mr-4">
+                      <Users className="h-6 w-6 text-rueckenwind-purple" />
+                    </div>
+                    <h3 className="text-2xl font-display font-medium text-rueckenwind-purple">In den stürmischen Jahren</h3>
+                  </div>
+                  <p className="mb-4">
+                    Als Schulsozialpädagogin an der Fridtjof-Nansen-Schule lernte ich, dass das Klassenzimmer oft nur ein kleiner Teil der Geschichte eines Kindes ist. Ich sah, wie familiäre Strukturen, gesellschaftliche Umstände und persönliche Krisen das Leben und Lernen beeinflussen können.
+                  </p>
+                  <p className="mb-4">
+                    Dann kam 2014 – eine Zeit, die mich tief prägte. Als die Flüchtlingskrise Deutschland erreichte, wurde ich ins kalte Wasser geworfen. Beim DRK Soziale Dienste Hannover baute ich Flüchtlingsheime auf und koordinierte Hilfsangebote für unzählige Familien, die alles verloren hatten. Ich sah Verzweiflung und Hoffnung, Trauma und unglaubliche Resilienz – oft in denselben Augen.
+                  </p>
+                  <p>
+                    Die Arbeit war intensiv, fordernd, manchmal überwältigend – und doch unendlich erfüllend. Mit jeder Familie, der wir helfen konnten, mit jedem Kind, das in der neuen Umgebung langsam wieder lächeln konnte, wuchs meine Überzeugung: In der größten Not liegt oft auch die größte Kraft zur Veränderung.
+                  </p>
                 </div>
-
-                <div className="bg-white p-6 rounded-lg shadow-md">
-                  <h3 className="text-xl font-display font-medium text-rueckenwind-purple mb-2">Publikationen</h3>
-                  <ul className="list-disc pl-5 space-y-2 text-gray-700">
-                    <li>"Wege aus dem elterlichen Burnout. Ausgebrannt durch den Familienalltag." (2025, ISBN beantragt)</li>
-                    <li>"Wenn ein Kind stirbt. Der Trauerprozess der Familie und die Begleitung" (2014, ISBN 9783656848387)</li>
-                    <li>"Die multikulturelle Gesellschaft. Ein funktionierendes gesellschaftliches Gesamtkonzept?" (2013, ISBN 9783656451006)</li>
-                  </ul>
+                
+                <div className="bg-white p-8 rounded-lg shadow-md">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-rueckenwind-light-purple p-3 rounded-full mr-4">
+                      <BriefCase className="h-6 w-6 text-rueckenwind-purple" />
+                    </div>
+                    <h3 className="text-2xl font-display font-medium text-rueckenwind-purple">Wachsen durch Verantwortung</h3>
+                  </div>
+                  <p className="mb-4">
+                    Meine Leidenschaft und mein Einsatz führten dazu, dass mir immer mehr Verantwortung übertragen wurde. Als Bereichsleiterin beim DRK und später als Teamleiterin bei der Stadt Hannover im Bereich Jugendhilfe durfte ich ein Team von Fachkräften führen, die täglich für Familien in Krisen kämpften.
+                  </p>
+                  <p className="mb-4">
+                    Diese Jahre lehrten mich, dass echte Hilfe Zeit braucht, Geduld erfordert und manchmal auch bedeutet, schwierige Entscheidungen zu treffen. Ich lernte, dass Systeme und Strukturen wichtig sind – aber dass es letztendlich die menschlichen Verbindungen sind, die den Unterschied machen.
+                  </p>
+                  <p>
+                    In jeder Familie, mit der ich arbeitete, sah ich nicht nur Probleme, sondern auch Potenzial; nicht nur Krisen, sondern auch Chancen für Wachstum. Diese Perspektive prägt bis heute meine Arbeit und meine Philosophie.
+                  </p>
+                </div>
+                
+                <div className="bg-white p-8 rounded-lg shadow-md">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-rueckenwind-light-purple p-3 rounded-full mr-4">
+                      <GraduationCap className="h-6 w-6 text-rueckenwind-purple" />
+                    </div>
+                    <h3 className="text-2xl font-display font-medium text-rueckenwind-purple">Der Weg zur Therapeutin</h3>
+                  </div>
+                  <p className="mb-4">
+                    Parallel zu meiner beruflichen Entwicklung habe ich nie aufgehört zu lernen. Mit einem Bachelor und einem Master in Sozialer Arbeit von der HAWK Hochschule legte ich akademische Grundlagen für meine Praxis. Doch ich spürte, dass ich noch tiefer gehen wollte, noch gezielter helfen.
+                  </p>
+                  <p className="mb-4">
+                    So begann ich 2021 meine Ausbildung zur Kinder- und Jugendlichenpsychotherapeutin am DGVT Hannover – ein Schritt, der mich mit neuen Perspektiven und Werkzeugen ausstattet. Als Psychotherapeutin in Ausbildung am Kinderkrankenhaus Auf Der Bult arbeite ich heute mit Kindern und Jugendlichen, die mit psychischen Herausforderungen kämpfen.
+                  </p>
+                  <p>
+                    Diese therapeutische Ausbildung erlaubt mir, die emotionalen und psychologischen Dimensionen der Familienarbeit noch tiefer zu verstehen – und sie mit meiner langjährigen praktischen Erfahrung zu verbinden.
+                  </p>
+                </div>
+                
+                <div className="bg-white p-8 rounded-lg shadow-md">
+                  <div className="flex items-center mb-4">
+                    <div className="bg-rueckenwind-light-purple p-3 rounded-full mr-4">
+                      <Book className="h-6 w-6 text-rueckenwind-purple" />
+                    </div>
+                    <h3 className="text-2xl font-display font-medium text-rueckenwind-purple">Mein Wissen teilen</h3>
+                  </div>
+                  <p className="mb-4">
+                    Die Erfahrungen und Erkenntnisse meines beruflichen Weges finden auch in meinen Publikationen Ausdruck. In "Wenn ein Kind stirbt" (2014) setzte ich mich mit einem der schwersten Themen auseinander, das eine Familie treffen kann. "Die multikulturelle Gesellschaft" (2013) reflektiert meine Erfahrungen mit Menschen aus verschiedenen kulturellen Hintergründen.
+                  </p>
+                  <p className="mb-4">
+                    Mein aktuelles Projekt "Wege aus dem elterlichen Burnout" (2025) ist eine Herzensangelegenheit – es verbindet meine berufliche Expertise mit persönlichen Erfahrungen als Mutter. Darin teile ich Erkenntnisse und praktische Strategien für Eltern, die sich ausgebrannt fühlen und einen Weg zurück zu mehr Lebensfreude suchen.
+                  </p>
+                  <p>
+                    Als Trauer- und Sterbebegleiterin beim Hospizdienst Hannover und durch mein soziales Engagement bei Intiwawa habe ich gelernt, dass in den dunkelsten Stunden manchmal das hellste Licht zu finden ist – eine Erkenntnis, die ich in all meiner Arbeit weitergebe.
+                  </p>
                 </div>
               </div>
             </div>
@@ -87,15 +139,15 @@ const UeberMich = () => {
           <div className="container-custom">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="order-2 lg:order-1">
-                <h2 className="text-3xl md:text-4xl font-display font-semibold mb-6">Meine persönliche Geschichte</h2>
+                <h2 className="text-3xl md:text-4xl font-display font-semibold mb-6">Mutter mit Leidenschaft</h2>
                 <p className="text-gray-700 mb-4">
-                  Als Mutter von drei wundervollen Kindern – darunter ein Kind mit ADHS – kenne ich die Höhen und Tiefen des Familienlebens aus erster Hand. Ich habe selbst erlebt, wie es ist, wenn die Erschöpfung überhandnimmt und man das Gefühl hat, nicht mehr weiterzuwissen.
+                  Mein größtes und wichtigstes Projekt ist meine eigene Familie. Als Ehefrau und Mutter von drei wundervollen Kindern lebe ich täglich die Herausforderungen und Freuden, über die ich in meiner beruflichen Arbeit spreche.
                 </p>
                 <p className="text-gray-700 mb-4">
-                  Diese persönlichen Erfahrungen haben mich dazu inspiriert, Rückenwind Eltern zu gründen – eine Plattform, die Eltern genau die Unterstützung bietet, die ich mir damals gewünscht hätte.
+                  Mit ADHS – sowohl bei mir selbst als auch bei einem meiner Kinder – kenne ich die täglichen Höhen und Tiefen einer neurodivers geprägten Familienrealität. Ich weiß, wie es sich anfühlt, wenn der Tag zu wenige Stunden hat, wenn die Erschöpfung überhandnimmt und wenn gut gemeinte Ratschläge von außen mehr frustrieren als helfen.
                 </p>
                 <p className="text-gray-700">
-                  Ich bin überzeugt: Wir Eltern brauchen keine perfekten Lösungen, sondern praktikable Wege, um den Alltag mit unseren Kindern liebevoll und gesund zu gestalten, auch wenn es manchmal stürmisch wird.
+                  Diese persönliche Verbindung zum Thema macht Rückenwind Eltern zu mehr als einem beruflichen Projekt – es ist meine Mission, mein Beitrag für all die Eltern da draußen, die sich manchmal fragen, ob sie genug tun, ob sie gut genug sind. Meine Antwort: Ja, das seid ihr. Und gemeinsam können wir Wege finden, damit ihr das auch spüren könnt.
                 </p>
               </div>
               <div className="order-1 lg:order-2 relative">
