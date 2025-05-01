@@ -103,4 +103,61 @@
   .section-subtitle {
     @apply text-xl md:text-2xl font-display mb-12 text-center text-muted-foreground;
   }
+
+  /* Blog styling */
+  .prose {
+    @apply max-w-none;
+  }
+  
+  .prose h2 {
+    @apply text-2xl md:text-3xl font-display font-semibold mt-12 mb-6 text-gray-900;
+  }
+  
+  .prose h3 {
+    @apply text-xl md:text-2xl font-display font-medium mt-8 mb-4 text-gray-800;
+  }
+  
+  .prose p {
+    @apply mb-6 text-gray-700 leading-relaxed;
+  }
+  
+  .prose ul, .prose ol {
+    @apply mb-6 pl-6;
+  }
+  
+  .prose ul {
+    @apply list-disc;
+  }
+  
+  .prose ol {
+    @apply list-decimal;
+  }
+  
+  .prose li {
+    @apply mb-2;
+  }
+  
+  .prose blockquote {
+    @apply border-l-4 border-rueckenwind-purple pl-4 italic my-8 text-gray-600;
+  }
+  
+  .prose table {
+    @apply w-full border-collapse my-8;
+  }
+  
+  .prose table th {
+    @apply bg-rueckenwind-soft-gray border-b border-gray-300 p-3 text-left font-semibold text-gray-800;
+  }
+  
+  .prose table td {
+    @apply border-b border-gray-200 p-3;
+  }
+  
+  .prose a {
+    @apply text-rueckenwind-purple hover:text-rueckenwind-dark-purple hover:underline;
+  }
+  
+  .prose strong {
+    @apply font-semibold;
+  }
 }

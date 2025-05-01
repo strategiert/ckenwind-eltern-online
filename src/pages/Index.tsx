@@ -9,38 +9,20 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
+import { Helmet } from 'react-helmet-async';
+import { blogPostsListing } from '@/data/blogPosts';
 
 const Index = () => {
-  // Mock blog posts data
-  const blogPosts = [
-    {
-      id: 1,
-      title: "7 Anzeichen für elterliches Burnout und was Sie dagegen tun können",
-      excerpt: "Erfahren Sie, wie Sie die ersten Warnzeichen erkennen und gezielt gegensteuern können.",
-      date: "15. April 2023",
-      imageUrl: "https://images.unsplash.com/photo-1626557981101-aae6f84aa6ff?q=80&w=1964",
-      slug: "anzeichen-elterliches-burnout"
-    },
-    {
-      id: 2,
-      title: "Wie Sie ADHS bei Kindern positiv begleiten können",
-      excerpt: "Praktische Strategien für den Alltag mit ADHS-Kindern, die wirklich funktionieren.",
-      date: "02. März 2023",
-      imageUrl: "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?q=80&w=1972",
-      slug: "adhs-bei-kindern-begleiten"
-    },
-    {
-      id: 3,
-      title: "Essstörungen frühzeitig erkennen: Ein Leitfaden für Eltern",
-      excerpt: "Was Sie als Eltern über die Anzeichen und Prävention von Essstörungen wissen sollten.",
-      date: "18. Februar 2023",
-      imageUrl: "https://images.unsplash.com/photo-1493770348161-369560ae357d?q=80&w=2070",
-      slug: "essstoerungen-fruehzeitig-erkennen"
-    }
-  ];
+  // Get the first 3 blog posts for the homepage
+  const recentBlogPosts = blogPostsListing.slice(0, 3);
 
   return (
     <>
+      <Helmet>
+        <title>Rückenwind Eltern | Unterstützung für Ihren Familienalltag</title>
+        <meta name="description" content="Wissenschaftlich fundierte und empathische Unterstützung für Eltern bei Burnout, ADHS und Essstörungen. Entdecken Sie Strategien für mehr Leichtigkeit im Familienalltag." />
+        <meta name="keywords" content="Eltern-Burnout, ADHS, Essstörungen, Familienunterstützung, Erziehung" />
+      </Helmet>
       <Navbar />
       <main>
         <HeroSection />
@@ -215,7 +197,7 @@ const Index = () => {
             <p className="section-subtitle">Tipps und Erkenntnisse für Ihren Familienalltag</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-              {blogPosts.map(post => (
+              {recentBlogPosts.map(post => (
                 <BlogPreview key={post.id} post={post} />
               ))}
             </div>
