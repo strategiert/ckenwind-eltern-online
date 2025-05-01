@@ -1,3 +1,4 @@
+
 import React from 'react';
 import HeroSection from '@/components/HeroSection';
 import FeatureCard from '@/components/FeatureCard';
@@ -10,10 +11,13 @@ import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Helmet } from 'react-helmet-async';
 import { blogPostsListing } from '@/data/blogPosts';
+
 const Index = () => {
   // Get the first 3 blog posts for the homepage
   const recentBlogPosts = blogPostsListing.slice(0, 3);
-  return <>
+
+  return (
+    <>
       <Helmet>
         <title>Rückenwind Eltern | Unterstützung für Ihren Familienalltag</title>
         <meta name="description" content="Wissenschaftlich fundierte und empathische Unterstützung für Eltern bei Burnout, ADHS und Essstörungen. Entdecken Sie Strategien für mehr Leichtigkeit im Familienalltag." />
@@ -129,7 +133,14 @@ const Index = () => {
         </section>
         
         {/* E-Book CTA */}
-        <CTASection title="Ihr erster Schritt: Gratis E-Book" description="Holen Sie sich jetzt mein E-Book 'Wege aus dem elterlichen Burnout' und entdecken Sie sofort anwendbare Strategien für mehr Energie und Gelassenheit." buttonText="Gratis E-Book sichern" buttonLink="/gratis-buch" imageUrl="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1974" bgColor="bg-rueckenwind-light-purple" />
+        <CTASection 
+          title="Ihr erster Schritt: Gratis E-Book" 
+          description="Holen Sie sich jetzt mein E-Book 'Wege aus dem elterlichen Burnout' und entdecken Sie sofort anwendbare Strategien für mehr Energie und Gelassenheit." 
+          buttonText="Gratis E-Book sichern" 
+          buttonLink="/gratis-buch" 
+          imageUrl="/lovable-uploads/7d2ad28c-b24a-4328-9709-ff66596391f2.png"
+          bgColor="bg-rueckenwind-light-purple" 
+        />
         
         {/* Testimonials */}
         <section className="py-16 md:py-24">
@@ -167,6 +178,8 @@ const Index = () => {
         <CTASection title="Immer dabei: Die Rückenwind App" description="Laden Sie sich unsere App herunter und haben Sie praktische Tools, Übungen und Ihre persönlichen Ressourcen immer griffbereit." buttonText="App entdecken" buttonLink="#" bgColor="bg-white" />
       </main>
       <Footer />
-    </>;
+    </>
+  );
 };
+
 export default Index;

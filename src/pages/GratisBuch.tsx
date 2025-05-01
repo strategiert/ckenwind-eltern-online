@@ -106,7 +106,7 @@ const GratisBuch = () => {
                 <div className="absolute -top-6 -left-6 w-32 h-32 rounded-full bg-rueckenwind-soft-blue opacity-60 z-0"></div>
                 <div className="relative z-10 shadow-xl">
                   <img 
-                    src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1974" 
+                    src="/lovable-uploads/7d2ad28c-b24a-4328-9709-ff66596391f2.png" 
                     alt="E-Book Cover: Wege aus dem elterlichen Burnout" 
                     className="w-full h-auto rounded-lg"
                   />
