@@ -20,12 +20,29 @@ interface BlogPreviewProps {
 const BlogPreview: React.FC<BlogPreviewProps> = ({
   post
 }) => {
+  // Wir verwenden ein standardmäßiges Burnout-Bild, falls kein spezifisches Bild vorhanden ist
+  const getImageUrl = () => {
+    if (post.imageUrl && post.imageUrl.trim() !== '') {
+      return post.imageUrl;
+    }
+    // Fallback zu einem Burnout/belastete Familie Bild
+    return "https://images.unsplash.com/photo-1541199249251-f713e6145474?q=80&w=1974&auto=format&fit=crop";
+  };
+
   const shareUrl = `${window.location.origin}/blog/${post.slug}`;
 
   return (
     <Card className="h-full overflow-hidden hover:shadow-lg transition-shadow duration-300">
       <div className="h-48 overflow-hidden">
-        <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover transition-transform duration-300 hover:scale-105" />
+        <img 
+          src={getImageUrl()} 
+          alt={post.title} 
+          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+          onError={(e) => {
+            // Fallback wenn das Bild nicht geladen werden kann
+            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1604134967494-8a9ed3adea0d?q=80&w=1974&auto=format&fit=crop";
+          }}
+        />
       </div>
       <CardHeader className="pb-2">
         <CardTitle className="text-xl font-display">
