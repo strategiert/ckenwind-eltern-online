@@ -12,6 +12,7 @@ import BlogPost from "./pages/BlogPost";
 import GratisBuch from "./pages/GratisBuch";
 import Kontakt from "./pages/Kontakt";
 import NotFound from "./pages/NotFound";
+import Impressum from "./pages/Impressum";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/gratis-buch" element={<GratisBuch />} />
             <Route path="/kontakt" element={<Kontakt />} />
+            <Route path="/impressum" element={<Impressum />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
