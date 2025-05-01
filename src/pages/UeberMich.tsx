@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CTASection from '@/components/CTASection';
 import { Link } from 'react-router-dom';
-import { Book, BriefCase, GraduationCap, Heart, Users } from 'lucide-react';
+import { Book, Briefcase, GraduationCap, Heart, Users } from 'lucide-react';
 
 const UeberMich = () => {
   return (
