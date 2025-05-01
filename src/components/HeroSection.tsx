@@ -1,11 +1,8 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-
 const HeroSection: React.FC = () => {
-  return (
-    <section className="bg-gradient-to-b from-rueckenwind-light-purple to-white py-16 md:py-24">
+  return <section className="bg-gradient-to-b from-rueckenwind-light-purple to-white py-16 md:py-24">
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="animate-fade-in">
@@ -28,18 +25,12 @@ const HeroSection: React.FC = () => {
           <div className="relative animate-fade-in">
             <div className="absolute -top-6 -left-6 w-32 h-32 rounded-full bg-rueckenwind-soft-blue opacity-60 z-0"></div>
             <div className="relative z-10 rounded-2xl overflow-hidden shadow-xl">
-              <img 
-                src="https://images.unsplash.com/photo-1532622785990-d2c36a76f5a6?q=80&w=2070" 
-                alt="Janike Arent, Expertin für Eltern-Coaching" 
-                className="w-full h-auto object-cover"
-              />
+              <img alt="Janike Arent, Expertin für Eltern-Coaching" className="w-full h-auto object-cover" src="/lovable-uploads/f3fff60c-fae4-4bdd-ad95-3651cef45cb0.png" />
             </div>
             <div className="absolute -bottom-6 -right-6 w-40 h-40 rounded-full bg-rueckenwind-light-purple opacity-60 z-0"></div>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;

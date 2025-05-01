@@ -1,4 +1,3 @@
-
 import React from 'react';
 import HeroSection from '@/components/HeroSection';
 import FeatureCard from '@/components/FeatureCard';
@@ -11,13 +10,10 @@ import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Helmet } from 'react-helmet-async';
 import { blogPostsListing } from '@/data/blogPosts';
-
 const Index = () => {
   // Get the first 3 blog posts for the homepage
   const recentBlogPosts = blogPostsListing.slice(0, 3);
-
-  return (
-    <>
+  return <>
       <Helmet>
         <title>Rückenwind Eltern | Unterstützung für Ihren Familienalltag</title>
         <meta name="description" content="Wissenschaftlich fundierte und empathische Unterstützung für Eltern bei Burnout, ADHS und Essstörungen. Entdecken Sie Strategien für mehr Leichtigkeit im Familienalltag." />
@@ -34,33 +30,15 @@ const Index = () => {
             <p className="section-subtitle">Ihre digitale Unterstützung für mehr Leichtigkeit im Familienalltag</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-              <FeatureCard
-                title="Eltern-Burnout"
-                description="Gezielte Unterstützung für erschöpfte Eltern: Entdecken Sie Wege aus dem Burnout und zurück zu mehr Energie und Lebensfreude."
-                icon={
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <FeatureCard title="Eltern-Burnout" description="Gezielte Unterstützung für erschöpfte Eltern: Entdecken Sie Wege aus dem Burnout und zurück zu mehr Energie und Lebensfreude." icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                }
-              />
-              <FeatureCard
-                title="ADHS bei Kindern"
-                description="Verstehen Sie ADHS besser und lernen Sie praktische Strategien, die Ihrem Kind helfen, sein volles Potenzial zu entfalten."
-                icon={
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  </svg>} />
+              <FeatureCard title="ADHS bei Kindern" description="Verstehen Sie ADHS besser und lernen Sie praktische Strategien, die Ihrem Kind helfen, sein volles Potenzial zu entfalten." icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                }
-              />
-              <FeatureCard
-                title="Essstörungen"
-                description="Früherkennung, Prävention und Begleitung: Erfahren Sie, wie Sie als Eltern bei Essstörungen richtig handeln können."
-                icon={
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  </svg>} />
+              <FeatureCard title="Essstörungen" description="Früherkennung, Prävention und Begleitung: Erfahren Sie, wie Sie als Eltern bei Essstörungen richtig handeln können." icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
-                }
-              />
+                  </svg>} />
             </div>
           </div>
         </section>
@@ -72,11 +50,7 @@ const Index = () => {
               <div>
                 <div className="relative">
                   <div className="absolute -top-4 -left-4 w-24 h-24 rounded-full bg-rueckenwind-light-purple opacity-70 z-0"></div>
-                  <img 
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2787" 
-                    alt="Janike Arent" 
-                    className="relative z-10 rounded-lg shadow-lg max-w-md mx-auto"
-                  />
+                  <img alt="Janike Arent" className="relative z-10 rounded-lg shadow-lg max-w-md mx-auto" src="/lovable-uploads/5a353323-d780-4159-976a-7e93624fb784.png" />
                   <div className="absolute -bottom-4 -right-4 w-32 h-32 rounded-full bg-rueckenwind-soft-blue opacity-60 z-0"></div>
                 </div>
               </div>
@@ -155,14 +129,7 @@ const Index = () => {
         </section>
         
         {/* E-Book CTA */}
-        <CTASection
-          title="Ihr erster Schritt: Gratis E-Book"
-          description="Holen Sie sich jetzt mein E-Book 'Wege aus dem elterlichen Burnout' und entdecken Sie sofort anwendbare Strategien für mehr Energie und Gelassenheit."
-          buttonText="Gratis E-Book sichern"
-          buttonLink="/gratis-buch"
-          imageUrl="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1974"
-          bgColor="bg-rueckenwind-light-purple"
-        />
+        <CTASection title="Ihr erster Schritt: Gratis E-Book" description="Holen Sie sich jetzt mein E-Book 'Wege aus dem elterlichen Burnout' und entdecken Sie sofort anwendbare Strategien für mehr Energie und Gelassenheit." buttonText="Gratis E-Book sichern" buttonLink="/gratis-buch" imageUrl="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1974" bgColor="bg-rueckenwind-light-purple" />
         
         {/* Testimonials */}
         <section className="py-16 md:py-24">
@@ -171,21 +138,9 @@ const Index = () => {
             <p className="section-subtitle">Was andere über Rückenwind Eltern sagen</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-              <TestimonialCard
-                quote="Die Materialien und die Unterstützung von Janike haben mir geholfen, meinen Alltag mit einem ADHS-Kind komplett neu zu strukturieren. Endlich haben wir weniger Konflikte und mehr Freude miteinander."
-                author="Maria S."
-                role="Mutter eines 9-jährigen Sohnes"
-              />
-              <TestimonialCard
-                quote="Ich stand kurz vor dem kompletten Burnout – Janikes Ansatz hat mir nicht nur geholfen, mich selbst wieder zu spüren, sondern auch praktische Wege gezeigt, wie ich meinen Alltag mit drei Kindern besser bewältigen kann."
-                author="Thomas K."
-                role="Vater von drei Kindern"
-              />
-              <TestimonialCard
-                quote="Als wir die ersten Anzeichen einer Essstörung bei unserer Tochter bemerkten, wussten wir nicht, wohin. Die Ressourcen von Rückenwind Eltern waren ein Rettungsanker und haben uns durch diese herausfordernde Zeit geleitet."
-                author="Sabine M."
-                role="Mutter einer Teenagerin"
-              />
+              <TestimonialCard quote="Die Materialien und die Unterstützung von Janike haben mir geholfen, meinen Alltag mit einem ADHS-Kind komplett neu zu strukturieren. Endlich haben wir weniger Konflikte und mehr Freude miteinander." author="Maria S." role="Mutter eines 9-jährigen Sohnes" />
+              <TestimonialCard quote="Ich stand kurz vor dem kompletten Burnout – Janikes Ansatz hat mir nicht nur geholfen, mich selbst wieder zu spüren, sondern auch praktische Wege gezeigt, wie ich meinen Alltag mit drei Kindern besser bewältigen kann." author="Thomas K." role="Vater von drei Kindern" />
+              <TestimonialCard quote="Als wir die ersten Anzeichen einer Essstörung bei unserer Tochter bemerkten, wussten wir nicht, wohin. Die Ressourcen von Rückenwind Eltern waren ein Rettungsanker und haben uns durch diese herausfordernde Zeit geleitet." author="Sabine M." role="Mutter einer Teenagerin" />
             </div>
           </div>
         </section>
@@ -197,9 +152,7 @@ const Index = () => {
             <p className="section-subtitle">Tipps und Erkenntnisse für Ihren Familienalltag</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-              {recentBlogPosts.map(post => (
-                <BlogPreview key={post.id} post={post} />
-              ))}
+              {recentBlogPosts.map(post => <BlogPreview key={post.id} post={post} />)}
             </div>
             
             <div className="text-center mt-12">
@@ -211,17 +164,9 @@ const Index = () => {
         </section>
         
         {/* App CTA */}
-        <CTASection
-          title="Immer dabei: Die Rückenwind App"
-          description="Laden Sie sich unsere App herunter und haben Sie praktische Tools, Übungen und Ihre persönlichen Ressourcen immer griffbereit."
-          buttonText="App entdecken"
-          buttonLink="#"
-          bgColor="bg-white"
-        />
+        <CTASection title="Immer dabei: Die Rückenwind App" description="Laden Sie sich unsere App herunter und haben Sie praktische Tools, Übungen und Ihre persönlichen Ressourcen immer griffbereit." buttonText="App entdecken" buttonLink="#" bgColor="bg-white" />
       </main>
       <Footer />
-    </>
-  );
+    </>;
 };
-
 export default Index;
