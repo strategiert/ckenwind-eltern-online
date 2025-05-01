@@ -65,7 +65,7 @@ const UeberMich = () => {
                     Dann kam 2014 – eine Zeit, die mich tief prägte. Als die Flüchtlingskrise Deutschland erreichte, wurde ich ins kalte Wasser geworfen. Beim DRK Soziale Dienste Hannover baute ich Flüchtlingsheime auf und koordinierte Hilfsangebote für unzählige Familien, die alles verloren hatten. Ich sah Verzweiflung und Hoffnung, Trauma und unglaubliche Resilienz – oft in denselben Augen.
                   </p>
                   <p>
-                    Die Arbeit war intensiv, fordernd, manchmal überwältigend – und doch unendlich erfüllend. Mit jeder Familie, der wir helfen konnten, mit jedem Kind, das in der neuen Umgebung langsam wieder lächeln konnte, wuchs meine Überzeugung: In der größten Not liegt oft auch die größte Kraft zur Veränderung.
+                    Die Arbeit war intensiv, fordernd, manchmal überwältigend – und doch unendlich erfüllend. Mit jeder Familie, die wir helfen konnten, mit jedem Kind, das in der neuen Umgebung langsam wieder lächeln konnte, wuchs meine Überzeugung: In der größten Not liegt oft auch die größte Kraft zur Veränderung.
                   </p>
                 </div>
                 
@@ -143,12 +143,32 @@ const UeberMich = () => {
                   Diese persönliche Verbindung zum Thema macht Rückenwind Eltern zu mehr als einem beruflichen Projekt – es ist meine Mission, mein Beitrag für all die Eltern da draußen, die sich manchmal fragen, ob sie genug tun, ob sie gut genug sind. Meine Antwort: Ja, das seid ihr. Und gemeinsam können wir Wege finden, damit ihr das auch spüren könnt.
                 </p>
               </div>
-              <div className="order-1 lg:order-2 relative">
-                <div className="grid grid-cols-2 gap-4">
-                  <img alt="Familienleben" className="rounded-lg shadow-md w-full h-auto" src="/lovable-uploads/0d5fdd37-eb0e-45a5-893b-e3a3e8a7a4fd.jpg" />
-                  <img alt="Familienleben" className="rounded-lg shadow-md w-full h-auto mt-8" src="/lovable-uploads/f79ff23e-87e0-459d-be17-b69a522993d0.jpg" />
-                  <img alt="Familienleben" className="rounded-lg shadow-md w-full h-auto" src="/lovable-uploads/90bfde2f-8f49-40ce-8dc1-ed9b7724d311.jpg" />
-                  <img alt="Familienleben" className="rounded-lg shadow-md w-full h-auto mt-8" src="/lovable-uploads/5e9c2c69-3b6c-4ccc-8989-a23b9cc671b2.jpg" />
+              <div className="order-1 lg:order-2">
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-6">
+                    <img 
+                      alt="Familienleben" 
+                      className="rounded-lg shadow-md w-full h-auto object-cover aspect-[3/4]" 
+                      src="/lovable-uploads/0d5fdd37-eb0e-45a5-893b-e3a3e8a7a4fd.jpg" 
+                    />
+                    <img 
+                      alt="Familienleben" 
+                      className="rounded-lg shadow-md w-full h-auto object-cover aspect-[3/4]" 
+                      src="/lovable-uploads/90bfde2f-8f49-40ce-8dc1-ed9b7724d311.jpg" 
+                    />
+                  </div>
+                  <div className="space-y-6 pt-12">
+                    <img 
+                      alt="Familienleben" 
+                      className="rounded-lg shadow-md w-full h-auto object-cover aspect-[3/4]" 
+                      src="/lovable-uploads/f79ff23e-87e0-459d-be17-b69a522993d0.jpg" 
+                    />
+                    <img 
+                      alt="Familienleben" 
+                      className="rounded-lg shadow-md w-full h-auto object-cover aspect-[3/4]" 
+                      src="/lovable-uploads/5e9c2c69-3b6c-4ccc-8989-a23b9cc671b2.jpg" 
+                    />
+                  </div>
                 </div>
               </div>
             </div>
