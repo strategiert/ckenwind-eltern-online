@@ -1,1 +1,27 @@
+
 project_id = "zcbotbornmmlmpylkcyr"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage"]
+
+[db]
+port = 54322
+
+[studio]
+port = 54323
+
+[auth]
+enabled = true
+port = 54324
+
+[storage]
+enabled = true
+port = 54325
+
+[functions]
+enabled = true
+port = 54326
+[functions.send-contact-email]
+verify_jwt = false
