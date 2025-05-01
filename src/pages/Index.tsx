@@ -7,6 +7,8 @@ import BlogPreview from '@/components/BlogPreview';
 import CTASection from '@/components/CTASection';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { Link } from 'react-router-dom';
+import { Button } from "@/components/ui/button";
 
 const Index = () => {
   // Mock blog posts data
@@ -173,7 +175,7 @@ const Index = () => {
         {/* E-Book CTA */}
         <CTASection
           title="Ihr erster Schritt: Gratis E-Book"
-          description="Holen Sie sich jetzt mein E-Book „Wege aus dem elterlichen Burnout" und entdecken Sie sofort anwendbare Strategien für mehr Energie und Gelassenheit."
+          description="Holen Sie sich jetzt mein E-Book 'Wege aus dem elterlichen Burnout' und entdecken Sie sofort anwendbare Strategien für mehr Energie und Gelassenheit."
           buttonText="Gratis E-Book sichern"
           buttonLink="/gratis-buch"
           imageUrl="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1974"
