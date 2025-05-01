@@ -4,10 +4,8 @@ import Footer from '@/components/Footer';
 import CTASection from '@/components/CTASection';
 import { Link } from 'react-router-dom';
 import { Book, Briefcase, GraduationCap, Heart, Users } from 'lucide-react';
-
 const UeberMich = () => {
-  return (
-    <>
+  return <>
       <Navbar />
       <main>
         {/* Hero Section */}
@@ -23,11 +21,7 @@ const UeberMich = () => {
               <div className="relative">
                 <div className="absolute -top-6 -left-6 w-32 h-32 rounded-full bg-rueckenwind-soft-blue opacity-60 z-0"></div>
                 <div className="relative z-10 rounded-2xl overflow-hidden shadow-xl">
-                  <img 
-                    src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2787" 
-                    alt="Janike Arent" 
-                    className="w-full h-auto"
-                  />
+                  <img alt="Janike Arent" className="w-full h-auto" src="/lovable-uploads/bee7f053-fb8f-409e-b5b9-96776ee1cb95.jpg" />
                 </div>
                 <div className="absolute -bottom-6 -right-6 w-40 h-40 rounded-full bg-rueckenwind-light-purple opacity-60 z-0"></div>
               </div>
@@ -151,26 +145,10 @@ const UeberMich = () => {
               </div>
               <div className="order-1 lg:order-2 relative">
                 <div className="grid grid-cols-2 gap-4">
-                  <img 
-                    src="https://images.unsplash.com/photo-1565538810643-b5bdb714032a?q=80&w=1964" 
-                    alt="Familienleben" 
-                    className="rounded-lg shadow-md w-full h-auto"
-                  />
-                  <img 
-                    src="https://images.unsplash.com/photo-1536640712-4d4c36ff0e4e?q=80&w=2070" 
-                    alt="Familienleben" 
-                    className="rounded-lg shadow-md w-full h-auto mt-8"
-                  />
-                  <img 
-                    src="https://images.unsplash.com/photo-1581952976147-5a2d15560349?q=80&w=1971" 
-                    alt="Familienleben" 
-                    className="rounded-lg shadow-md w-full h-auto"
-                  />
-                  <img 
-                    src="https://images.unsplash.com/photo-1484665754804-74b091211472?q=80&w=2070" 
-                    alt="Familienleben" 
-                    className="rounded-lg shadow-md w-full h-auto mt-8"
-                  />
+                  <img alt="Familienleben" className="rounded-lg shadow-md w-full h-auto" src="/lovable-uploads/0d5fdd37-eb0e-45a5-893b-e3a3e8a7a4fd.jpg" />
+                  <img alt="Familienleben" className="rounded-lg shadow-md w-full h-auto mt-8" src="/lovable-uploads/f79ff23e-87e0-459d-be17-b69a522993d0.jpg" />
+                  <img alt="Familienleben" className="rounded-lg shadow-md w-full h-auto" src="/lovable-uploads/90bfde2f-8f49-40ce-8dc1-ed9b7724d311.jpg" />
+                  <img alt="Familienleben" className="rounded-lg shadow-md w-full h-auto mt-8" src="/lovable-uploads/5e9c2c69-3b6c-4ccc-8989-a23b9cc671b2.jpg" />
                 </div>
               </div>
             </div>
@@ -224,17 +202,9 @@ const UeberMich = () => {
         </section>
 
         {/* CTA */}
-        <CTASection
-          title="Lassen Sie uns gemeinsam starten"
-          description="Entdecken Sie, wie Rückenwind Eltern Ihnen und Ihrer Familie helfen kann – beginnen Sie mit meinem kostenlosen E-Book."
-          buttonText="Gratis E-Book sichern"
-          buttonLink="/gratis-buch"
-          bgColor="bg-rueckenwind-light-purple"
-        />
+        <CTASection title="Lassen Sie uns gemeinsam starten" description="Entdecken Sie, wie Rückenwind Eltern Ihnen und Ihrer Familie helfen kann – beginnen Sie mit meinem kostenlosen E-Book." buttonText="Gratis E-Book sichern" buttonLink="/gratis-buch" bgColor="bg-rueckenwind-light-purple" />
       </main>
       <Footer />
-    </>
-  );
+    </>;
 };
-
 export default UeberMich;
