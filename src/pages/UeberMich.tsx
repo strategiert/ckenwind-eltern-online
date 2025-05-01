@@ -43,34 +43,39 @@ const UeberMich = () => {
               
               <div className="space-y-8">
                 <div className="bg-white p-6 rounded-lg shadow-md">
-                  <h3 className="text-xl font-display font-medium text-rueckenwind-purple mb-2">Qualifikationen</h3>
+                  <h3 className="text-xl font-display font-medium text-rueckenwind-purple mb-2">Ausbildung</h3>
                   <ul className="list-disc pl-5 space-y-2 text-gray-700">
-                    <li>Master of Science in Psychologie</li>
-                    <li>Bachelor of Arts in Pädagogik</li>
-                    <li>Zertifizierte Familientherapeutin</li>
-                    <li>Ausbildung in kognitiver Verhaltenstherapie</li>
-                    <li>Spezialisierung auf ADHS, Essstörungen und Burnout-Prävention</li>
+                    <li>Kinder- und Jugendpsychotherapie - DGVT Hannover</li>
+                    <li>Master of Social Work (MSW) - HAWK Hochschule für angewandte Wissenschaft und Kunst Hildesheim/Holzminden/Göttingen</li>
+                    <li>Bachelor of Applied Science (BASc), Soziale Arbeit - HAWK Hochschule für angewandte Wissenschaft und Kunst Hildesheim/Holzminden/Göttingen</li>
                   </ul>
                 </div>
 
                 <div className="bg-white p-6 rounded-lg shadow-md">
-                  <h3 className="text-xl font-display font-medium text-rueckenwind-purple mb-2">Erfahrung</h3>
-                  <p className="text-gray-700 mb-4">
-                    Mit über 20 Jahren Erfahrung in der therapeutischen Arbeit mit Familien kenne ich die vielfältigen Herausforderungen, denen Eltern heute gegenüberstehen.
-                  </p>
-                  <p className="text-gray-700">
-                    In meiner langjährigen Praxisarbeit habe ich hunderte Familien bei Themen wie Eltern-Burnout, dem Umgang mit ADHS bei Kindern und der Begleitung von Kindern mit Essstörungen unterstützt.
-                  </p>
+                  <h3 className="text-xl font-display font-medium text-rueckenwind-purple mb-2">Berufserfahrung</h3>
+                  <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                    <li>Kinder- und Jugendlichenpsychotherapeutin - Kinderkrankenhaus Auf Der Bult (2021-heute)</li>
+                    <li>Teamleiter - Stadt Hannover, Teamleitung Jugendhilfe SPFH (2016-2021)</li>
+                    <li>Bereichsleiter - DRK Soziale Dienste Hannover, Flüchtlingshilfe Heimleitung (2014-2016)</li>
+                    <li>Schulsozialpädagogin - Grundschule Fridtjof-Nansen-Schule (2013-2014)</li>
+                  </ul>
                 </div>
                 
                 <div className="bg-white p-6 rounded-lg shadow-md">
-                  <h3 className="text-xl font-display font-medium text-rueckenwind-purple mb-2">Mein Ansatz</h3>
-                  <p className="text-gray-700 mb-4">
-                    Ich verbinde wissenschaftliche Erkenntnisse mit praktischer Alltagstauglichkeit. Als Mutter von drei Kindern weiß ich: Theoretische Konzepte müssen im hektischen Familienalltag funktionieren, um wirklich zu helfen.
-                  </p>
-                  <p className="text-gray-700">
-                    Meine Arbeit basiert auf einem wertschätzenden, ressourcenorientierten Ansatz. Ich glaube an die Stärken jeder Familie und helfe dabei, diese zu entdecken und zu nutzen.
-                  </p>
+                  <h3 className="text-xl font-display font-medium text-rueckenwind-purple mb-2">Ehrenamtliches Engagement</h3>
+                  <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                    <li>Trauer- und Sterbebegleiterin - Hospizdienst Hannover</li>
+                    <li>Sozialarbeiter - Intiwawa</li>
+                  </ul>
+                </div>
+
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                  <h3 className="text-xl font-display font-medium text-rueckenwind-purple mb-2">Publikationen</h3>
+                  <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                    <li>"Wege aus dem elterlichen Burnout. Ausgebrannt durch den Familienalltag." (2025, ISBN beantragt)</li>
+                    <li>"Wenn ein Kind stirbt. Der Trauerprozess der Familie und die Begleitung" (2014, ISBN 9783656848387)</li>
+                    <li>"Die multikulturelle Gesellschaft. Ein funktionierendes gesellschaftliches Gesamtkonzept?" (2013, ISBN 9783656451006)</li>
+                  </ul>
                 </div>
               </div>
             </div>
