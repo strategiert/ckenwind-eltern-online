@@ -1,8 +1,11 @@
 
 import React from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { glossaryData } from '@/data/glossaryData';
+import { BookOpen } from 'lucide-react';
 
 interface GlossarContentProps {
   activeFilter: string;
@@ -17,6 +20,17 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
   searchTerm,
   setSearchTerm 
 }) => {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  
+  // Check if there's a tag parameter in the URL
+  React.useEffect(() => {
+    const tagParam = searchParams.get('tag');
+    if (tagParam) {
+      setActiveFilter(tagParam);
+    }
+  }, [searchParams, setActiveFilter]);
+
   // Group glossary items by first letter
   const groupedItems = glossaryData
     .filter(item => {
@@ -52,6 +66,10 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
   )).sort();
 
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+  const handleTermClick = (slug: string) => {
+    navigate(`/glossar/${slug}`);
+  };
 
   return (
     <section className="py-16">
@@ -137,22 +155,23 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
               <h2 className="text-4xl font-display font-semibold text-rueckenwind-purple mb-6 border-b border-gray-200 pb-2">
                 {letter}
               </h2>
-              <div className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {groupedItems[letter].map((item, index) => (
-                  <div key={index} className="group">
-                    <h3 className="text-xl font-medium mb-2 group-hover:text-rueckenwind-purple transition-colors">
-                      {item.term}
-                      {item.alias && <span className="text-gray-500 font-normal"> ({item.alias})</span>}
-                    </h3>
-                    <p className="text-gray-700 mb-3">{item.definition}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {item.tags.map((tag, tagIndex) => (
-                        <Badge key={tagIndex} variant="outline" className="bg-gray-50">
-                          {tag}
-                        </Badge>
-                      ))}
+                  <Button
+                    key={index}
+                    variant="outline"
+                    className="bg-white text-left flex items-start gap-4 p-4 h-auto shadow-sm hover:shadow-md border border-gray-200 hover:border-rueckenwind-light-purple transition-all"
+                    onClick={() => handleTermClick(item.slug)}
+                  >
+                    <BookOpen className="h-5 w-5 text-rueckenwind-purple shrink-0 mt-1" />
+                    <div>
+                      <h3 className="text-lg font-medium mb-1 text-rueckenwind-purple">
+                        {item.term}
+                        {item.alias && <span className="text-gray-500 font-normal text-sm block">{item.alias}</span>}
+                      </h3>
+                      <p className="text-gray-700 text-sm line-clamp-3">{item.definition}</p>
                     </div>
-                  </div>
+                  </Button>
                 ))}
               </div>
             </div>

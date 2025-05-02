@@ -25,7 +25,9 @@ const GlossarPreview: React.FC = () => {
                 {term.term}
                 {term.alias && <span className="text-gray-500 font-normal ml-2">({term.alias})</span>}
               </h3>
-              <p className="text-gray-700 mb-4 line-clamp-3">{term.definition}</p>
+              <p className="text-gray-700 mb-4 line-clamp-3">
+                {term.content?.teaser || term.definition}
+              </p>
               <div className="flex flex-wrap gap-2 mt-2 mb-4">
                 {term.tags.slice(0, 2).map((tag, tagIndex) => (
                   <span key={tagIndex} className="bg-rueckenwind-light-purple px-2 py-1 text-xs rounded text-rueckenwind-purple">
@@ -33,8 +35,11 @@ const GlossarPreview: React.FC = () => {
                   </span>
                 ))}
               </div>
-              <Link to="/glossar" className="text-rueckenwind-purple hover:text-rueckenwind-dark-purple font-medium inline-flex items-center">
-                Mehr im Glossar 
+              <Link 
+                to={`/glossar/${term.slug}`} 
+                className="text-rueckenwind-purple hover:text-rueckenwind-dark-purple font-medium inline-flex items-center"
+              >
+                Weiterlesen 
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>

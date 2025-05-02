@@ -11,6 +11,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import GratisBuch from "./pages/GratisBuch";
 import Glossar from "./pages/Glossar";
+import GlossaryDetail from "./pages/GlossaryDetail";
 import Kontakt from "./pages/Kontakt";
 import NotFound from "./pages/NotFound";
 import Impressum from "./pages/Impressum";
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/gratis-buch" element={<GratisBuch />} />
             <Route path="/glossar" element={<Glossar />} />
+            <Route path="/glossar/:slug" element={<GlossaryDetail />} />
             <Route path="/kontakt" element={<Kontakt />} />
             <Route path="/impressum" element={<Impressum />} />
             <Route path="*" element={<NotFound />} />
