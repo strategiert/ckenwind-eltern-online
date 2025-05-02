@@ -4,6 +4,7 @@ import HeroSection from '@/components/HeroSection';
 import FeatureCard from '@/components/FeatureCard';
 import TestimonialCard from '@/components/TestimonialCard';
 import BlogPreview from '@/components/BlogPreview';
+import GlossarPreview from '@/components/GlossarPreview';
 import CTASection from '@/components/CTASection';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -141,6 +142,9 @@ const Index = () => {
           imageUrl="/lovable-uploads/7d2ad28c-b24a-4328-9709-ff66596391f2.png"
           bgColor="bg-rueckenwind-light-purple" 
         />
+        
+        {/* Glossar Preview */}
+        <GlossarPreview />
         
         {/* Testimonials */}
         <section className="py-16 md:py-24">
