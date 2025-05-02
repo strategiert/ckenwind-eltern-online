@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { glossaryData } from '@/data/glossaryData';
 import { BookOpen } from 'lucide-react';
 
@@ -19,27 +20,29 @@ const GlossarPreview: React.FC = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
           {randomTerms.map((term, index) => (
-            <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow h-full flex flex-col">
-              <div>
-                <h3 className="text-xl font-medium mb-2 text-rueckenwind-purple flex items-start">
+            <Card key={index} className="bg-white hover:shadow-lg transition-shadow h-full">
+              <CardHeader className="pb-2">
+                <h3 className="text-xl font-medium text-rueckenwind-purple flex items-start">
                   <BookOpen className="h-5 w-5 mr-2 mt-1 shrink-0" />
                   <div>
                     {term.term}
                     {term.alias && <div className="text-gray-500 font-normal text-sm mt-1">{term.alias}</div>}
                   </div>
                 </h3>
-                <p className="text-gray-700 mb-4 line-clamp-3">
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700 line-clamp-3">
                   {term.content?.teaser || term.definition}
                 </p>
-              </div>
-              <div className="mt-auto">
-                <div className="flex flex-wrap gap-2 mt-2 mb-4">
+                <div className="flex flex-wrap gap-2 mt-4">
                   {term.tags.slice(0, 2).map((tag, tagIndex) => (
                     <span key={tagIndex} className="bg-rueckenwind-light-purple px-2 py-1 text-xs rounded text-rueckenwind-purple">
                       {tag}
                     </span>
                   ))}
                 </div>
+              </CardContent>
+              <CardFooter>
                 <Link 
                   to={`/glossar/${term.slug}`} 
                   className="text-rueckenwind-purple hover:text-rueckenwind-dark-purple font-medium inline-flex items-center"
@@ -49,8 +52,8 @@ const GlossarPreview: React.FC = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
-              </div>
-            </div>
+              </CardFooter>
+            </Card>
           ))}
         </div>
         

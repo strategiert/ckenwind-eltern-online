@@ -160,20 +160,22 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
                   <Button
                     key={index}
                     variant="outline"
-                    className="bg-white text-left flex items-start gap-4 p-5 h-auto min-h-[120px] shadow-sm hover:shadow-md border border-gray-200 hover:border-rueckenwind-light-purple transition-all"
+                    className="bg-white text-left flex flex-col items-start p-5 h-auto shadow-sm hover:shadow-md border border-gray-200 hover:border-rueckenwind-light-purple transition-all"
                     onClick={() => handleTermClick(item.slug)}
                   >
-                    <BookOpen className="h-5 w-5 text-rueckenwind-purple shrink-0 mt-1" />
-                    <div className="flex flex-col items-start">
-                      <h3 className="text-lg font-medium mb-1.5 text-rueckenwind-purple">
-                        {item.term}
-                      </h3>
-                      {item.alias && (
-                        <span className="text-gray-500 font-normal text-sm block -mt-1 mb-1.5">
-                          {item.alias}
-                        </span>
-                      )}
-                      <p className="text-gray-700 text-sm line-clamp-3">{item.definition}</p>
+                    <div className="flex gap-3 w-full">
+                      <BookOpen className="h-5 w-5 text-rueckenwind-purple shrink-0 mt-1" />
+                      <div className="flex flex-col items-start">
+                        <h3 className="text-lg font-medium mb-1 text-rueckenwind-purple">
+                          {item.term}
+                        </h3>
+                        {item.alias && (
+                          <span className="text-gray-500 font-normal text-sm block mb-2">
+                            {item.alias}
+                          </span>
+                        )}
+                        <p className="text-gray-700 text-sm line-clamp-2 w-full">{item.definition}</p>
+                      </div>
                     </div>
                   </Button>
                 ))}
