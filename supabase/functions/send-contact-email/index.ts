@@ -1,12 +1,5 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { SMTPClient } from "https://deno.land/x/smtp@v0.7.0/mod.ts";
-
-const SMTP_HOST = "mail.privateemail.com"; // Namecheap Private Email SMTP-Server
-const SMTP_PORT = 465;
-const SMTP_USERNAME = "info@rueckenwind-eltern.de"; // Ihre E-Mail-Adresse
-const SMTP_PASSWORD = Deno.env.get("EMAIL_PASSWORD"); // Passwort aus Umgebungsvariablen
-const EMAIL_RECIPIENT = "info@rueckenwind-eltern.de"; // Empfänger-E-Mail-Adresse
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -20,6 +13,11 @@ interface ContactFormData {
   subject: string;
   message: string;
 }
+
+// EmailJS-Konfiguration
+const EMAILJS_SERVICE_ID = Deno.env.get("EMAILJS_SERVICE_ID") || "";
+const EMAILJS_TEMPLATE_ID = Deno.env.get("EMAILJS_TEMPLATE_ID") || "";
+const EMAILJS_USER_ID = Deno.env.get("EMAILJS_USER_ID") || "";
 
 const handler = async (req: Request): Promise<Response> => {
   // CORS präflight Anfrage behandeln
@@ -41,77 +39,30 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    // E-Mail an Sie senden
-    const client = new SMTPClient({
-      connection: {
-        hostname: SMTP_HOST,
-        port: SMTP_PORT,
-        tls: true,
-        auth: {
-          username: SMTP_USERNAME,
-          password: SMTP_PASSWORD,
-        },
+    // EmailJS API aufrufen
+    const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
       },
+      body: JSON.stringify({
+        service_id: EMAILJS_SERVICE_ID,
+        template_id: EMAILJS_TEMPLATE_ID,
+        user_id: EMAILJS_USER_ID,
+        template_params: {
+          from_name: name,
+          reply_to: email,
+          subject: subject,
+          message: message
+        }
+      })
     });
 
-    await client.send({
-      from: SMTP_USERNAME,
-      to: EMAIL_RECIPIENT,
-      subject: `Kontaktformular: ${subject}`,
-      content: `
-        Name: ${name}
-        E-Mail: ${email}
-        Betreff: ${subject}
-        
-        Nachricht:
-        ${message}
-      `,
-      html: `
-        <h2>Neue Kontaktanfrage</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>E-Mail:</strong> ${email}</p>
-        <p><strong>Betreff:</strong> ${subject}</p>
-        <p><strong>Nachricht:</strong></p>
-        <p>${message.replace(/\n/g, "<br>")}</p>
-      `,
-    });
-
-    await client.close();
-
-    // Auch eine Bestätigungsmail an den Absender senden
-    const confirmationClient = new SMTPClient({
-      connection: {
-        hostname: SMTP_HOST,
-        port: SMTP_PORT,
-        tls: true,
-        auth: {
-          username: SMTP_USERNAME,
-          password: SMTP_PASSWORD,
-        },
-      },
-    });
-
-    await confirmationClient.send({
-      from: SMTP_USERNAME,
-      to: email,
-      subject: "Vielen Dank für Ihre Kontaktanfrage",
-      content: `
-        Hallo ${name},
-        
-        vielen Dank für Ihre Kontaktanfrage. Wir haben Ihre Nachricht erhalten und werden uns schnellstmöglich bei Ihnen melden.
-        
-        Mit freundlichen Grüßen
-        Das Team von Rückenwind Eltern
-      `,
-      html: `
-        <h2>Vielen Dank für Ihre Kontaktanfrage</h2>
-        <p>Hallo ${name},</p>
-        <p>vielen Dank für Ihre Kontaktanfrage. Wir haben Ihre Nachricht erhalten und werden uns schnellstmöglich bei Ihnen melden.</p>
-        <p>Mit freundlichen Grüßen<br>Das Team von Rückenwind Eltern</p>
-      `,
-    });
-
-    await confirmationClient.close();
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error("EmailJS Fehler:", errorData);
+      throw new Error(`EmailJS Fehler: ${response.status} ${errorData}`);
+    }
 
     return new Response(
       JSON.stringify({ success: true, message: "E-Mail erfolgreich gesendet" }),
