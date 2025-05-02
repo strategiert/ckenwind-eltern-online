@@ -163,18 +163,20 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
                     className="bg-white text-left flex flex-col items-start p-5 h-auto shadow-sm hover:shadow-md border border-gray-200 hover:border-rueckenwind-light-purple transition-all"
                     onClick={() => handleTermClick(item.slug)}
                   >
-                    <div className="flex gap-3 w-full">
+                    <div className="flex gap-3 w-full overflow-hidden">
                       <BookOpen className="h-5 w-5 text-rueckenwind-purple shrink-0 mt-1" />
-                      <div className="flex flex-col items-start">
-                        <h3 className="text-lg font-medium mb-1 text-rueckenwind-purple">
+                      <div className="flex flex-col items-start overflow-hidden w-full">
+                        <h3 className="text-lg font-medium mb-1 text-rueckenwind-purple truncate w-full">
                           {item.term}
                         </h3>
                         {item.alias && (
-                          <span className="text-gray-500 font-normal text-sm block mb-2">
+                          <span className="text-gray-500 font-normal text-sm block mb-2 truncate w-full">
                             {item.alias}
                           </span>
                         )}
-                        <p className="text-gray-700 text-sm line-clamp-2 w-full">{item.definition}</p>
+                        <p className="text-gray-700 text-sm line-clamp-2 w-full break-words">
+                          {item.definition}
+                        </p>
                       </div>
                     </div>
                   </Button>

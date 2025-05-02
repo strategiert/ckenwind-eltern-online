@@ -19,6 +19,7 @@ const GlossarHero = () => {
           </h1>
           <p className="text-xl text-gray-700 mb-6">
             Fachbegriffe aus den Bereichen Eltern-Burnout, ADHS bei Kindern und Essstörungen – 
+            <br />
             verständlich erklärt für Eltern und Betroffene
           </p>
           <div className="mt-6 text-gray-600">

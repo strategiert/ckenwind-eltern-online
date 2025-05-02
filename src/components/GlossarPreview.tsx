@@ -20,23 +20,23 @@ const GlossarPreview: React.FC = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
           {randomTerms.map((term, index) => (
-            <Card key={index} className="bg-white hover:shadow-lg transition-shadow h-full">
+            <Card key={index} className="bg-white hover:shadow-lg transition-shadow h-full flex flex-col">
               <CardHeader className="pb-2">
-                <h3 className="text-xl font-medium text-rueckenwind-purple flex items-start">
-                  <BookOpen className="h-5 w-5 mr-2 mt-1 shrink-0" />
-                  <div>
+                <h3 className="text-xl font-medium text-rueckenwind-purple flex items-start gap-2 break-words">
+                  <BookOpen className="h-5 w-5 shrink-0 mt-1" />
+                  <span className="break-words">
                     {term.term}
-                    {term.alias && <div className="text-gray-500 font-normal text-sm mt-1">{term.alias}</div>}
-                  </div>
+                    {term.alias && <div className="text-gray-500 font-normal text-sm mt-1 break-words">{term.alias}</div>}
+                  </span>
                 </h3>
               </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 line-clamp-3">
+              <CardContent className="grow">
+                <p className="text-gray-700 line-clamp-3 break-words">
                   {term.content?.teaser || term.definition}
                 </p>
                 <div className="flex flex-wrap gap-2 mt-4">
                   {term.tags.slice(0, 2).map((tag, tagIndex) => (
-                    <span key={tagIndex} className="bg-rueckenwind-light-purple px-2 py-1 text-xs rounded text-rueckenwind-purple">
+                    <span key={tagIndex} className="bg-rueckenwind-light-purple px-2 py-1 text-xs rounded text-rueckenwind-purple truncate max-w-full">
                       {tag}
                     </span>
                   ))}
