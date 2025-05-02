@@ -7,10 +7,15 @@ import { glossaryData } from '@/data/glossaryData';
 import { BookOpen } from 'lucide-react';
 
 const GlossarPreview: React.FC = () => {
-  // Wähle 3 zufällige Begriffe aus dem Glossar
-  const randomTerms = [...glossaryData]
-    .sort(() => 0.5 - Math.random())
-    .slice(0, 3);
+  // Find specific terms to feature: ADHS, Burn-out, and a random third term
+  const featuredTerms = [
+    glossaryData.find(term => term.term === "ADHS"),
+    glossaryData.find(term => term.term === "Burn-out"),
+    ...glossaryData
+      .filter(term => term.term !== "ADHS" && term.term !== "Burn-out")
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 1)
+  ].filter(Boolean) as typeof glossaryData;
 
   return (
     <section className="py-16 md:py-24 bg-rueckenwind-soft-gray">
@@ -19,7 +24,7 @@ const GlossarPreview: React.FC = () => {
         <p className="section-subtitle">Fachbegriffe aus Psychologie und Therapie verständlich erklärt</p>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-          {randomTerms.map((term, index) => (
+          {featuredTerms.map((term, index) => (
             <Card key={index} className="bg-white hover:shadow-lg transition-shadow h-full flex flex-col">
               <CardHeader className="pb-2">
                 <h3 className="text-xl font-medium text-rueckenwind-purple flex items-start gap-2 break-words">
@@ -31,12 +36,12 @@ const GlossarPreview: React.FC = () => {
                 </h3>
               </CardHeader>
               <CardContent className="grow">
-                <p className="text-gray-700 line-clamp-3 break-words">
+                <p className="text-gray-700 break-words">
                   {term.content?.teaser || term.definition}
                 </p>
                 <div className="flex flex-wrap gap-2 mt-4">
-                  {term.tags.slice(0, 2).map((tag, tagIndex) => (
-                    <span key={tagIndex} className="bg-rueckenwind-light-purple px-2 py-1 text-xs rounded text-rueckenwind-purple truncate max-w-full">
+                  {term.tags.slice(0, 3).map((tag, tagIndex) => (
+                    <span key={tagIndex} className="bg-rueckenwind-light-purple px-2 py-1 text-xs rounded text-rueckenwind-purple">
                       {tag}
                     </span>
                   ))}
