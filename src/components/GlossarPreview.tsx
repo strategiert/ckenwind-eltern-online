@@ -7,12 +7,12 @@ import { glossaryData } from '@/data/glossaryData';
 import { BookOpen } from 'lucide-react';
 
 const GlossarPreview: React.FC = () => {
-  // Find specific terms to feature: ADHS, Burn-out, and a random third term
+  // Find specific terms to feature: ADHS, Burn-out, and a random term
   const featuredTerms = [
     glossaryData.find(term => term.term === "ADHS"),
     glossaryData.find(term => term.term === "Burn-out"),
     ...glossaryData
-      .filter(term => term.term !== "ADHS" && term.term !== "Burn-out")
+      .filter(term => term.term !== "ADHS" && term.term !== "Burn-out" && term.term.startsWith("A"))
       .sort(() => 0.5 - Math.random())
       .slice(0, 1)
   ].filter(Boolean) as typeof glossaryData;

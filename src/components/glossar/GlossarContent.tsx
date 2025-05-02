@@ -155,7 +155,7 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
               </h2>
 
               {letter === 'A' ? (
-                // Special detailed table view for letter 'A'
+                // Detailed table view for letter 'A'
                 <Table>
                   <TableBody>
                     {groupedItems['A'].map((item, index) => (
@@ -164,24 +164,28 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
                         className="hover:bg-rueckenwind-light-purple cursor-pointer"
                         onClick={() => handleTermClick(item.slug)}
                       >
-                        <TableCell className="font-medium">
+                        <TableCell className="font-medium w-1/4">
                           <div className="flex items-center gap-2">
-                            <BookOpen className="h-4 w-4 text-rueckenwind-purple" />
-                            <span className="text-rueckenwind-purple">{item.term}</span>
-                            {item.alias && <span className="text-gray-500">({item.alias})</span>}
+                            <BookOpen className="h-4 w-4 text-rueckenwind-purple shrink-0" />
+                            <div>
+                              <span className="text-rueckenwind-purple font-medium">{item.term}</span>
+                              {item.alias && <div className="text-gray-500 text-sm">({item.alias})</div>}
+                            </div>
                           </div>
                         </TableCell>
-                        <TableCell className="w-full">
-                          <p className="text-sm text-gray-700">{item.definition}</p>
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {item.tags.map((tag, tagIdx) => (
-                              <span 
-                                key={tagIdx} 
-                                className="bg-rueckenwind-light-purple text-xs px-2 py-0.5 rounded-full text-rueckenwind-purple"
-                              >
-                                {tag}
-                              </span>
-                            ))}
+                        <TableCell className="w-3/4">
+                          <div className="space-y-2">
+                            <p className="text-sm text-gray-700">{item.definition}</p>
+                            <div className="flex flex-wrap gap-1">
+                              {item.tags.map((tag, tagIdx) => (
+                                <span 
+                                  key={tagIdx} 
+                                  className="bg-rueckenwind-light-purple text-xs px-2 py-0.5 rounded-full text-rueckenwind-purple"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
                           </div>
                         </TableCell>
                       </TableRow>
