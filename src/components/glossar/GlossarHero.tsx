@@ -17,10 +17,11 @@ const GlossarHero = () => {
           <h1 className="text-4xl md:text-5xl font-display font-semibold mb-6">
             Wiki-Glossar
           </h1>
-          <p className="text-xl text-gray-700 mb-6">
-            Fachbegriffe aus den Bereichen Eltern-Burnout, ADHS bei Kindern und Essstörungen – 
-            <br />
-            verständlich erklärt für Eltern und Betroffene
+          <p className="text-xl text-gray-700 mb-6 max-w-2xl mx-auto">
+            Glossar: Eltern-Burnout, ADHS bei Kindern, Anorexie
+          </p>
+          <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
+            Dieses Glossar umfasst Begriffe aus den Bereichen Eltern-Burnout, ADHS bei Kindern und Essstörungen (insbesondere Anorexie), einschließlich offizieller Diagnosen (ICD-10/DSM-5), psychotherapeutischer Fachbegriffe und Alltagssprache von Eltern.
           </p>
           <div className="mt-6 text-gray-600">
             <p>Über {termCount}+ Begriffe alphabetisch sortiert, thematisch gegliedert und ausführlich erläutert</p>
