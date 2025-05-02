@@ -19,31 +19,37 @@ const GlossarPreview: React.FC = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
           {randomTerms.map((term, index) => (
-            <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-medium mb-2 text-rueckenwind-purple flex items-center">
-                <BookOpen className="h-5 w-5 mr-2 inline-block" />
-                {term.term}
-                {term.alias && <span className="text-gray-500 font-normal ml-2">({term.alias})</span>}
-              </h3>
-              <p className="text-gray-700 mb-4 line-clamp-3">
-                {term.content?.teaser || term.definition}
-              </p>
-              <div className="flex flex-wrap gap-2 mt-2 mb-4">
-                {term.tags.slice(0, 2).map((tag, tagIndex) => (
-                  <span key={tagIndex} className="bg-rueckenwind-light-purple px-2 py-1 text-xs rounded text-rueckenwind-purple">
-                    {tag}
-                  </span>
-                ))}
+            <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow h-full flex flex-col">
+              <div>
+                <h3 className="text-xl font-medium mb-2 text-rueckenwind-purple flex items-start">
+                  <BookOpen className="h-5 w-5 mr-2 mt-1 shrink-0" />
+                  <div>
+                    {term.term}
+                    {term.alias && <div className="text-gray-500 font-normal text-sm mt-1">{term.alias}</div>}
+                  </div>
+                </h3>
+                <p className="text-gray-700 mb-4 line-clamp-3">
+                  {term.content?.teaser || term.definition}
+                </p>
               </div>
-              <Link 
-                to={`/glossar/${term.slug}`} 
-                className="text-rueckenwind-purple hover:text-rueckenwind-dark-purple font-medium inline-flex items-center"
-              >
-                Weiterlesen 
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
+              <div className="mt-auto">
+                <div className="flex flex-wrap gap-2 mt-2 mb-4">
+                  {term.tags.slice(0, 2).map((tag, tagIndex) => (
+                    <span key={tagIndex} className="bg-rueckenwind-light-purple px-2 py-1 text-xs rounded text-rueckenwind-purple">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <Link 
+                  to={`/glossar/${term.slug}`} 
+                  className="text-rueckenwind-purple hover:text-rueckenwind-dark-purple font-medium inline-flex items-center"
+                >
+                  Weiterlesen 
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
             </div>
           ))}
         </div>

@@ -75,7 +75,7 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
     <section className="py-16">
       <div className="container-custom">
         {/* Search and filter */}
-        <div className="mb-12 space-y-6">
+        <div className="mb-16 space-y-8">
           <div className="max-w-md mx-auto">
             <Input
               type="search"
@@ -86,7 +86,7 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
             />
           </div>
           
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-3">
             <Badge 
               variant={activeFilter === 'all' ? "default" : "outline"}
               className="cursor-pointer text-sm py-1.5 px-3"
@@ -118,8 +118,8 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
         </div>
 
         {/* Alphabet navigation */}
-        <div className="mb-10">
-          <div className="flex flex-wrap justify-center gap-2 mb-4">
+        <div className="mb-16">
+          <div className="flex flex-wrap justify-center gap-3 mb-4">
             {alphabet.map(letter => {
               const hasItems = !!groupedItems[letter];
               return (
@@ -149,10 +149,10 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
         )}
 
         {/* Glossary content */}
-        <div className="space-y-12">
+        <div className="space-y-16">
           {letters.map(letter => (
-            <div key={letter} id={`letter-${letter}`} className="scroll-mt-20">
-              <h2 className="text-4xl font-display font-semibold text-rueckenwind-purple mb-6 border-b border-gray-200 pb-2">
+            <div key={letter} id={`letter-${letter}`} className="scroll-mt-24">
+              <h2 className="text-4xl font-display font-semibold text-rueckenwind-purple mb-8 border-b border-gray-200 pb-2">
                 {letter}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -160,15 +160,19 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
                   <Button
                     key={index}
                     variant="outline"
-                    className="bg-white text-left flex items-start gap-4 p-4 h-auto shadow-sm hover:shadow-md border border-gray-200 hover:border-rueckenwind-light-purple transition-all"
+                    className="bg-white text-left flex items-start gap-4 p-5 h-auto min-h-[120px] shadow-sm hover:shadow-md border border-gray-200 hover:border-rueckenwind-light-purple transition-all"
                     onClick={() => handleTermClick(item.slug)}
                   >
                     <BookOpen className="h-5 w-5 text-rueckenwind-purple shrink-0 mt-1" />
-                    <div>
-                      <h3 className="text-lg font-medium mb-1 text-rueckenwind-purple">
+                    <div className="flex flex-col items-start">
+                      <h3 className="text-lg font-medium mb-1.5 text-rueckenwind-purple">
                         {item.term}
-                        {item.alias && <span className="text-gray-500 font-normal text-sm block">{item.alias}</span>}
                       </h3>
+                      {item.alias && (
+                        <span className="text-gray-500 font-normal text-sm block -mt-1 mb-1.5">
+                          {item.alias}
+                        </span>
+                      )}
                       <p className="text-gray-700 text-sm line-clamp-3">{item.definition}</p>
                     </div>
                   </Button>
