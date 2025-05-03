@@ -463,7 +463,7 @@ export const glossaryData: GlossaryItem[] = [
       relatedTerms: ["adhs", "verhaltensregulation", "soziale-kompetenz", "erziehung"]
     }
   }
-]
+];
 
 /**
  * Find a specific term by its slug
@@ -480,3 +480,4 @@ export const getRelatedTerms = (slugs: string[]): GlossaryItem[] => {
     .map(slug => glossaryData.find(term => term.slug === slug))
     .filter((term): term is GlossaryItem => term !== undefined);
 };
+
