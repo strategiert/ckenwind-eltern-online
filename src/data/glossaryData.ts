@@ -1,3 +1,4 @@
+
 interface GlossaryItem {
   term: string;
   slug: string;
@@ -442,4 +443,24 @@ export const glossaryData: GlossaryItem[] = [
         },
         {
           title: "Herausforderungen bei ADHS",
-          content: "Kinder mit ADHS haben oft Schwier
+          content: "Kinder mit ADHS haben oft Schwierigkeiten mit ihrem Benehmen, da ihre Impulsivität, Hyperaktivität und Aufmerksamkeitsprobleme es ihnen erschweren, soziale Regeln zu verstehen und einzuhalten. Sie handeln oft, bevor sie denken, unterbrechen andere oder haben Schwierigkeiten, still zu sitzen und ruhig zu bleiben. Diese Verhaltensweisen sind nicht absichtlich oder boshaft, sondern Ausdruck ihrer Störung."
+        },
+        {
+          title: "Unterstützung bei Verhaltensauffälligkeiten",
+          content: "Bei Kindern mit Verhaltensauffälligkeiten ist es wichtig, klare Regeln und Strukturen zu schaffen, angemessenes Verhalten zu loben und unangemessenes Verhalten konsequent, aber verständnisvoll zu begrenzen. Dabei sollte man zwischen dem Kind und seinem Verhalten unterscheiden: Nicht das Kind ist 'schlecht', sondern bestimmte Verhaltensweisen sind unangemessen. Eine positive Verstärkung erwünschten Verhaltens ist oft wirksamer als Bestrafung."
+        }
+      ],
+      literaryDevices: [
+        {
+          title: "Der soziale Kompass",
+          content: "Benehmen kann mit einem sozialen Kompass verglichen werden, der uns hilft, uns in der Gesellschaft zu orientieren. Kinder müssen lernen, diesen Kompass zu lesen und zu nutzen, um in verschiedenen sozialen Situationen angemessen zu navigieren. Kinder mit ADHS haben manchmal einen Kompass, der ungenau ist oder dessen Nadel zu schnell schwingt, was es ihnen schwerer macht, den richtigen Weg zu finden."
+        }
+      ],
+      references: [
+        "Barkley, R. A. (2013). Taking charge of ADHD: The complete, authoritative guide for parents. New York: Guilford Press.",
+        "Greene, R. W. (2014). The explosive child: A new approach for understanding and parenting easily frustrated, chronically inflexible children. New York: Harper."
+      ],
+      relatedTerms: ["adhs", "verhaltensregulation", "soziale-kompetenz", "erziehung"]
+    }
+  }
+]
