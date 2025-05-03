@@ -1,17 +1,10 @@
 
-import React, { useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { 
-  Table,
-  TableBody,
-  TableCell,
-  TableRow
-} from "@/components/ui/table";
+import React from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { glossaryData } from '@/data/glossaryData';
-import { BookOpen } from 'lucide-react';
+import GlossarSearch from './GlossarSearch';
+import GlossarAlphabet from './GlossarAlphabet';
+import GlossarLetterSection from './GlossarLetterSection';
 
 interface GlossarContentProps {
   activeFilter: string;
@@ -61,9 +54,6 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
 
   // Get unique alphabet letters that have items
   const letters = Object.keys(groupedItems).sort();
-  
-  // Define the full alphabet for the letter navigation
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
   const handleTermClick = (slug: string) => {
     navigate(`/glossar/${slug}`);
@@ -73,68 +63,15 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
     <section className="py-16">
       <div className="container-custom">
         {/* Search and filter */}
-        <div className="mb-16 space-y-8">
-          <div className="max-w-md mx-auto">
-            <Input
-              type="search"
-              placeholder="Suche nach Begriffen..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full"
-            />
-          </div>
-          
-          <div className="flex flex-wrap justify-center gap-3">
-            <Badge 
-              variant={activeFilter === 'all' ? "default" : "outline"}
-              className="cursor-pointer text-sm py-1.5 px-3"
-              onClick={() => setActiveFilter('all')}
-            >
-              Alle Begriffe
-            </Badge>
-            {['Diagnose', 'Therapie', 'Symptom', 'Konzept', 'Alltag'].map(tag => (
-              <Badge
-                key={tag}
-                variant={activeFilter === tag ? "default" : "outline"}
-                className="cursor-pointer text-sm py-1.5 px-3"
-                onClick={() => setActiveFilter(tag)}
-              >
-                {tag}
-              </Badge>
-            ))}
-            {['Burnout', 'ADHS', 'Essstörung'].map(tag => (
-              <Badge
-                key={tag}
-                variant={activeFilter === tag ? "default" : "outline"} 
-                className="cursor-pointer text-sm py-1.5 px-3"
-                onClick={() => setActiveFilter(tag)}
-              >
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        </div>
-
+        <GlossarSearch 
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          activeFilter={activeFilter}
+          setActiveFilter={setActiveFilter}
+        />
+        
         {/* Alphabet navigation */}
-        <div className="mb-16">
-          <div className="flex flex-wrap justify-center gap-3 mb-4">
-            {alphabet.map(letter => {
-              const hasItems = !!groupedItems[letter];
-              return (
-                <a 
-                  key={letter}
-                  href={hasItems ? `#letter-${letter}` : undefined}
-                  className={`w-8 h-8 flex items-center justify-center rounded-full 
-                    ${hasItems 
-                      ? 'bg-rueckenwind-light-purple text-rueckenwind-purple hover:bg-rueckenwind-purple hover:text-white transition-colors' 
-                      : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
-                >
-                  {letter}
-                </a>
-              );
-            })}
-          </div>
-        </div>
+        <GlossarAlphabet groupedItems={groupedItems} />
 
         {/* No results message */}
         {letters.length === 0 && (
@@ -149,80 +86,12 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
         {/* Glossary content */}
         <div className="space-y-16">
           {letters.map(letter => (
-            <div key={letter} id={`letter-${letter}`} className="scroll-mt-24">
-              <h2 className="text-4xl font-display font-semibold text-rueckenwind-purple mb-8 border-b border-gray-200 pb-2">
-                {letter}
-              </h2>
-
-              {letter === 'A' ? (
-                // Detailed table view for letter 'A'
-                <Table>
-                  <TableBody>
-                    {groupedItems['A'].map((item, index) => (
-                      <TableRow 
-                        key={index} 
-                        className="hover:bg-rueckenwind-light-purple cursor-pointer"
-                        onClick={() => handleTermClick(item.slug)}
-                      >
-                        <TableCell className="font-medium w-1/4">
-                          <div className="flex items-center gap-2">
-                            <BookOpen className="h-4 w-4 text-rueckenwind-purple shrink-0" />
-                            <div>
-                              <span className="text-rueckenwind-purple font-medium">{item.term}</span>
-                              {item.alias && <div className="text-gray-500 text-sm">({item.alias})</div>}
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="w-3/4">
-                          <div className="space-y-2">
-                            <p className="text-sm text-gray-700">{item.definition}</p>
-                            <div className="flex flex-wrap gap-1">
-                              {item.tags.map((tag, tagIdx) => (
-                                <span 
-                                  key={tagIdx} 
-                                  className="bg-rueckenwind-light-purple text-xs px-2 py-0.5 rounded-full text-rueckenwind-purple"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              ) : (
-                // Standard grid view for other letters
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {groupedItems[letter].map((item, index) => (
-                    <Button
-                      key={index}
-                      variant="outline"
-                      className="bg-white text-left flex flex-col items-start p-5 h-auto shadow-sm hover:shadow-md border border-gray-200 hover:border-rueckenwind-light-purple transition-all"
-                      onClick={() => handleTermClick(item.slug)}
-                    >
-                      <div className="flex gap-3 w-full overflow-hidden">
-                        <BookOpen className="h-5 w-5 text-rueckenwind-purple shrink-0 mt-1" />
-                        <div className="flex flex-col items-start overflow-hidden w-full">
-                          <h3 className="text-lg font-medium mb-1 text-rueckenwind-purple truncate w-full">
-                            {item.term}
-                          </h3>
-                          {item.alias && (
-                            <span className="text-gray-500 font-normal text-sm block mb-2 truncate w-full">
-                              {item.alias}
-                            </span>
-                          )}
-                          <p className="text-gray-700 text-sm line-clamp-2 w-full break-words">
-                            {item.definition}
-                          </p>
-                        </div>
-                      </div>
-                    </Button>
-                  ))}
-                </div>
-              )}
-            </div>
+            <GlossarLetterSection 
+              key={letter} 
+              letter={letter} 
+              items={groupedItems[letter]} 
+              onTermClick={handleTermClick} 
+            />
           ))}
         </div>
       </div>
