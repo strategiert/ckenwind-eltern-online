@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { glossaryData } from '@/data/glossaryData';
 import GlossarSearch from './GlossarSearch';
 import GlossarAlphabet from './GlossarAlphabet';
 import GlossarLetterSection from './GlossarLetterSection';
+import GlossarViewToggle from './GlossarViewToggle';
 
 interface GlossarContentProps {
   activeFilter: string;
@@ -21,6 +22,7 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
 }) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [view, setView] = useState<'grid' | 'table'>('grid');
   
   // Check if there's a tag parameter in the URL
   React.useEffect(() => {
@@ -70,6 +72,9 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
           setActiveFilter={setActiveFilter}
         />
         
+        {/* View toggle */}
+        <GlossarViewToggle view={view} setView={setView} />
+        
         {/* Alphabet navigation */}
         <GlossarAlphabet groupedItems={groupedItems} />
 
@@ -90,7 +95,8 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
               key={letter} 
               letter={letter} 
               items={groupedItems[letter]} 
-              onTermClick={handleTermClick} 
+              onTermClick={handleTermClick}
+              view={view}
             />
           ))}
         </div>
