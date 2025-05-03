@@ -3,77 +3,38 @@ import { GlossaryItem } from './types';
 
 export const aTerms: GlossaryItem[] = [
   {
-    term: "ADHS",
-    slug: "adhs",
-    definition: "Neurobiologische Störung, gekennzeichnet durch Probleme mit Aufmerksamkeit, Impulsivität und/oder Hyperaktivität.",
-    tags: ["Diagnose-ADHS"],
-    alias: "Aufmerksamkeitsdefizit-Hyperaktivitätsstörung",
-    content: {
-      teaser: "ADHS ist eine neurologische Entwicklungsstörung, die sich durch Probleme mit Aufmerksamkeit, Impulsivität und Hyperaktivität auszeichnet und sowohl Kinder als auch Erwachsene betrifft.",
-      sections: [
-        {
-          title: "Was ist ADHS?",
-          content: "ADHS ist eine komplexe Störung, die das Gehirn und das Verhalten beeinflusst. Sie beginnt oft in der Kindheit und kann bis ins Erwachsenenalter andauern. Die Symptome können sich im Laufe der Zeit verändern, aber die Kernmerkmale bleiben bestehen."
-        },
-        {
-          title: "Symptome von ADHS",
-          content: "Zu den Hauptsymptomen gehören Schwierigkeiten, die Aufmerksamkeit zu fokussieren, übermäßiges impulsives Verhalten und Hyperaktivität. Diese Symptome können sich in verschiedenen Lebensbereichen manifestieren, wie z.B. in der Schule, bei der Arbeit und in sozialen Beziehungen."
-        },
-        {
-          title: "Diagnose und Behandlung",
-          content: "Die Diagnose von ADHS erfolgt in der Regel durch eine umfassende Bewertung, einschließlich medizinischer und psychologischer Tests. Die Behandlung kann Medikamente, Verhaltenstherapie und unterstützende Maßnahmen umfassen."
-        }
-      ],
-      literaryDevices: [
-        {
-          title: "Der unruhige Geist",
-          content: "Stellen Sie sich vor, Ihr Geist ist wie ein Fernseher mit vielen Kanälen, die gleichzeitig laufen. Es ist schwer, sich auf einen Kanal zu konzentrieren, und Sie werden ständig von anderen abgelenkt. Das ist ein bisschen so, wie es sich anfühlt, mit ADHS zu leben."
-        }
-      ],
-      references: [
-        "American Psychiatric Association. (2013). Diagnostic and statistical manual of mental disorders (5th ed.). Arlington, VA: American Psychiatric Publishing.",
-        "Barkley, R. A. (2015). Attention-deficit hyperactivity disorder: A handbook for diagnosis and treatment. New York, NY: Guilford Press."
-      ],
-      relatedTerms: ["hyperaktivitaet", "impulsivitaet", "aufmerksamkeit"]
-    }
-  },
-  {
     term: "Achtsamkeit",
     slug: "achtsamkeit",
     definition: "Bewusste Wahrnehmung des gegenwärtigen Moments ohne Bewertung.",
     tags: ["Konzept-Psychologie", "Therapie-Methode", "Alltag", "Burnout", "ADHS", "Essstörung"],
     alias: "Mindfulness",
     content: {
-      teaser: "Achtsamkeit ist eine Praxis, bei der man lernt, den gegenwärtigen Moment bewusst wahrzunehmen, ohne ihn zu bewerten. Sie hilft, Stress abzubauen und das Wohlbefinden zu steigern.",
+      teaser: "Achtsamkeit beschreibt die bewusste und wertfreie Wahrnehmung des gegenwärtigen Moments.",
       sections: [
         {
-          title: "Was bedeutet Achtsamkeit?",
-          content: "Achtsamkeit bedeutet, dass man seine Aufmerksamkeit bewusst auf das richtet, was gerade geschieht – sei es ein Gedanke, ein Gefühl, eine Körperempfindung oder ein Geräusch. Dabei versucht man, eine offene und akzeptierende Haltung einzunehmen, ohne das Erlebte zu bewerten oder zu verändern."
+          title: "Was ist Achtsamkeit?",
+          content: "Achtsamkeit bezeichnet die Fähigkeit, bewusst im gegenwärtigen Moment zu verweilen und Erfahrungen, Gedanken und Gefühle ohne Bewertung wahrzunehmen. Es handelt sich um eine Form der Aufmerksamkeitslenkung, die absichtsvoll, nicht-wertend und auf den gegenwärtigen Moment bezogen ist. Diese aus buddhistischen Meditationspraktiken stammende Haltung wurde von Jon Kabat-Zinn in den westlichen Kontext übertragen und wissenschaftlich erforscht."
         },
         {
-          title: "Wie praktiziert man Achtsamkeit?",
-          content: "Es gibt viele verschiedene Möglichkeiten, Achtsamkeit zu praktizieren. Man kann sich auf den Atem konzentrieren, eine Gehmeditation machen, achtsam essen oder einfach nur bewusst den Alltag erleben. Wichtig ist, regelmäßig zu üben und geduldig mit sich selbst zu sein."
+          title: "Achtsamkeit im therapeutischen Kontext",
+          content: "In der Psychotherapie hat sich Achtsamkeit als wirksames Element etabliert und ist Kernbestandteil verschiedener therapeutischer Ansätze wie der Achtsamkeitsbasierten Stressreduktion (MBSR), der Achtsamkeitsbasierten Kognitiven Therapie (MBCT) und der Akzeptanz- und Commitment-Therapie (ACT). Durch das Üben von Achtsamkeit lernen Menschen, ihre automatischen Reaktionsmuster zu unterbrechen, Distanz zu belastenden Gedanken und Gefühlen zu gewinnen und präsenter im Hier und Jetzt zu sein."
         },
         {
-          title: "Vorteile der Achtsamkeit",
-          content: "Achtsamkeit kann helfen, Stress abzubauen, die Konzentration zu verbessern, das Selbstbewusstsein zu stärken und das emotionale Gleichgewicht zu fördern. Sie kann auch bei der Bewältigung von chronischen Schmerzen, Angstzuständen und Depressionen unterstützen."
-        },
-        {
-          title: "Achtsamkeit bei psychischen Störungen",
-          content: "Bei Burnout kann Achtsamkeit helfen, frühe Warnsignale zu erkennen und eine gesündere Beziehung zu Stress zu entwickeln. Bei ADHS unterstützt sie die Konzentration und Selbstregulation. Bei Essstörungen fördert sie ein bewussteres Verhältnis zum Körper und zur Nahrungsaufnahme."
+          title: "Achtsamkeit für Eltern und Kinder",
+          content: "Für Eltern kann Achtsamkeit besonders wertvoll sein, um in stressigen Situationen nicht in automatische Reaktionsmuster zu verfallen und stattdessen bewusst zu handeln. Achtsame Elternschaft ('Mindful Parenting') bedeutet, den Moment mit dem Kind bewusst wahrzunehmen, auf Autopilotreaktionen zu verzichten und die eigenen Gedanken und Gefühle zu erkennen, ohne sofort auf sie zu reagieren. Auch für Kinder mit ADHS oder Essstörungen können altersgerechte Achtsamkeitsübungen hilfreich sein, um Selbstregulation zu fördern."
         }
       ],
       literaryDevices: [
         {
-          title: "Der Beobachter",
-          content: "Stellen Sie sich vor, Sie sitzen am Ufer eines Flusses und beobachten, wie die Gedanken und Gefühle wie Blätter vorbeiziehen. Sie versuchen nicht, sie festzuhalten oder zu verändern, sondern nehmen sie einfach nur wahr. Das ist die Haltung der Achtsamkeit."
+          title: "Der achtsame Beobachter",
+          content: "Achtsamkeit kann man sich wie einen wohlwollenden, neutralen Beobachter vorstellen, der auf einem Hügel sitzt und das geschäftige Treiben (unsere Gedanken und Gefühle) in einem Tal beobachtet. Dieser Beobachter nimmt alles wahr, was geschieht, aber er lässt sich nicht in das Geschehen hineinziehen. Er bewertet nicht, was er sieht, sondern nimmt es einfach zur Kenntnis. Durch regelmäßige Achtsamkeitspraxis lernen wir, immer öfter diesen Beobachterposten einzunehmen, anstatt im Tal von unseren Gedanken und Gefühlen mitgerissen zu werden."
         }
       ],
       references: [
-        "Kabat-Zinn, J. (1990). Full catastrophe living: Using the wisdom of your body and mind to face stress, pain, and illness. New York: Delacorte Press.",
-        "Germer, C. K. (2009). The mindful path to self-compassion: Freeing yourself from destructive thoughts and emotions. New York: Guilford Press."
+        "Kabat-Zinn, J. (2013). Gesund durch Meditation: Das große Buch der Selbstheilung mit MBSR. O.W. Barth eBook.",
+        "Segal, Z. V., Williams, J. M. G., & Teasdale, J. D. (2008). Die Achtsamkeitsbasierte Kognitive Therapie der Depression. Tübingen: dgvt-Verlag."
       ],
-      relatedTerms: ["meditation", "stressbewaeltigung", "selbstmitgefuehl"]
+      relatedTerms: ["act", "selbstfuersorge", "stressbewaeltigung"]
     }
   },
   {
@@ -83,32 +44,67 @@ export const aTerms: GlossaryItem[] = [
     tags: ["Therapie-Ansatz", "Burnout", "ADHS", "Essstörung"],
     alias: "Akzeptanz- und Commitment-Therapie",
     content: {
-      teaser: "ACT ist ein moderner therapeutischer Ansatz, der Menschen dabei unterstützt, schwierige Gedanken und Gefühle zu akzeptieren und gleichzeitig ein wertorientiertes Leben zu führen.",
+      teaser: "Die Akzeptanz- und Commitment-Therapie (ACT) ist ein moderner therapeutischer Ansatz, der Menschen dabei unterstützt, unangenehme Gedanken und Gefühle zu akzeptieren und gleichzeitig wertorientiert zu handeln.",
       sections: [
         {
-          title: "Was ist ACT?",
-          content: "Die Akzeptanz- und Commitment-Therapie (ACT) ist ein verhaltenstherapeutischer Ansatz, der darauf abzielt, psychische Flexibilität zu fördern. Im Gegensatz zu traditionellen Ansätzen, die sich auf die Reduzierung von Symptomen konzentrieren, lehrt ACT, wie man schwierige Gefühle und Gedanken akzeptieren kann, während man gleichzeitig Handlungen unternimmt, die mit den eigenen Werten übereinstimmen."
+          title: "Grundlagen der ACT",
+          content: "Die Akzeptanz- und Commitment-Therapie (ausgesprochen als ein Wort: 'Act') wurde von Steven Hayes entwickelt und gehört zur dritten Welle der Verhaltenstherapie. Im Gegensatz zu traditionellen kognitiven Ansätzen versucht ACT nicht primär, belastende Gedanken oder Gefühle zu verändern. Stattdessen fördert sie die psychologische Flexibilität – die Fähigkeit, auch bei unangenehmen inneren Erfahrungen im gegenwärtigen Moment präsent zu bleiben und das eigene Verhalten an persönlichen Werten auszurichten."
         },
         {
           title: "Die sechs Kernprozesse der ACT",
-          content: "ACT basiert auf sechs miteinander verbundenen Kernprozessen: Akzeptanz (statt Vermeidung), kognitive Defusion (Distanz zu Gedanken schaffen), Kontakt mit dem gegenwärtigen Moment (Achtsamkeit), das Selbst als Kontext (Beobachter-Perspektive), Werte (was wirklich wichtig ist) und engagiertes Handeln (Schritte in Richtung der Werte)."
+          content: "ACT basiert auf sechs miteinander verbundenen Prozessen: 1) Akzeptanz: Das Annehmen unerwünschter privater Erfahrungen ohne Vermeidung, 2) Kognitive Defusion: Das Lösen von Gedanken, statt sich mit ihnen zu identifizieren, 3) Präsenz im gegenwärtigen Moment: Bewusste Aufmerksamkeit auf das Hier und Jetzt, 4) Selbst als Kontext: Das beobachtende Selbst erkennen, das von wechselnden Gedanken und Gefühlen verschieden ist,, 5) Werte: Identifizieren dessen, was im Leben wirklich wichtig ist, 6) Engagiertes Handeln: Konkrete Schritte unternehmen, um ein werteorientiertes Leben zu führen."
         },
         {
-          title: "ACT bei verschiedenen Störungsbildern",
-          content: "Bei Burnout hilft ACT, Stressgedanken zu akzeptieren und gleichzeitig werteorientierte Selbstfürsorge zu praktizieren. Bei ADHS kann ACT unterstützen, Frustrationen über Symptome zu akzeptieren und dennoch produktive Strukturen zu entwickeln. Bei Essstörungen fördert ACT eine gesündere Beziehung zum Körper und zur Nahrung durch Akzeptanz und werteorientiertes Handeln."
+          title: "ACT bei verschiedenen Problemstellungen",
+          content: "ACT hat sich bei einer Vielzahl psychischer Probleme als wirksam erwiesen. Bei Burnout hilft ACT, die Erschöpfung nicht zu bekämpfen, sondern zu akzeptieren und gleichzeitig Wege zu finden, im Einklang mit den eigenen Werten zu handeln. Für Eltern von Kindern mit ADHS kann ACT unterstützen, die Herausforderungen anzunehmen und dennoch eine erfüllende Elternschaft zu leben. Bei Essstörungen richtet ACT den Fokus darauf, einen flexibleren Umgang mit Körpererleben und Nahrungsaufnahme zu entwickeln, statt rigide Kontrolle auszuüben."
         }
       ],
       literaryDevices: [
         {
-          title: "Der Bus und die Passagiere",
-          content: "Stellen Sie sich vor, Sie sind der Busfahrer Ihres Lebens. Die schwierigen Gedanken und Gefühle sind wie laute Passagiere, die Sie ablenken und in eine andere Richtung lenken wollen. ACT lehrt Sie nicht, die Passagiere zum Schweigen zu bringen (was oft nicht funktioniert), sondern sie mitfahren zu lassen, während Sie dennoch den Bus in die Richtung steuern, die für Sie wichtig ist."
+          title: "Der Fahrgast im Bus",
+          content: "Stellen Sie sich vor, Sie sind ein Busfahrer, und verschiedene schwierige Gedanken und Gefühle sind wie unangenehme Fahrgäste in Ihrem Bus. Traditionelle Ansätze wären, die Fahrgäste zu bekämpfen oder sie von der Weiterfahrt abzuhalten. ACT schlägt einen anderen Weg vor: Sie akzeptieren, dass diese Fahrgäste mitfahren, aber Sie entscheiden als Fahrer trotzdem selbst, wohin Sie fahren. Die schwierigen Gedanken und Gefühle dürfen da sein, aber sie bestimmen nicht die Richtung Ihres Lebens."
         }
       ],
       references: [
-        "Hayes, S. C., Strosahl, K. D., & Wilson, K. G. (2011). Acceptance and commitment therapy: The process and practice of mindful change (2nd ed.). New York: Guilford Press.",
-        "Harris, R. (2009). ACT made simple: An easy-to-read primer on acceptance and commitment therapy. Oakland, CA: New Harbinger Publications."
+        "Hayes, S. C., Strosahl, K. D., & Wilson, K. G. (2014). Akzeptanz- und Commitment-Therapie. Junfermann Verlag.",
+        "Harris, R. (2009). ACT made simple: An easy-to-read primer on acceptance and commitment therapy. New Harbinger Publications."
       ],
-      relatedTerms: ["achtsamkeit", "akzeptanz", "kognitive-verhaltenstherapie"]
+      relatedTerms: ["achtsamkeit", "akzeptanz", "werte", "kognitive-defusion"]
+    }
+  },
+  {
+    term: "ADHS",
+    slug: "adhs",
+    definition: "Neurobiologische Störung, gekennzeichnet durch Probleme mit Aufmerksamkeit, Impulsivität und/oder Hyperaktivität.",
+    tags: ["Diagnose-ADHS"],
+    alias: "Aufmerksamkeitsdefizit-/Hyperaktivitätsstörung",
+    content: {
+      teaser: "ADHS ist eine neurobiologische Entwicklungsstörung, die sich durch Aufmerksamkeitsschwierigkeiten, Impulsivität und/oder motorische Unruhe äußert und im Alltag zu deutlichen Beeinträchtigungen führen kann.",
+      sections: [
+        {
+          title: "Was ist ADHS?",
+          content: "Die Aufmerksamkeitsdefizit-/Hyperaktivitätsstörung (ADHS) ist eine der häufigsten psychiatrischen Diagnosen im Kindes- und Jugendalter, die oft bis ins Erwachsenenalter fortbesteht. Sie ist durch ein durchgehendes Muster von Unaufmerksamkeit und/oder Hyperaktivität-Impulsivität gekennzeichnet, das die Funktionsfähigkeit oder Entwicklung beeinträchtigt. Die Symptome müssen vor dem 12. Lebensjahr auftreten, in mehr als einem Lebensbereich (z.B. Schule und zuhause) vorhanden sein und mindestens sechs Monate anhalten."
+        },
+        {
+          title: "Erscheinungsformen und Diagnose",
+          content: "Nach DSM-5 werden drei Erscheinungsformen unterschieden: der vorwiegend unaufmerksame Typ (wenn hauptsächlich Aufmerksamkeitsprobleme vorliegen), der vorwiegend hyperaktiv-impulsive Typ (wenn hauptsächlich Hyperaktivität und Impulsivität dominieren) und der kombinierte Typ (wenn beide Symptombereiche ausgeprägt sind). Die Diagnose erfolgt durch erfahrene Fachleute (Kinder- und Jugendpsychiater, Kinder- und Jugendpsychotherapeuten) auf Basis von Verhaltensbeobachtungen, Fragebögen, Interviews und neuropsychologischen Tests. Typische Symptome sind leichte Ablenkbarkeit, Schwierigkeiten, Aufgaben zu Ende zu bringen, übermäßiges Reden oder Unterbrechen anderer, Zappeligkeit und Schwierigkeiten beim ruhigen Spielen oder Arbeiten."
+        },
+        {
+          title: "Ursachen und Behandlung",
+          content: "ADHS hat eine starke genetische Komponente mit einer Erblichkeit von etwa 70-80%. Umweltfaktoren wie Komplikationen während der Schwangerschaft oder Geburt können ebenfalls eine Rolle spielen. Die Behandlung erfolgt multimodal und umfasst Psychoedukation, Verhaltenstherapie, Elterntraining, schulische Unterstützung und bei mittelschweren bis schweren Fällen auch medikamentöse Therapie, vorwiegend mit Stimulanzien wie Methylphenidat. Mit der richtigen Unterstützung können Kinder und Erwachsene mit ADHS ein erfüllendes Leben führen und ihre Stärken, wie Kreativität, Energie und Begeisterungsfähigkeit, entfalten."
+        }
+      ],
+      literaryDevices: [
+        {
+          title: "Das Ferrari-Gehirn mit Fahrradbrems",
+          content: "ADHS kann man sich wie einen Ferrari mit Fahrradbremsen vorstellen. Das Gehirn eines Menschen mit ADHS ist leistungsstark und kann enorm schnell denken (wie ein Ferrari), hat aber Schwierigkeiten, dieses Potenzial zu kontrollieren und zu steuern (wie ein Auto mit unzureichenden Bremsen). Dies führt dazu, dass betroffene Personen manchmal Schwierigkeiten haben, ihre Gedanken, Impulse oder Bewegungen zu stoppen oder zu verlangsamen, wenn es nötig wäre."
+        }
+      ],
+      references: [
+        "Döpfner, M., Frölich, J., & Lehmkuhl, G. (2013). Aufmerksamkeitsdefizit-/Hyperaktivitätsstörung (ADHS). Hogrefe Verlag.",
+        "Barkley, R. A. (2018). Attention-deficit hyperactivity disorder: A handbook for diagnosis and treatment. Guilford Publications."
+      ],
+      relatedTerms: ["aufmerksamkeit", "impulsivitaet", "hyperaktivitaet", "exekutive-funktionen"]
     }
   },
   {
@@ -118,32 +114,32 @@ export const aTerms: GlossaryItem[] = [
     tags: ["Diagnose-Stress", "Diagnose-Burnout"],
     alias: "Anpassungsstörung",
     content: {
-      teaser: "Eine Anpassungsstörung ist eine psychische Reaktion auf identifizierbare Belastungsfaktoren, die zu emotionalem Leiden und Funktionsbeeinträchtigungen führt.",
+      teaser: "Die Anpassungsstörung ist eine psychische Reaktion auf belastende Lebensereignisse, die zu deutlichen emotionalen oder verhaltensbezogenen Symptomen führt.",
       sections: [
         {
-          title: "Definition und Diagnosekriterien",
-          content: "Eine Anpassungsstörung entwickelt sich als Reaktion auf einen oder mehrere identifizierbare Stressoren innerhalb von drei Monaten nach deren Auftreten. Die Reaktion geht über das normale oder erwartbare Maß hinaus und verursacht deutliches Leiden oder Beeinträchtigungen in sozialen, beruflichen oder anderen wichtigen Funktionsbereichen."
+          title: "Definition und Merkmale",
+          content: "Eine Anpassungsstörung ist eine übermäßige Reaktion auf einen oder mehrere identifizierbare Stressoren, die innerhalb von drei Monaten nach Beginn der Belastung auftritt. Die Symptome überschreiten das erwartbare Maß an Belastung und führen zu deutlichen Beeinträchtigungen im sozialen oder beruflichen Funktionsniveau. Typische Symptome können depressive Stimmung, Angst, Verhaltensstörungen oder eine Kombination davon sein. Im Gegensatz zu anderen psychischen Störungen ist bei der Anpassungsstörung der Auslöser klar identifizierbar."
         },
         {
-          title: "Unterschied zum Burnout",
-          content: "Während Burnout meist durch chronischen Arbeitsstress verursacht wird und sich langsam entwickelt, kann eine Anpassungsstörung durch verschiedene Arten von Stressoren ausgelöst werden und tritt relativ schnell auf. Eine Anpassungsstörung ist eine offizielle Diagnose, während Burnout eher ein Konzept ist, das in der ICD-11 als 'arbeitsbezogenes Phänomen' beschrieben wird."
+          title: "Auslöser und Risikogruppen",
+          content: "Auslöser können einzelne Ereignisse wie Jobverlust, Trennung, Umzug, Erkrankung oder anhaltende Stressoren wie berufliche Überforderung, finanzielle Probleme oder familiäre Konflikte sein. Auch positive Veränderungen wie Heirat oder Elternschaft können eine Anpassungsstörung auslösen, wenn sie mit erheblichen Lebensveränderungen verbunden sind. Besonders gefährdet sind Menschen in Lebensphasen mit multiplen Veränderungen, Personen mit schwachem sozialem Netzwerk oder Menschen mit vorbestehenden psychischen Problemen. Eltern von Kindern mit besonderen Bedürfnissen, wie ADHS oder chronischen Erkrankungen, haben ebenfalls ein erhöhtes Risiko."
         },
         {
           title: "Behandlung und Verlauf",
-          content: "Die Behandlung einer Anpassungsstörung umfasst meist psychotherapeutische Ansätze wie kognitive Verhaltenstherapie oder Problemlösungsstrategien. Die Prognose ist in der Regel gut, und die Symptome klingen oft innerhalb von sechs Monaten ab, wenn der Stressor beseitigt ist oder eine Anpassung stattgefunden hat."
+          content: "Anpassungsstörungen sind in der Regel zeitlich begrenzt und klingen oft innerhalb von sechs Monaten nach Ende des Stressors ab. Die Behandlung umfasst unterstützende Psychotherapie, um Bewältigungsstrategien zu entwickeln und die emotionale Verarbeitung zu fördern. Kognitive Verhaltenstherapie kann helfen, negative Gedankenmuster zu erkennen und zu modifizieren. In einigen Fällen, besonders bei starken depressiven oder Angstsymptomen, kann eine kurzfristige medikamentöse Behandlung sinnvoll sein. Die Prognose ist bei adäquater Behandlung gut, kann sich jedoch bei anhaltenden Stressoren oder mangelnder Unterstützung zu einer länger anhaltenden Depression oder Angststörung entwickeln."
         }
       ],
       literaryDevices: [
         {
-          title: "Der umgeknickte Baum",
-          content: "Eine Anpassungsstörung kann mit einem Baum verglichen werden, der durch einen plötzlichen Sturm umgeknickt wurde. Der Baum war zuvor gesund, aber die Belastung war zu stark. Mit der richtigen Unterstützung und Zeit kann er sich wieder aufrichten und weiterwachsen, möglicherweise mit einer leichten Neigung als Zeichen der erlebten Belastung."
+          title: "Der überforderte Anpassungsmechanismus",
+          content: "Unser Körper und unsere Psyche verfügen über natürliche Anpassungsmechanismen, ähnlich wie ein Thermostat, der die Temperatur reguliert. Bei einer Anpassungsstörung ist dieser 'psychologische Thermostat' überfordert. Wenn die Raumtemperatur plötzlich extrem ansteigt oder fällt, kann selbst ein gut funktionierender Thermostat die Temperatur nicht sofort wieder ins Gleichgewicht bringen. Ähnlich verhält es sich bei der Anpassungsstörung: Der psychologische Regulationsmechanismus ist mit der Größe oder Geschwindigkeit der Veränderung überfordert und benötigt Zeit und Unterstützung, um wieder ein Gleichgewicht herzustellen."
         }
       ],
       references: [
-        "American Psychiatric Association. (2013). Diagnostic and statistical manual of mental disorders (5th ed.). Arlington, VA: American Psychiatric Publishing.",
-        "Casey, P. (2014). Adjustment disorder: New developments. Current Psychiatry Reports, 16(6), 451."
+        "Casey, P. (2014). Adjustment disorder: New developments. Current Psychiatry Reports, 16(6), 451.",
+        "Maercker, A., Einsle, F., & Köllner, V. (2007). Adjustment disorders as stress response syndromes: A new diagnostic concept and its exploration in a medical sample. Psychopathology, 40(3), 135-146."
       ],
-      relatedTerms: ["stress", "belastung", "burnout", "anpassungsstoerung"]
+      relatedTerms: ["anpassungsstörung", "stress", "belastung", "bewaeltigungsstrategien"]
     }
   },
   {
@@ -152,66 +148,101 @@ export const aTerms: GlossaryItem[] = [
     definition: "Vorübergehende Reaktion auf eine außergewöhnliche körperliche oder seelische Belastung.",
     tags: ["Diagnose-Stress"],
     content: {
-      teaser: "Die akute Belastungsreaktion ist eine vorübergehende Störung als Reaktion auf außergewöhnliche physische oder psychische Belastung, die in der Regel innerhalb von Stunden oder Tagen abklingt.",
+      teaser: "Die akute Belastungsreaktion ist eine unmittelbare, vorübergehende psychische Reaktion auf ein stark belastendes Ereignis.",
       sections: [
         {
           title: "Definition und Symptome",
-          content: "Eine akute Belastungsreaktion tritt als direkte Folge einer außergewöhnlichen Belastung auf und äußert sich durch ein gemischtes Bild an Symptomen. Dazu können Betäubungsgefühle, Bewusstseinseinengung, eingeschränkte Aufmerksamkeit, Desorientierung, Angst, Depression, Wut, Verzweiflung, Überaktivität oder Rückzug gehören. Auch körperliche Symptome wie Herzrasen, Schwitzen und Zittern können auftreten."
+          content: "Die akute Belastungsreaktion ist eine vorübergehende Störung, die bei einem psychisch nicht manifest gestörten Menschen als Reaktion auf eine außergewöhnliche physische oder psychische Belastung entsteht und üblicherweise innerhalb von Stunden oder Tagen abklingt. Die Symptome zeigen ein typisches gemischtes und wechselndes Bild und umfassen zunächst ein Gefühl von Betäubung, Bewusstseinseinengung und eingeschränkter Aufmerksamkeit, gefolgt von weiteren Symptomen wie Rückzug von der Umgebung, Unruhe, Überaktivität, Angst, Depression, Wut oder Verzweiflung."
         },
         {
-          title: "Unterschied zur Posttraumatischen Belastungsstörung",
-          content: "Im Gegensatz zur Posttraumatischen Belastungsstörung (PTBS) ist die akute Belastungsreaktion vorübergehend und klingt in der Regel innerhalb von 24 bis 72 Stunden ab. Sie kann jedoch auch der Vorläufer einer PTBS sein, wenn die Symptome länger anhalten oder sich verschlimmern."
+          title: "Abgrenzung zu anderen Störungen",
+          content: "Die akute Belastungsreaktion unterscheidet sich von der Posttraumatischen Belastungsstörung (PTBS) durch ihre kürzere Dauer und das unmittelbare Auftreten nach dem belastenden Ereignis, während die PTBS verzögert auftreten kann und länger anhält. Von der Anpassungsstörung grenzt sie sich durch die höhere Intensität des auslösenden Stressors ab – bei der akuten Belastungsreaktion handelt es sich um ein außergewöhnlich belastendes Ereignis wie Unfall, Gewalt oder Naturkatastrophe, nicht um alltägliche Stressoren."
         },
         {
-          title: "Umgang und Unterstützung",
-          content: "Bei einer akuten Belastungsreaktion ist es wichtig, Sicherheit zu vermitteln, praktische und emotionale Unterstützung anzubieten und für Ruhe und Erholung zu sorgen. Professionelle Hilfe kann sinnvoll sein, wenn die Symptome besonders stark sind oder nicht abklingen. Techniken wie Grounding und Atemübungen können helfen, Übererregung zu reduzieren."
+          title: "Umgang und Hilfestellung",
+          content: "Der Umgang mit einer akuten Belastungsreaktion sollte unterstützend und verständnisvoll sein, ohne zu pathologisieren. Die betroffene Person braucht Sicherheit, Beruhigung und das Gefühl, nicht allein zu sein. Psychologische Erste Hilfe umfasst praktische Unterstützung, Informationen über normale Stressreaktionen, Förderung positiver Bewältigungsstrategien und Vermittlung sozialer Unterstützung. Bei anhaltenden oder sich verschlechternden Symptomen sollte professionelle Hilfe in Anspruch genommen werden, um eine Chronifizierung zu vermeiden."
         }
       ],
       literaryDevices: [
         {
-          title: "Der Schutzmechanismus",
-          content: "Die akute Belastungsreaktion kann mit dem Sicherungssystem eines Hauses verglichen werden. Bei einer plötzlichen Überspannung (extremer Stress) springen die Sicherungen heraus (Symptome), um größere Schäden zu verhindern. Dies ist ein automatischer Schutzmechanismus. Nach einiger Zeit können die Sicherungen wieder eingeschaltet werden, und das System funktioniert wieder normal."
+          title: "Das psychologische Erdbeben",
+          content: "Eine akute Belastungsreaktion kann mit einem psychologischen Erdbeben verglichen werden. So wie bei einem plötzlichen Erdbeben der Boden – die sonst so verlässliche Grundlage unserer physischen Existenz – ins Wanken gerät, erschüttert ein traumatisches Ereignis die Grundannahmen unserer psychischen Existenz: dass die Welt sicher ist, dass wir Kontrolle haben und dass uns nichts Schlimmes passieren kann. Und so wie nach einem Erdbeben zunächst Chaos und Verwirrung herrschen, bevor man beginnen kann, die Schäden zu begutachten und aufzuräumen, braucht auch der Geist nach einem psychologischen Erdbeben Zeit, um das Geschehene zu verarbeiten und wieder ins Gleichgewicht zu kommen."
         }
       ],
       references: [
         "World Health Organization. (2019). International statistical classification of diseases and related health problems (11th ed.).",
-        "Bryant, R. A. (2018). The current evidence for acute stress disorder. Current Psychiatry Reports, 20(12), 111."
+        "Bengel, J., & Huber, B. (2020). Akute Belastungsreaktion und -störung. In E. Brähler & B. Strauß (Eds.), Grundlagen der medizinischen Psychologie (pp. 485-497). Hogrefe Verlag."
       ],
-      relatedTerms: ["stress", "trauma", "posttraumatische-belastungsstoerung"]
+      relatedTerms: ["trauma", "stress", "posttraumatische-belastungsstoerung", "krisenintervention"]
+    }
+  },
+  {
+    term: "Akzeptanz- und Commitment-Therapie (ACT)",
+    slug: "akzeptanz-und-commitment-therapie",
+    definition: "Siehe ACT.",
+    tags: ["Therapie-Ansatz", "Burnout", "ADHS", "Essstörung"],
+    alias: "ACT",
+    content: {
+      teaser: "Die Akzeptanz- und Commitment-Therapie (ACT) ist ein moderner verhaltenstherapeutischer Ansatz, der Menschen dabei unterstützt, unangenehme Gedanken und Gefühle zu akzeptieren und gleichzeitig wertorientiert zu handeln.",
+      sections: [
+        {
+          title: "Was ist die Akzeptanz- und Commitment-Therapie?",
+          content: "Die Akzeptanz- und Commitment-Therapie, abgekürzt ACT (ausgesprochen als ein Wort: 'Act'), ist ein therapeutischer Ansatz der dritten Welle der Verhaltenstherapie. Sie wurde von Steven Hayes und Kollegen entwickelt und integriert achtsamkeitsbasierte Strategien mit verhaltenstherapeutischen Interventionen. Ihre Grundannahme ist, dass das Vermeiden unangenehmer Gedanken und Gefühle langfristig zu mehr psychischem Leid führt. Stattdessen fördert ACT die Akzeptanz dieser Erfahrungen und das engagierte Handeln in Richtung persönlich wichtiger Werte."
+        },
+        {
+          title: "Grundlegende Prinzipien",
+          content: "ACT basiert auf sechs miteinander verbundenen Kernprozessen, die zusammen die psychologische Flexibilität fördern: 1) Akzeptanz unangenehmer Erfahrungen statt Vermeidung, 2) Kognitive Defusion oder das 'Loslösen' von Gedanken, 3) Kontakt mit dem gegenwärtigen Moment, 4) Entwicklung des 'beobachtenden Selbst', 5) Identifikation persönlich wichtiger Werte und 6) Engagiertes Handeln in Übereinstimmung mit diesen Werten. Die Metaphern und erlebnisorientierten Übungen in ACT helfen dabei, diese Prozesse direkt zu erfahren, statt sie nur intellektuell zu verstehen."
+        },
+        {
+          title: "Anwendungsbereiche",
+          content: "ACT hat sich bei einer Vielzahl psychischer Probleme als wirksam erwiesen, darunter Depressionen, Angststörungen, chronische Schmerzen, Suchtprobleme und Stress. Bei Burnout hilft ACT, die Erschöpfung zu akzeptieren und gleichzeitig das Handeln an den eigenen Werten auszurichten. Für Eltern von Kindern mit ADHS bietet ACT Strategien zur Akzeptanz der Herausforderungen und zur Gestaltung einer erfüllenden Elternschaft trotz Schwierigkeiten. Bei Essstörungen fördert ACT einen flexibleren Umgang mit dem Körpererleben und der Nahrungsaufnahme, statt rigide Kontrolle anzustreben."
+        }
+      ],
+      literaryDevices: [
+        {
+          title: "Der unwillkommene Partygast",
+          content: "Stellen Sie sich vor, schwierige Gedanken und Gefühle sind wie ein unwillkommener Gast auf Ihrer Party (Ihrem Leben). Je mehr Sie versuchen, diesen Gast hinauszuwerfen, desto mehr Aufmerksamkeit und Energie widmen Sie ihm, und desto weniger können Sie Ihre Party genießen. ACT schlägt vor, diesen Gast zwar nicht einzuladen, aber wenn er auftaucht, ihn einfach dasein zu lassen – und sich trotzdem auf die anderen Gäste und die Musik zu konzentrieren, also auf das, was Ihnen wichtig ist. Der unerwünschte Gast ist zwar da, bestimmt aber nicht mehr die gesamte Party."
+        }
+      ],
+      references: [
+        "Hayes, S. C., Strosahl, K. D., & Wilson, K. G. (2014). Akzeptanz- und Commitment-Therapie. Junfermann Verlag.",
+        "Harris, R. (2009). ACT made simple: An easy-to-read primer on acceptance and commitment therapy. New Harbinger Publications."
+      ],
+      relatedTerms: ["act", "achtsamkeit", "akzeptanz", "werte"]
     }
   },
   {
     term: "Alltagssprache (Eltern)",
     slug: "alltagssprache-eltern",
-    definition: "Begriffe und Formulierungen, die Eltern selbst verwenden, um ihre Erfahrungen zu beschreiben (z.B. \"am Ende sein\", \"ausgelaugt\").",
+    definition: "Begriffe und Formulierungen, die Eltern selbst verwenden, um ihre Erfahrungen zu beschreiben (z.B. 'am Ende sein', 'ausgelaugt').",
     tags: ["Alltag", "Elternsprache", "Glossar"],
     content: {
-      teaser: "Alltagssprache von Eltern umfasst spezifische Begriffe und Ausdrücke, mit denen Eltern ihre Erfahrungen, Herausforderungen und Emotionen beschreiben und die oft wertvolle Hinweise auf ihr Wohlbefinden geben können.",
+      teaser: "Die Alltagssprache von Eltern umfasst spezifische Ausdrücke und Redewendungen, mit denen sie ihre Erfahrungen, Gefühle und Herausforderungen im Familienalltag beschreiben.",
       sections: [
         {
           title: "Bedeutung der Alltagssprache",
-          content: "Die von Eltern verwendete Alltagssprache bietet einen Einblick in ihre subjektive Erfahrungswelt und kann wichtige Hinweise auf Belastungen, Überforderung oder Erschöpfung geben. Ausdrücke wie 'am Ende sein', 'ausgelaugt' oder 'ich kann nicht mehr' zeigen oft emotionale Zustände an, die auf ein erhöhtes Burnout-Risiko hindeuten können."
+          content: "Die Alltagssprache von Eltern spiegelt ihre unmittelbaren Erfahrungen wider und unterscheidet sich oft von der klinischen oder fachlichen Terminologie. Ausdrücke wie 'am Ende sein', 'ausgelaugt' oder 'keine Luft zum Atmen haben' beschreiben emotionale Zustände direkter und authentischer als Fachbegriffe wie 'emotionale Erschöpfung' oder 'reduzierte persönliche Leistungsfähigkeit'. Diese Sprache ist wichtig, weil sie die subjektive Erfahrungswelt der Eltern erfasst und ihnen ermöglicht, sich verstanden zu fühlen, auch wenn sie keine formale Diagnose haben."
         },
         {
-          title: "Alltagssprache als Brücke zur Fachsprache",
-          content: "Für Fachpersonen ist es wichtig, die Alltagssprache der Eltern zu verstehen und als Brücke zur fachlichen Kommunikation zu nutzen. Wenn Eltern beispielsweise sagen, ihr Kind sei 'schwierig' oder 'anstrengend', können dahinter verschiedene Phänomene stehen, die fachlich differenzierter betrachtet werden müssen."
+          title: "Brücke zwischen Alltagserfahrung und Fachsprache",
+          content: "Die Anerkennung und Wertschätzung der Alltagssprache von Eltern bildet eine wichtige Brücke zwischen ihrer Erfahrungswelt und der professionellen Unterstützung. Während die Fachsprache präzise und wissenschaftlich fundiert ist, kann sie für Eltern distanziert oder abstrakt wirken. Wenn Fachpersonen die Alltagssprache der Eltern aufgreifen und respektieren, entsteht eine gemeinsame Verständigungsebene. Gleichzeitig können Fachpersonen behutsam Fachbegriffe einführen und erklären, sodass Eltern zunehmend in der Lage sind, ihre Erfahrungen auch im fachlichen Kontext zu kommunizieren."
         },
         {
-          title: "Kulturelle und soziale Dimension",
-          content: "Die Alltagssprache von Eltern ist kulturell und sozial geprägt und kann je nach Bildungshintergrund, kulturellem Kontext und sozialer Schicht variieren. Dies ist bei der Beratung und Unterstützung von Eltern zu berücksichtigen, um Missverständnisse zu vermeiden und eine gemeinsame Kommunikationsbasis zu schaffen."
+          title: "Kulturelle und soziale Aspekte der Elternsprache",
+          content: "Die Alltagssprache von Eltern ist auch kulturell und sozial geprägt. Welche Begriffe Eltern verwenden, um ihre Erfahrungen zu beschreiben, hängt von ihrem kulturellen Hintergrund, ihrem sozialen Umfeld und ihren persönlichen Erfahrungen ab. In manchen Kulturen oder sozialen Gruppen kann der Ausdruck bestimmter Gefühle oder Belastungen tabuisiert sein, sodass Eltern auf Umschreibungen oder metaphorische Ausdrücke zurückgreifen. Die Sensibilität für diese sprachlichen Nuancen ist ein wichtiger Aspekt kultursensibler Elternberatung und -begleitung."
         }
       ],
       literaryDevices: [
         {
-          title: "Die Übersetzungsarbeit",
-          content: "Die Verständigung zwischen Eltern und Fachpersonen ähnelt manchmal einer Übersetzungsarbeit zwischen zwei Sprachen. Ein Elternteil sagt vielleicht: 'Mein Kind treibt mich in den Wahnsinn', während eine Fachperson diesen Ausruf in Konzepte wie 'elterliche Belastung', 'Erziehungsstress' oder 'dysfunktionale Interaktionsmuster' übersetzen muss. Die Kunst liegt darin, die Alltagssprache wert zu schätzen und gleichzeitig die fachliche Präzision zu wahren."
+          title: "Das sprachliche Fenster",
+          content: "Die Alltagssprache von Eltern kann als Fenster zu ihrer inneren Erfahrungswelt betrachtet werden. Wie ein echtes Fenster lässt sie uns einen Blick in das Innere werfen, ohne dass wir vollständig eintreten können. Die Worte und Ausdrücke, die Eltern wählen, sind wie die Scheiben dieses Fensters – manchmal klar und transparent, manchmal leicht getönt oder sogar teilweise verhängt. Je aufmerksamer wir auf diese sprachlichen Feinheiten achten, desto besser können wir verstehen, was im 'Haus' der elterlichen Erfahrungen tatsächlich vor sich geht."
         }
       ],
       references: [
-        "Schneewind, K. A. (2010). Familienpsychologie (3. Aufl.). Stuttgart: Kohlhammer.",
-        "Tröster, H. (2010). Eltern-Belastungs-Inventar (EBI). Deutsche Version des Parenting Stress Index (PSI) von R.R. Abidin. Göttingen: Hogrefe."
+        "Krebs, G., & Kumschick, I. R. (2019). Sprache und Kommunikation in Beratungsgesprächen mit Eltern. Hogrefe Verlag.",
+        "Schön, B. (2018). Elternsprache - Kindersprache: Entwicklung im Gespräch. Beltz Juventa."
       ],
-      relatedTerms: ["am-ende-sein", "ausgelaugt", "eltern-burnout"]
+      relatedTerms: ["am-ende-sein", "ausgelaugt", "ausgebrannt"]
     }
   },
   {
@@ -220,66 +251,66 @@ export const aTerms: GlossaryItem[] = [
     definition: "Gefühl völliger körperlicher und emotionaler Erschöpfung und Überforderung.",
     tags: ["Alltag", "Elternsprache", "Symptom-Burnout"],
     content: {
-      teaser: "Der Ausdruck 'am Ende sein' beschreibt einen Zustand tiefgreifender Erschöpfung und Überforderung, der oft ein Warnsignal für ein fortgeschrittenes Burnout-Stadium darstellt.",
+      teaser: "'Am Ende sein' beschreibt einen Zustand tiefgreifender Erschöpfung und Überforderung, bei dem die eigenen Ressourcen aufgebraucht erscheinen.",
       sections: [
         {
-          title: "Bedeutung und Erleben",
-          content: "Wenn Eltern sagen, sie seien 'am Ende', beschreiben sie damit einen Zustand, in dem ihre körperlichen, emotionalen und kognitiven Ressourcen erschöpft sind. Sie fühlen sich ausgebrannt, überfordert und unfähig, den Anforderungen des Alltags gerecht zu werden. Dieses Gefühl geht oft mit Hoffnungslosigkeit, Hilflosigkeit und dem Eindruck einher, in einer ausweglosen Situation gefangen zu sein."
+          title: "Alltagsverständnis und Erfahrung",
+          content: "Der Ausdruck 'am Ende sein' ist eine alltägliche Redewendung, die einen Zustand beschreibt, in dem jemand das Gefühl hat, keine Kraft, Energie oder Ressourcen mehr zu haben, um mit den Anforderungen des Lebens umzugehen. Es handelt sich um ein subjektives Empfinden von Erschöpfung, das über normale Müdigkeit hinausgeht und oft mit einem Gefühl der Hilf- und Hoffnungslosigkeit verbunden ist. Eltern verwenden diesen Ausdruck häufig, um ihre Erfahrung zu beschreiben, wenn die Anforderungen der Kinderbetreuung, des Berufs und andere Verpflichtungen ihre Bewältigungskapazitäten übersteigen."
         },
         {
-          title: "Als Warnsignal für Burnout",
-          content: "Die Aussage 'Ich bin am Ende' sollte als ernstes Warnsignal verstanden werden, das auf ein fortgeschrittenes Stadium von Erschöpfung hindeutet. Es signalisiert, dass die betroffene Person dringend Unterstützung, Entlastung und möglicherweise professionelle Hilfe benötigt, um nicht vollständig in einen Burnout zu geraten oder sich davon zu erholen."
+          title: "Psychologische Einordnung",
+          content: "Aus psychologischer Perspektive kann das 'Am-Ende-Sein' als ein Warnsignal für beginnenden oder fortgeschrittenen Burnout betrachtet werden. Es kennzeichnet die emotionale Erschöpfung, die als Kernsymptom des Burnout-Syndroms gilt. Dieser Zustand entsteht nicht plötzlich, sondern entwickelt sich meist schleichend über einen längeren Zeitraum, in dem die Person kontinuierlich mehr Energie ausgibt, als sie regenerieren kann. Bei Eltern kann dies besonders ausgeprägt sein, da die Betreuung von Kindern eine ständige Anforderung darstellt, die kaum Pausen zulässt."
         },
         {
-          title: "Umgang und Hilfestellungen",
-          content: "Wenn jemand sich 'am Ende' fühlt, sind kurzfristige Entlastung und Unterstützung besonders wichtig. Dies kann durch praktische Hilfe im Alltag, emotionale Unterstützung durch Zuhören und Verständnis oder professionelle Beratung und Therapie erfolgen. Es ist wichtig, die Situation ernst zu nehmen und nicht mit oberflächlichen Ratschlägen oder Bagatellisierung zu reagieren."
+          title: "Bewältigungsstrategien und Hilfe",
+          content: "Wenn Eltern das Gefühl haben, 'am Ende zu sein', ist dies ein deutliches Zeichen dafür, dass sie dringend Unterstützung und Entlastung benötigen. Kurzfristig können Notfallstrategien wie das Organisieren von Kinderbetreuung und bewusstes Einplanen von Ruhepausen helfen. Mittelfristig ist es wichtig, die eigenen Grenzen anzuerkennen, realistische Erwartungen zu setzen und Unterstützungssysteme zu aktivieren. Langfristig kann eine Überprüfung und Neuausrichtung des Lebensstils, der Prioritäten und des Umgangs mit Stress notwendig sein. Professionelle Unterstützung durch Beratung oder Therapie kann helfen, die zugrundeliegenden Muster zu erkennen und zu verändern."
         }
       ],
       literaryDevices: [
         {
           title: "Die leere Batterie",
-          content: "Das Gefühl, 'am Ende zu sein', kann mit einer völlig entladenen Batterie verglichen werden, die keine Energie mehr liefern kann. So wie eine entladene Batterie nicht einfach durch kurzes Aufladen wieder voll funktionsfähig wird, benötigt auch ein Mensch in diesem Zustand Zeit, Ruhe und eine grundlegende Regeneration, um seine Energiereserven wiederherzustellen."
+          content: "'Am Ende sein' ist wie eine völlig entladene Batterie in einem wichtigen Gerät. So wie eine leere Batterie keine Energie mehr für die Funktion des Geräts liefern kann, hat ein Mensch, der 'am Ende ist', keine Energie mehr für die Anforderungen des täglichen Lebens. Und ähnlich wie eine Batterie nicht durch kurzes Aufladen wieder voll funktionsfähig wird, wenn sie tiefentladen wurde, braucht auch ein Mensch in diesem Zustand mehr als nur eine gute Nacht Schlaf oder ein entspannendes Wochenende, um wieder zu voller Kraft zu kommen."
         }
       ],
       references: [
-        "Maslach, C., & Leiter, M. P. (2016). Understanding the burnout experience: Recent research and its implications for psychiatry. World Psychiatry, 15(2), 103-111.",
-        "Roskam, I., Brianda, M. E., & Mikolajczak, M. (2018). A step forward in the conceptualization and measurement of parental burnout: The Parental Burnout Assessment (PBA). Frontiers in Psychology, 9, 758."
+        "Rösing, I. (2003). Ist die Burnout-Forschung ausgebrannt? Analyse und Kritik der internationalen Burnout-Forschung. Kröning: Asanger.",
+        "Maslach, C., & Leiter, M. P. (2016). Understanding the burnout experience: Recent research and its implications for psychiatry. World Psychiatry, 15(2), 103-111."
       ],
-      relatedTerms: ["burnout", "erschoepfung", "ausgelaugt", "ueberforderung"]
+      relatedTerms: ["burnout", "erschoepfung", "stress", "belastung", "selbstfuersorge"]
     }
   },
   {
-    term: "Anorexia",
-    slug: "anorexia",
+    term: "Anorexia (Symptom)",
+    slug: "anorexia-symptom",
     definition: "Appetitlosigkeit als Symptom, nicht die spezifische Diagnose Anorexia Nervosa. (ICD-10: R63.0)",
     tags: ["Symptom-Essstörung", "Diagnose"],
     content: {
-      teaser: "Anorexia bezeichnet medizinisch betrachtet den Appetitsverlust als Symptom verschiedener Erkrankungen und ist von der psychischen Störung Anorexia nervosa (Magersucht) zu unterscheiden.",
+      teaser: "Anorexia bezeichnet als Symptom einen Appetitverlust, der bei verschiedenen körperlichen und psychischen Erkrankungen auftreten kann.",
       sections: [
         {
           title: "Definition und Abgrenzung",
-          content: "Der Begriff 'Anorexia' bezeichnet im medizinischen Sinne zunächst einfach den Verlust des Appetits oder die verringerte Nahrungsaufnahme. Dies ist von der Essstörung 'Anorexia nervosa' (Magersucht) zu unterscheiden, bei der die Nahrungsverweigerung nicht durch Appetitlosigkeit, sondern durch eine Gewichtsphobie und gestörte Körperwahrnehmung bedingt ist."
+          content: "Der Begriff 'Anorexia' bezeichnet medizinisch betrachtet zunächst nur das Symptom des Appetitverlusts oder der Appetitlosigkeit. Dies ist zu unterscheiden von 'Anorexia nervosa', die eine spezifische psychische Erkrankung aus dem Bereich der Essstörungen darstellt. Als Symptom kann Anorexia bei zahlreichen körperlichen und psychischen Erkrankungen auftreten und ist in der ICD-10 unter R63.0 klassifiziert."
         },
         {
-          title: "Mögliche Ursachen",
-          content: "Anorexia als Symptom kann verschiedene Ursachen haben, darunter körperliche Erkrankungen (wie Infektionen, Magen-Darm-Erkrankungen, Krebs), psychische Faktoren (wie Depression, Angststörungen, Stress), Nebenwirkungen von Medikamenten oder altersbedingten Veränderungen. Es handelt sich also um ein unspezifisches Symptom, das weiterer Abklärung bedarf."
+          title: "Ursachen für Appetitlosigkeit",
+          content: "Appetitlosigkeit kann viele verschiedene Ursachen haben. Häufig tritt sie im Zusammenhang mit akuten Infektionen, Verdauungsproblemen oder als Nebenwirkung bestimmter Medikamente auf. Auch psychische Faktoren wie Stress, Depression oder Angstzustände können zu Appetitlosigkeit führen. Bei Kindern kann temporäre Appetitlosigkeit Teil normaler Entwicklungsphasen sein oder auf emotionale Belastungen hinweisen. Bei älteren Menschen kann ein vermindertes Hungergefühl mit altersbedingten Veränderungen des Stoffwechsels und der Sinneswahrnehmung zusammenhängen."
         },
         {
-          title: "Klinische Bedeutung",
-          content: "Anhaltender Appetitsverlust kann zu ungewolltem Gewichtsverlust, Mangelernährung und weiteren gesundheitlichen Problemen führen. Besonders bei älteren Menschen, Kindern oder Personen mit chronischen Erkrankungen kann dies schwerwiegende Folgen haben. Bei anhaltender oder ungeklärter Anorexia ist daher eine ärztliche Abklärung wichtig."
+          title: "Beobachtung und Handlungsbedarf",
+          content: "Kurzzeitige Appetitlosigkeit, etwa während einer Erkältung, ist meist unproblematisch. Anhaltender Appetitverlust sollte jedoch ärztlich abgeklärt werden, besonders wenn er mit ungewolltem Gewichtsverlust, Müdigkeit oder anderen Symptomen einhergeht. Bei Kindern ist ein verändertes Essverhalten zu beachten, wenn es über typische 'schwierige Esser'-Phasen hinausgeht. Eltern sollten darauf achten, ob das Kind generell weniger Interesse an Essen zeigt oder ob selektives Essen vorliegt, bei dem nur bestimmte Nahrungsmittel gemieden werden. Bei Verdacht auf eine beginnende Essstörung ist frühes Handeln wichtig, wobei ein ausgewogener Umgang mit dem Thema Essen und ein nicht zu starker Fokus auf Gewicht und Figur hilfreich sind."
         }
       ],
       literaryDevices: [
         {
-          title: "Das verlorene Hungersignal",
-          content: "Anorexia kann mit einem defekten Alarmsystem verglichen werden. Normalerweise sendet unser Körper Hungersignale wie ein Alarmsystem, das uns mitteilt, wann wir Energie benötigen. Bei Anorexia funktioniert dieses System nicht richtig – der Alarm bleibt stumm oder wird vom Körper ignoriert, obwohl Nahrung benötigt wird. Während bei Anorexia nervosa der Alarm zwar funktioniert, aber bewusst überhört wird."
+          title: "Der verstummte Dialog",
+          content: "Appetit kann als ein Dialog zwischen Körper und Umwelt verstanden werden. Normalerweise 'spricht' unser Körper zu uns durch Hungersignale, wenn er Nahrung benötigt, und wir 'antworten', indem wir essen. Appetitlosigkeit ist wie ein verstummter Dialog – der Körper sendet keine klaren Signale mehr oder wir können sie nicht mehr wahrnehmen. Dies kann geschehen, weil andere 'Stimmen' (wie Stress, Krankheit oder emotionale Belastung) zu laut sind und die Hungersignale übertönen, oder weil die 'Verbindungsleitung' gestört ist, etwa durch biochemische Veränderungen bei Krankheit oder Depression."
         }
       ],
       references: [
-        "World Health Organization. (2019). International statistical classification of diseases and related health problems (11th ed.).",
-        "Thomas, D. R., & Ashmen, W. (2019). Anorexia and cachexia. In W. R. Hazzard (Ed.), Principles of Geriatric Medicine and Gerontology (7th ed.). McGraw-Hill Education."
+        "Biesalski, H. K., & Grimm, P. (2011). Taschenatlas Ernährung. Georg Thieme Verlag.",
+        "Treasure, J., Claudino, A. M., & Zucker, N. (2010). Eating disorders. The Lancet, 375(9714), 583-593."
       ],
-      relatedTerms: ["anorexia-nervosa", "appetitlosigkeit", "gewichtsverlust"]
+      relatedTerms: ["anorexia-nervosa", "appetit", "essstoerungen", "ernaehrung"]
     }
   },
   {
@@ -289,32 +320,32 @@ export const aTerms: GlossaryItem[] = [
     tags: ["Diagnose-Essstörung"],
     alias: "Magersucht",
     content: {
-      teaser: "Anorexia nervosa ist eine schwerwiegende Essstörung, die durch selbst herbeigeführten Gewichtsverlust, gestörte Körperwahrnehmung und intensive Angst vor Gewichtszunahme gekennzeichnet ist.",
+      teaser: "Anorexia nervosa ist eine schwerwiegende Essstörung, die durch selbst herbeigeführten Gewichtsverlust, intensive Angst vor Gewichtszunahme und eine gestörte Körperwahrnehmung gekennzeichnet ist.",
       sections: [
         {
-          title: "Definition und Diagnosekriterien",
-          content: "Anorexia nervosa ist durch drei Hauptkriterien gekennzeichnet: 1) Die Aufrechterhaltung eines signifikant niedrigen Körpergewichts (BMI unter 18,5 kg/m² bei Erwachsenen), 2) intensive Angst vor Gewichtszunahme trotz Untergewicht, und 3) eine gestörte Wahrnehmung des eigenen Körpers oder übermäßiger Einfluss des Körpergewichts auf die Selbstbewertung."
+          title: "Merkmale und Diagnose",
+          content: "Die Anorexia nervosa (Magersucht) ist durch ein deutlich zu niedriges Körpergewicht gekennzeichnet, das durch Nahrungsrestriktion, manchmal begleitet von übermäßiger körperlicher Aktivität, selbstinduziertem Erbrechen oder Missbrauch von Abführmitteln, herbeigeführt wird. Nach ICD-10 liegt das Körpergewicht mindestens 15% unter dem erwarteten Gewicht (BMI ≤ 17,5 kg/m²). Trotz Untergewicht besteht eine intensive Angst vor Gewichtszunahme und ein gestörtes Körperbild – Betroffene nehmen sich trotz objektiven Untergewichts als 'zu dick' wahr oder leugnen den Ernst ihrer Gewichtsabnahme. Die Störung beginnt typischerweise in der Adoleszenz und tritt überwiegend bei Mädchen und jungen Frauen auf, zunehmend aber auch bei Jungen und jungen Männern."
         },
         {
-          title: "Subtypen und Verlauf",
-          content: "Es werden zwei Haupttypen unterschieden: Der restriktive Typ, bei dem das Gewicht primär durch Nahrungsrestriktion und oft übermäßige körperliche Aktivität reduziert wird, und der Purging-Typ mit Essanfällen und kompensatorischem Verhalten wie Erbrechen oder Missbrauch von Abführmitteln. Die Erkrankung beginnt typischerweise in der Adoleszenz, kann aber in jedem Alter auftreten. Der Verlauf ist variabel, von vollständiger Genesung bis zu einem chronischen, lebensbedrohlichen Zustand."
+          title: "Subtypen und Verläufe",
+          content: "Es werden zwei Haupttypen unterschieden: Der restriktive Typ, bei dem primär durch Nahrungsrestriktion und übermäßige körperliche Aktivität Gewicht verloren wird, und der Binge-Eating/Purging-Typ, bei dem zusätzlich wiederkehrende Essanfälle und/oder kompensatorische Verhaltensweisen wie Erbrechen oder Missbrauch von Abführmitteln auftreten. Der Verlauf ist variabel – manche Betroffene erleben eine einzelne Episode mit vollständiger Genesung, andere einen chronischen, lebenslangen Verlauf mit schwerwiegenden körperlichen Folgen. Zu den körperlichen Komplikationen gehören Herzrhythmusstörungen, Osteoporose, Unfruchtbarkeit, Elektrolytstörungen und im schlimmsten Fall der Tod, mit einer der höchsten Mortalitätsraten unter psychischen Erkrankungen."
         },
         {
-          title: "Behandlungsansätze",
-          content: "Die Behandlung erfordert einen multidisziplinären Ansatz, der medizinische Überwachung, Ernährungsberatung und Psychotherapie umfasst. Je nach Schweregrad kann eine ambulante, teilstationäre oder vollstationäre Behandlung notwendig sein. Ziele sind die Normalisierung des Essverhaltens und Gewichts, die Behandlung der psychischen Aspekte und die Prävention von Rückfällen."
+          title: "Behandlung und Unterstützung",
+          content: "Die Behandlung erfordert einen multidisziplinären Ansatz, der medizinische Überwachung, Ernährungstherapie und psychotherapeutische Interventionen umfasst. Bei starkem Untergewicht steht zunächst die körperliche Stabilisierung im Vordergrund, oft im stationären Setting. Die kognitive Verhaltenstherapie, familienbasierte Therapie (besonders bei Jugendlichen) und psychodynamische Ansätze haben sich als wirksam erwiesen. Der Einbezug der Familie ist besonders bei jüngeren Patienten wichtig. Eltern sollten auf Frühwarnzeichen wie deutliche Veränderungen des Essverhaltens, exzessiven Sport, sozialen Rückzug und übermäßige Beschäftigung mit Essen und Gewicht achten."
         }
       ],
       literaryDevices: [
         {
-          title: "Das verzerrte Spiegelbild",
-          content: "Anorexia nervosa kann mit einem verzerrten Spiegel verglichen werden, der ein völlig anderes Bild zeigt als die Realität. Eine Person mit dieser Erkrankung blickt in den Spiegel und sieht sich als 'zu dick', selbst wenn der Körper bereits gefährlich abgemagert ist. Diese Verzerrung ist nicht willentlich, sondern Teil der Erkrankung – ähnlich wie ein Spukhaus-Spiegel, der die Realität verfälscht darstellt."
+          title: "Das tyrannische Regime",
+          content: "Anorexia nervosa kann als eine Art 'tyrannisches Regime' verstanden werden, das die Kontrolle über das Leben des Betroffenen übernimmt. Was als 'einfache Diät' oder Versuch, gesünder zu leben, beginnt, entwickelt sich zu einem strengen Regelwerk mit immer mehr Verboten und Pflichten. Wie ein Diktator verspricht die Anorexie zunächst Sicherheit und Kontrolle, fordert aber zunehmend schwerere Opfer und isoliert den Betroffenen von unterstützenden Beziehungen. Die anfänglichen 'Belohnungen' (wie Gefühle von Stolz und Kontrolle) werden immer seltener, während die 'Strafen' für Regelbrüche (Schuldgefühle, Selbsthass) immer härter werden. Die Heilung beginnt, wenn die Person erkennt, dass dieses Regime nicht ihr eigentliches Selbst repräsentiert, und beginnt, sich gegen die Tyrannei aufzulehnen."
         }
       ],
       references: [
-        "American Psychiatric Association. (2013). Diagnostic and statistical manual of mental disorders (5th ed.). Arlington, VA: American Psychiatric Publishing.",
-        "Zipfel, S., Giel, K. E., Bulik, C. M., Hay, P., & Schmidt, U. (2015). Anorexia nervosa: aetiology, assessment, and treatment. The Lancet Psychiatry, 2(12), 1099-1111."
+        "Herpertz, S., de Zwaan, M., & Zipfel, S. (2019). Handbuch Essstörungen und Adipositas. Springer-Verlag.",
+        "Lock, J., & Le Grange, D. (2015). Treatment manual for anorexia nervosa: A family-based approach. Guilford Publications."
       ],
-      relatedTerms: ["magersucht", "koerperschemastoerung", "essstoerung"]
+      relatedTerms: ["magersucht", "essanfaelle", "koerperbild", "essverhalten", "purging"]
     }
   },
   {
@@ -323,32 +354,32 @@ export const aTerms: GlossaryItem[] = [
     definition: "Subtyp der Anorexia Nervosa, bei dem neben restriktivem Essverhalten auch Essanfälle und/oder selbstinduziertes Erbrechen oder andere kompensatorische Verhaltensweisen auftreten. (ICD-10: F50.02)",
     tags: ["Diagnose-Essstörung"],
     content: {
-      teaser: "Dieser Subtyp der Anorexia nervosa ist durch eine Kombination aus starkem Untergewicht, Essanfällen und kompensatorischen Maßnahmen wie selbstinduziertem Erbrechen gekennzeichnet.",
+      teaser: "Der Binge-Eating/Purging-Typ der Anorexia Nervosa ist durch die Kombination von Untergewicht mit wiederkehrenden Essanfällen und/oder gewichtskontrollierenden Maßnahmen wie Erbrechen gekennzeichnet.",
       sections: [
         {
-          title: "Charakteristika und Diagnose",
-          content: "Bei diesem Subtyp der Anorexia nervosa treten neben dem für die Grunderkrankung typischen Untergewicht und der Angst vor Gewichtszunahme auch wiederkehrende Essanfälle und/oder kompensatorische Verhaltensweisen wie selbstinduziertes Erbrechen, Missbrauch von Abführmitteln oder exzessiver Sport auf. Im Gegensatz zum restriktiven Typ ist die Nahrungsaufnahme nicht nur eingeschränkt, sondern weist auch Phasen von unkontrolliertem Essen auf."
+          title: "Merkmale und Diagnostik",
+          content: "Der Binge-Eating/Purging-Typ der Anorexia Nervosa erfüllt die Grundkriterien der Anorexia nervosa (deutliches Untergewicht, Angst vor Gewichtszunahme, gestörtes Körperbild), zeigt aber zusätzlich regelmäßige Episoden von Essanfällen und/oder kompensatorischen Verhaltensweisen. Bei Essanfällen werden innerhalb kurzer Zeit objektiv große Nahrungsmengen verzehrt, begleitet von einem Gefühl des Kontrollverlusts. Purging-Verhalten umfasst selbstinduziertes Erbrechen, Missbrauch von Abführmitteln, Entwässerungsmitteln oder Einläufen. Auch exzessive körperliche Aktivität kann als kompensatorisches Verhalten eingesetzt werden. Für die Diagnose des Binge-Eating/Purging-Typs müssen diese Verhaltensweisen wiederholt während der aktuellen Episode der Anorexia nervosa aufgetreten sein."
         },
         {
-          title: "Unterschiede zu Bulimia Nervosa",
-          content: "Der Binge-Eating/Purging-Typ der Anorexia nervosa kann leicht mit Bulimia nervosa verwechselt werden, da beide Störungen Essanfälle und kompensatorisches Verhalten beinhalten. Der entscheidende Unterschied liegt jedoch im Körpergewicht: Bei Anorexia nervosa liegt ein signifikantes Untergewicht vor (BMI < 18,5), während das Gewicht bei Bulimia nervosa normal oder erhöht sein kann."
+          title: "Abgrenzung und Überschneidungen",
+          content: "Dieser Subtyp weist Überlappungen mit der Bulimia nervosa auf, unterscheidet sich jedoch durch das deutliche Untergewicht. Übergänge zwischen den beiden Störungsbildern sind nicht selten. Viele Betroffene wechseln im Laufe ihrer Erkrankung zwischen den Subtypen der Anorexia nervosa oder entwickeln eine Bulimia nervosa. Der Binge-Eating/Purging-Typ ist oft mit impulsiveren Persönlichkeitszügen, emotionaler Instabilität und einem höheren Risiko für selbstverletzendes Verhalten und Substanzmissbrauch verbunden als der restriktive Typ."
         },
         {
           title: "Behandlungsherausforderungen",
-          content: "Dieser Subtyp stellt besondere Herausforderungen in der Behandlung dar, da sowohl die Unterernährung als auch das dysfunktionale Essverhalten mit Essanfällen und Kompensationsverhalten adressiert werden müssen. Die Therapie umfasst daher neben der Gewichtsnormalisierung auch spezifische Interventionen zur Regulation des Essverhaltens, zum Umgang mit Essanfällen und zur Reduktion von Purging-Verhalten."
+          content: "Die Behandlung dieses Subtyps stellt besondere Herausforderungen dar, da neben der Gewichtszunahme auch die Essanfälle und das kompensatorische Verhalten adressiert werden müssen. Die Betroffenen erleben oft intensive Scham- und Schuldgefühle bezüglich dieser Verhaltensweisen und verheimlichen sie. Der therapeutische Ansatz muss daher eine vertrauensvolle Beziehung etablieren und ein nicht-wertendes Umfeld schaffen. Die kognitive Verhaltenstherapie hat sich als wirksam erwiesen, wobei der Fokus neben der Normalisierung des Essverhaltens auch auf der Identifikation auslösender Faktoren für Essanfälle und der Entwicklung alternativer Bewältigungsstrategien für schwierige Emotionen liegt."
         }
       ],
       literaryDevices: [
         {
-          title: "Der Pendel-Effekt",
-          content: "Das Essverhalten beim Binge-Eating/Purging-Typ der Anorexia nervosa kann mit einem Pendel verglichen werden, das zwischen extremen Positionen schwingt. Auf der einen Seite steht die strikte Kontrolle und Einschränkung, auf der anderen Seite der Kontrollverlust während der Essanfälle. Das Purging-Verhalten stellt dann den verzweifelten Versuch dar, das Pendel wieder in Richtung Kontrolle zu zwingen, was jedoch langfristig nur zu stärkeren Ausschlägen führt."
+          title: "Das Pendel der Extreme",
+          content: "Der Binge-Eating/Purging-Typ der Anorexia nervosa kann mit einem Pendel verglichen werden, das zwischen extremen Positionen schwingt. Auf der einen Seite steht die strenge Kontrolle und Restriktion, auf der anderen der Kontrollverlust während der Essanfälle. Das Pendel schwingt mit großer Kraft von einem Extrem zum anderen, ohne eine stabile Mitte zu finden. Wie bei einem realen Pendel verbraucht diese ständige Bewegung zwischen den Extremen enorme Energie und führt zu Erschöpfung. Der Heilungsprozess besteht darin, die heftigen Ausschläge allmählich zu verringern und dem Pendel zu helfen, eine ausgewogenere, ruhigere Position zu finden."
         }
       ],
       references: [
-        "American Psychiatric Association. (2013). Diagnostic and statistical manual of mental disorders (5th ed.). Arlington, VA: American Psychiatric Publishing.",
-        "Eddy, K. T., Tabri, N., Thomas, J. J., Murray, H. B., Keshaviah, A., Hastings, E., ... & Franko, D. L. (2017). Recovery from anorexia nervosa and bulimia nervosa at 22-year follow-up. The Journal of clinical psychiatry, 78(2), 184-189."
+        "Eddy, K. T., Dorer, D. J., Franko, D. L., Tahilani, K., Thompson-Brenner, H., & Herzog, D. B. (2008). Diagnostic crossover in anorexia nervosa and bulimia nervosa: Implications for DSM-V. American Journal of Psychiatry, 165(2), 245-250.",
+        "Dalle Grave, R. (2011). Eating disorders: Progress and challenges. European Journal of Internal Medicine, 22(2), 153-160."
       ],
-      relatedTerms: ["anorexia-nervosa", "bulimia-nervosa", "essanfall", "purging"]
+      relatedTerms: ["anorexia-nervosa", "bulimia-nervosa", "essanfaelle", "purging"]
     }
   },
   {
@@ -357,32 +388,32 @@ export const aTerms: GlossaryItem[] = [
     definition: "Subtyp der Anorexia Nervosa, bei dem das Untergewicht primär durch Hungern, Diäten oder exzessiven Sport erreicht wird, ohne regelmäßige Essanfälle oder Purging-Verhalten. (ICD-10: F50.01)",
     tags: ["Diagnose-Essstörung"],
     content: {
-      teaser: "Der restriktive Typ der Anorexia nervosa ist durch starkes Untergewicht gekennzeichnet, das primär durch Nahrungsrestriktion und oft exzessiven Sport erreicht wird, ohne Essanfälle oder Purging-Verhalten.",
+      teaser: "Der restriktive Typ der Anorexia nervosa ist durch striktes Einschränken der Nahrungszufuhr und/oder übermäßige körperliche Aktivität gekennzeichnet, ohne regelmäßige Essanfälle oder kompensatorische Maßnahmen.",
       sections: [
         {
-          title: "Charakteristika und Diagnose",
-          content: "Beim restriktiven Typ der Anorexia nervosa wird das Untergewicht hauptsächlich durch starke Einschränkung der Nahrungsaufnahme und oft durch übermäßige körperliche Aktivität erreicht. Im Gegensatz zum Binge-Eating/Purging-Typ treten keine regelmäßigen Essanfälle auf, und die Betroffenen greifen nicht regelmäßig zu Purging-Verhalten wie selbstinduziertem Erbrechen oder Missbrauch von Abführmitteln."
+          title: "Klinisches Bild und Diagnose",
+          content: "Der restriktive Typ der Anorexia nervosa erfüllt die Grundkriterien der Erkrankung (deutliches Untergewicht, Angst vor Gewichtszunahme, Körperbildstörung), erreicht und hält das niedrige Gewicht aber hauptsächlich durch Nahrungsrestriktion und/oder übermäßige körperliche Betätigung. Charakteristisch sind strenge Diätregeln, das Zählen von Kalorien, das Meiden bestimmter Nahrungsmittelgruppen (besonders fett- oder kohlenhydratreiche Speisen) und oft zwanghaft betriebener Sport. Für die Diagnose des restriktiven Typs dürfen in den letzten drei Monaten keine wiederkehrenden Essanfälle oder kompensatorischen Verhaltensweisen wie selbstinduziertes Erbrechen oder Missbrauch von Abführmitteln aufgetreten sein."
         },
         {
-          title: "Psychologische Merkmale",
-          content: "Personen mit diesem Subtyp zeigen oft eine ausgeprägte Rigidität und Perfektionismus, nicht nur in Bezug auf Essen und Gewicht, sondern auch in anderen Lebensbereichen. Die Nahrungsaufnahme wird streng kontrolliert, oft mit komplexen Regeln und Ritualen verbunden. Häufig besteht ein Stolz auf die 'Selbstkontrolle' und die Fähigkeit, Hungergefühle zu ignorieren oder zu unterdrücken."
+          title: "Psychologische Charakteristika",
+          content: "Betroffene mit dem restriktiven Typ zeigen häufig ausgeprägte Perfektionismus- und Zwangszüge, hohe Selbstkontrolle und Schwierigkeiten, Emotionen wahrzunehmen und auszudrücken (Alexithymie). Die Nahrungsrestriktion beginnt oft mit dem Wunsch, Kontrolle über das eigene Leben zu gewinnen oder mit gesellschaftlichen Idealen übereinzustimmen, entwickelt aber zunehmend eine Eigendynamik. Erfolgreiche Gewichtsabnahme und Hungern können vorübergehend euphorische Gefühle auslösen und werden mit Stolz und Überlegenheitsgefühlen verbunden. Mit fortschreitender Mangelernährung treten Konzentrationsstörungen, Reizbarkeit und sozialer Rückzug auf, die die Störung weiter verstärken können."
         },
         {
-          title: "Medizinische Komplikationen und Behandlung",
-          content: "Dieser Subtyp kann schnell zu schweren medizinischen Komplikationen führen, da die kontinuierliche Unterernährung ohne die gelegentliche Nahrungsaufnahme während Essanfällen zu einem besonders niedrigen Körpergewicht führen kann. Die Behandlung konzentriert sich auf die schrittweise Normalisierung des Essverhaltens und des Gewichts sowie auf die Veränderung der rigiden Denkmuster und der Angst vor Gewichtszunahme."
+          title: "Körperliche Folgen und Behandlung",
+          content: "Die anhaltende Unterernährung beim restriktiven Typ führt zu gravierenden körperlichen Folgen wie Herzrhythmusstörungen, Osteoporose, hormonellen Störungen mit Ausbleiben der Menstruation, Infertilität und erhöhter Infektanfälligkeit. Die Behandlung muss somatische und psychische Aspekte integrieren. Bei schwerem Untergewicht steht zunächst die Wiederherstellung eines gesundheitlich vertretbaren Gewichts im Vordergrund, oft im stationären Rahmen. Die psychotherapeutische Behandlung zielt auf die Veränderung dysfunktionaler Denkmuster bezüglich Gewicht und Figur, die Verbesserung der Emotionsregulation und den Aufbau eines positiven Selbstwertgefühls jenseits von Gewichtskontrolle ab."
         }
       ],
       literaryDevices: [
         {
-          title: "Das eingefrorene Thermostat",
-          content: "Der restriktive Typ der Anorexia nervosa kann mit einem defekten Thermostat verglichen werden, der kontinuierlich auf 'zu kalt' eingestellt ist. Während ein funktionierender Thermostat bei Kälte die Heizung aktivieren würde (analog zum Hungergefühl, das zur Nahrungsaufnahme führt), reagiert dieser defekte Thermostat nicht mehr auf die tatsächliche Temperatur des Körpers. Stattdessen hält er starr an einer Einstellung fest, die für den Organismus gefährlich ist."
+          title: "Das perfekte Bauwerk",
+          content: "Der restriktive Typ der Anorexia nervosa kann mit dem Versuch verglichen werden, ein perfektes Bauwerk zu errichten, das keinerlei Unregelmäßigkeiten oder Fehler aufweist. Die Betroffenen sehen ihren Körper als ein Projekt, das durch strenge Regeln, Kontrolle und Disziplin zu einem 'idealen' Zustand geformt werden muss. Wie ein Architekt, der besessen davon ist, jeden Millimeter genau zu planen und zu kontrollieren, überwachen sie jede Kalorie und jede körperliche Aktivität. Aber je mehr sie nach Perfektion streben, desto fragiler wird das Bauwerk – bis es schließlich einzustürzen droht. Der Heilungsprozess beginnt mit der Erkenntnis, dass echte Schönheit und Stärke nicht in der perfekten Symmetrie liegen, sondern in der Widerstandsfähigkeit eines Gebäudes, das flexibel genug ist, um den Stürmen des Lebens standzuhalten."
         }
       ],
       references: [
-        "American Psychiatric Association. (2013). Diagnostic and statistical manual of mental disorders (5th ed.). Arlington, VA: American Psychiatric Publishing.",
-        "Kaye, W. H., Wierenga, C. E., Bailer, U. F., Simmons, A. N., & Bischoff-Grethe, A. (2013). Nothing tastes as good as skinny feels: the neurobiology of anorexia nervosa. Trends in neurosciences, 36(2), 110-120."
+        "Zipfel, S., Giel, K. E., Bulik, C. M., Hay, P., & Schmidt, U. (2015). Anorexia nervosa: Aetiology, assessment, and treatment. The Lancet Psychiatry, 2(12), 1099-1111.",
+        "Hilbert, A., Hoek, H. W., & Schmidt, R. (2017). Evidence-based clinical guidelines for eating disorders: International comparison. Current Opinion in Psychiatry, 30(6), 423-437."
       ],
-      relatedTerms: ["anorexia-nervosa", "restriktion", "hungern", "koerperschemastoerung"]
+      relatedTerms: ["anorexia-nervosa", "diaet", "hunger", "hyperaktivitaet", "perfektionismus"]
     }
   },
   {
@@ -391,66 +422,67 @@ export const aTerms: GlossaryItem[] = [
     definition: "Diagnose, wenn die Kriterien für Anorexia Nervosa erfüllt sind, aber der Subtyp nicht spezifiziert ist. (ICD-10: F50.00)",
     tags: ["Diagnose-Essstörung"],
     content: {
-      teaser: "Anorexia Nervosa, nicht näher bezeichnet, wird diagnostiziert, wenn die Hauptkriterien der Anorexia nervosa erfüllt sind, aber keine eindeutige Zuordnung zu einem spezifischen Subtyp möglich ist.",
+      teaser: "Anorexia Nervosa, Unspecified bezeichnet Fälle von Magersucht, bei denen eine eindeutige Zuordnung zu einem spezifischen Subtyp nicht möglich oder nicht erfolgt ist.",
       sections: [
         {
           title: "Diagnostische Einordnung",
-          content: "Diese Diagnose wird gestellt, wenn eine Person die Kernmerkmale der Anorexia nervosa aufweist (signifikantes Untergewicht, Angst vor Gewichtszunahme, gestörte Körperwahrnehmung), aber nicht eindeutig dem restriktiven oder dem Binge-Eating/Purging-Typ zugeordnet werden kann. Dies kann der Fall sein, wenn das Essverhalten nicht klar zu kategorisieren ist oder sich im Wechsel Merkmale beider Subtypen zeigen."
+          content: "Die Diagnose 'Anorexia Nervosa, Unspecified' wird vergeben, wenn die grundlegenden Kriterien der Anorexia nervosa erfüllt sind (ausgeprägtes Untergewicht, intensive Angst vor Gewichtszunahme, Körperbildstörung), aber keine ausreichenden Informationen vorliegen oder keine klare Zuordnung zum restriktiven Typ oder zum Binge-Eating/Purging-Typ möglich ist. Dies kann der Fall sein, wenn das Essverhalten und gewichtskontrollierende Maßnahmen wechseln oder nicht eindeutig erfasst werden können, etwa bei unzureichender Anamnese oder wenn Betroffene bestimmte Verhaltensweisen nicht offenlegen."
         },
         {
-          title: "Klinische Bedeutung",
-          content: "Auch wenn der Subtyp nicht spezifiziert ist, handelt es sich um eine vollwertige Diagnose, die die gleiche klinische Aufmerksamkeit und Behandlungsbedürftigkeit signalisiert wie die spezifischen Subtypen. Die medizinischen Komplikationen und psychologischen Auswirkungen können ebenso gravierend sein."
+          title: "Klinische Relevanz",
+          content: "Die unspezifische Form der Anorexia nervosa ist klinisch ebenso ernst zu nehmen wie die spezifizierten Subtypen. Das Fehlen einer Subtypisierung bedeutet nicht, dass die Störung weniger schwerwiegend ist oder weniger Behandlungsbedarf besteht. Die körperlichen und psychischen Folgen entsprechen denen der anderen Formen der Anorexia nervosa. In der Praxis kann die Diagnose vorläufig sein, bis durch fortgesetzte Beobachtung und therapeutische Beziehungsbildung ein klareres Bild des Essverhaltens entsteht und eine spezifischere Einordnung möglich wird."
         },
         {
           title: "Behandlungsansatz",
-          content: "Die Behandlung orientiert sich an den Standards für Anorexia nervosa und berücksichtigt die individuellen Symptome und Verhaltensweisen. Eine gründliche fortlaufende Diagnostik kann hilfreich sein, um das spezifische Muster des Essverhaltens besser zu verstehen und die Therapie entsprechend anzupassen."
+          content: "Der Behandlungsansatz bei der unspezifizierten Form der Anorexia nervosa orientiert sich an den allgemeinen Leitlinien zur Behandlung der Essstörung. Zentrale Elemente sind die Normalisierung des Essverhaltens und des Gewichts, die psychotherapeutische Bearbeitung der zugrundeliegenden psychologischen Faktoren und die Behandlung von Begleiterkrankungen. Im Verlauf der Behandlung ist es wichtig, auf mögliche Essanfälle oder kompensatorisches Verhalten zu achten, um die Therapie entsprechend anzupassen. Die interdisziplinäre Zusammenarbeit von Ärzten, Psychotherapeuten, Ernährungsfachkräften und bei Bedarf weiteren Fachpersonen ist auch hier ein zentraler Erfolgsfaktor."
         }
       ],
       literaryDevices: [
         {
-          title: "Das unklare Muster",
-          content: "Anorexia nervosa ohne spezifizierten Subtyp kann mit einem Musikstück verglichen werden, das zwischen verschiedenen Tonarten wechselt. Obwohl das Grundthema (die Kernsymptomatik der Anorexie) klar erkennbar ist, folgt die Melodie (das spezifische Essverhalten) keinem eindeutigen Muster, sondern verändert sich und kombiniert verschiedene Elemente auf eine Weise, die sich einer klaren Kategorisierung entzieht."
+          title: "Das unbenannte Porträt",
+          content: "Die unspezifizierte Form der Anorexia nervosa kann mit einem Porträt verglichen werden, dessen genaue Stilrichtung noch nicht bestimmt wurde. Die grundlegenden Elemente des Bildes – die Leinwand, die Farben, das Motiv – sind klar erkennbar und identifizieren es eindeutig als Porträt (die Grundkriterien der Anorexia nervosa). Doch ob es sich um einen Impressionismus, Expressionismus oder Realismus handelt (der spezifische Subtyp), ist noch nicht festgelegt oder erfasst worden. Dies ändert jedoch nichts an der Tatsache, dass es sich um ein vollwertiges Kunstwerk handelt, das dieselbe Aufmerksamkeit und Pflege benötigt wie ein bereits kategorisiertes Werk."
         }
       ],
       references: [
-        "American Psychiatric Association. (2013). Diagnostic and statistical manual of mental disorders (5th ed.). Arlington, VA: American Psychiatric Publishing.",
-        "Treasure, J., Duarte, T. A., & Schmidt, U. (2020). Eating disorders. The Lancet, 395(10227), 899-911."
+        "American Psychiatric Association. (2013). Diagnostic and statistical manual of mental disorders (5th ed.).",
+        "World Health Organization. (2019). International statistical classification of diseases and related health problems (11th ed.)."
       ],
-      relatedTerms: ["anorexia-nervosa", "essstoerung", "diagnostik"]
+      relatedTerms: ["anorexia-nervosa", "anorexia-nervosa-restricting-type", "anorexia-nervosa-binge-eating-purging-type"]
     }
   },
   {
     term: "Anpassungsstörung",
     slug: "anpassungsstoerung",
-    definition: "Eine psychische Reaktion auf eine identifizierbare Belastung, die innerhalb von drei Monaten nach dem Ereignis beginnt.",
+    definition: "Siehe Adjustment Disorder.",
     tags: ["Diagnose-Stress", "Diagnose-Burnout"],
+    alias: "Adjustment Disorder",
     content: {
-      teaser: "Eine Anpassungsstörung ist eine psychische Reaktion auf eine belastende Lebenssituation, die sich in Form von emotionalen oder Verhaltenssymptomen äußert.",
+      teaser: "Die Anpassungsstörung ist eine psychische Reaktion auf belastende Lebensereignisse, die zu deutlichen emotionalen oder verhaltensbezogenen Symptomen führt, welche die normale Bewältigungsfähigkeit übersteigen.",
       sections: [
         {
-          title: "Was ist eine Anpassungsstörung?",
-          content: "Eine Anpassungsstörung ist eine psychische Erkrankung, die als Reaktion auf eine identifizierbare Belastung auftritt. Diese Belastung kann ein einzelnes Ereignis sein (z.B. Trennung, Verlust des Arbeitsplatzes) oder eine anhaltende Situation (z.B. Beziehungsprobleme, finanzielle Schwierigkeiten)."
+          title: "Definition und Merkmale",
+          content: "Eine Anpassungsstörung ist eine übermäßige, beeinträchtigende Reaktion auf einen oder mehrere identifizierbare Stressoren, die innerhalb von drei Monaten nach deren Beginn auftritt. Die Symptomatik überschreitet das erwartbare Maß an Belastungsreaktion und führt zu deutlichen Beeinträchtigungen im sozialen oder beruflichen Funktionsniveau. Typische Symptome können depressive Stimmung, Angst, Verhaltensstörungen oder eine Kombination davon sein. Im Gegensatz zu anderen psychischen Störungen ist bei der Anpassungsstörung der Auslöser klar identifizierbar, und die Symptome sollten innerhalb von sechs Monaten nach Ende des Stressors abklingen."
         },
         {
-          title: "Symptome einer Anpassungsstörung",
-          content: "Die Symptome können vielfältig sein und umfassen depressive Verstimmung, Angstzustände, Reizbarkeit, Schlafstörungen, Konzentrationsschwierigkeiten und Verhaltensänderungen. Sie beginnen in der Regel innerhalb von drei Monaten nach dem belastenden Ereignis."
+          title: "Auslöser und Risikogruppen",
+          content: "Auslöser können einzelne Ereignisse wie Jobverlust, Trennung, Umzug, schwere Erkrankung oder anhaltende Stressoren wie berufliche Überforderung, finanzielle Probleme oder familiäre Konflikte sein. Auch positive Veränderungen wie Heirat oder Elternschaft können eine Anpassungsstörung auslösen, wenn sie mit erheblichen Lebensveränderungen verbunden sind. Besonders gefährdet sind Menschen in Lebensphasen mit multiplen Veränderungen, Personen mit schwachem sozialem Netzwerk oder Menschen mit vorbestehenden psychischen Problemen. Eltern von Kindern mit besonderen Bedürfnissen, wie ADHS oder chronischen Erkrankungen, haben ebenfalls ein erhöhtes Risiko."
         },
         {
-          title: "Behandlung einer Anpassungsstörung",
-          content: "Die Behandlung zielt darauf ab, die Symptome zu lindern und die Anpassung an die neue Situation zu erleichtern. Sie kann Psychotherapie, Medikamente oder eine Kombination aus beidem umfassen."
+          title: "Behandlung und Verlauf",
+          content: "Die Behandlung umfasst unterstützende Psychotherapie, um Bewältigungsstrategien zu entwickeln und die emotionale Verarbeitung zu fördern. Kognitive Verhaltenstherapie kann helfen, negative Gedankenmuster zu erkennen und zu modifizieren. Entspannungstechniken und Stressbewältigungsstrategien sind wichtige Elemente der Therapie. In einigen Fällen, besonders bei starken depressiven oder Angstsymptomen, kann eine kurzfristige medikamentöse Behandlung sinnvoll sein. Die Prognose ist bei adäquater Behandlung gut. Ohne angemessene Unterstützung kann sich die Störung jedoch bei anhaltenden Stressoren zu einer länger anhaltenden Depression oder Angststörung entwickeln."
         }
       ],
       literaryDevices: [
         {
-          title: "Der Stolperstein",
-          content: "Stellen Sie sich vor, das Leben ist wie ein Weg, auf dem wir unterwegs sind. Manchmal liegt ein Stolperstein im Weg, der uns aus dem Gleichgewicht bringt. Eine Anpassungsstörung ist wie die Reaktion auf diesen Stolperstein – wir brauchen Zeit, um uns wiederzufinden und unseren Weg fortzusetzen."
+          title: "Das überflutete System",
+          content: "Eine Anpassungsstörung kann mit einem Entwässerungssystem verglichen werden, das mit einer plötzlichen Überschwemmung konfrontiert wird. Ein gut funktionierendes System kann mit normalen Regenfällen umgehen und das Wasser ableiten. Bei einem ungewöhnlich starken oder anhaltenden Unwetter kann jedoch selbst ein gutes System überlastet werden und überfluten. Die Folge ist eine 'Überschwemmung' von Emotionen und Reaktionen, die nicht mehr adäquat 'abfließen' können. Die Behandlung besteht darin, vorübergehende zusätzliche 'Abflussmöglichkeiten' zu schaffen (Unterstützung, Bewältigungsstrategien) und langfristig das 'Entwässerungssystem' zu verbessern (Resilienz aufbauen)."
         }
       ],
       references: [
-        "American Psychiatric Association. (2013). Diagnostic and statistical manual of mental disorders (5th ed.). Arlington, VA: American Psychiatric Publishing.",
-        "Casey, P., & Wittchen, H. U. (2001). Adjustment disorders in DSM-IV. In M. Maj (Ed.), Psychiatric diagnosis and classification (pp. 215-244). Chichester: John Wiley & Sons."
+        "Casey, P. (2014). Adjustment disorder: New developments. Current Psychiatry Reports, 16(6), 451.",
+        "Maercker, A., Einsle, F., & Köllner, V. (2007). Adjustment disorders as stress response syndromes: A new diagnostic concept and its exploration in a medical sample. Psychopathology, 40(3), 135-146."
       ],
-      relatedTerms: ["stress", "krise", "belastung"]
+      relatedTerms: ["adjustment-disorder", "stress", "belastung", "bewaeltigungsstrategien"]
     }
   },
   {
@@ -459,32 +491,67 @@ export const aTerms: GlossaryItem[] = [
     definition: "Hoher subjektiv empfundener Energieaufwand, um den Alltag oder spezifische Aufgaben zu bewältigen.",
     tags: ["Alltag", "Symptom-Burnout", "Symptom-ADHS", "Symptom-Essstörung"],
     content: {
-      teaser: "Anstrengung beschreibt den subjektiv empfundenen hohen Energieaufwand bei der Bewältigung von Aufgaben oder Situationen, der im Kontext psychischer Belastung besondere Bedeutung erlangt.",
+      teaser: "Anstrengung beschreibt den subjektiv empfundenen Energieaufwand, der nötig ist, um bestimmte Aufgaben zu bewältigen oder den Alltag zu meistern.",
       sections: [
         {
-          title: "Anstrengung im psychologischen Kontext",
-          content: "Anstrengung bezeichnet den subjektiv wahrgenommenen Aufwand an Energie oder Ressourcen, der benötigt wird, um Aufgaben zu bewältigen oder Situationen zu meistern. Während ein gewisses Maß an Anstrengung normal und oft notwendig für Leistung ist, kann übermäßige oder anhaltende Anstrengung ein Zeichen für erhöhte Belastung oder bestehende psychische Probleme sein, insbesondere wenn alltägliche Aktivitäten unverhältnismäßig viel Kraft kosten."
+          title: "Anstrengung im Alltag",
+          content: "Anstrengung ist ein normaler Teil des menschlichen Erlebens und beschreibt die körperliche und/oder geistige Energie, die für die Bewältigung von Aufgaben aufgewendet wird. Das subjektive Erleben von Anstrengung variiert stark zwischen Individuen und wird von zahlreichen Faktoren beeinflusst, darunter körperliche und psychische Verfassung, Schlafqualität, Motivation und Interesse an der Aufgabe, sowie vorhandene Fähigkeiten und Ressourcen. Anstrengung ist nicht grundsätzlich negativ zu bewerten – moderate Anstrengung kann zu Erfolgserlebnissen, persönlichem Wachstum und Zufriedenheit führen (Eustress). Problematisch wird sie, wenn sie chronisch zu hoch ist und die verfügbaren Ressourcen übersteigt."
         },
         {
-          title: "Anstrengung bei verschiedenen Störungsbildern",
-          content: "Bei Burnout wird der alltägliche Energieaufwand als unverhältnismäßig hoch empfunden, selbst bei früher leicht bewältigbaren Aufgaben. Bei ADHS erfordert die Aufrechterhaltung von Aufmerksamkeit und Organisation oft eine überdurchschnittliche Anstrengung, was zu schnellerer Erschöpfung führen kann. Bei Essstörungen kann der ständige Kampf mit Nahrung und Körperbild erhebliche mentale Anstrengung bedeuten und andere Lebensbereiche beeinträchtigen."
+          title: "Anstrengung im Kontext psychischer Gesundheit",
+          content: "Bei verschiedenen psychischen Zuständen und Erkrankungen kann die subjektiv empfundene Anstrengung für bestimmte Tätigkeiten erhöht sein. Menschen mit Burnout erleben oft selbst einfache Alltagsaufgaben als unverhältnismäßig anstrengend, was mit der emotionalen Erschöpfung als Kernsymptom zusammenhängt. Bei ADHS kann die Anstrengung für Aufgaben, die Aufmerksamkeit, Organisation oder Impulskontrolle erfordern, deutlich erhöht sein, da die neurobiologischen Grundlagen dieser exekutiven Funktionen beeinträchtigt sind. Bei Essstörungen kann die mentale Anstrengung im Zusammenhang mit Mahlzeiten und Körperwahrnehmung enorm sein, da ständige innere Konflikte, Regeln und Kontrollbedürfnisse bewältigt werden müssen."
         },
         {
-          title: "Maß der Anstrengung als diagnostischer Hinweis",
-          content: "Das subjektive Empfinden unverhältnismäßiger Anstrengung kann ein wichtiger diagnostischer Hinweis sein. Wenn alltägliche Aktivitäten wie Aufstehen, soziale Interaktionen oder Routineaufgaben als außerordentlich anstrengend erlebt werden, kann dies auf eine beginnende oder bestehende psychische Störung hindeuten. Die Veränderung im Anstrengungserleben über Zeit kann ein wertvoller Indikator für Verschlechterung oder Verbesserung sein."
+          title: "Umgang mit erhöhter Anstrengung",
+          content: "Der Umgang mit erhöhter Anstrengung erfordert zunächst das Erkennen und Akzeptieren der eigenen Grenzen. Es ist wichtig, realistische Erwartungen zu setzen und sich nicht mit anderen zu vergleichen, besonders bei Vorliegen psychischer Beeinträchtigungen. Strategien zur Bewältigung umfassen das Setzen von Prioritäten, das Aufteilen größerer Aufgaben in kleinere Schritte, regelmäßige Pausen und eine gute Selbstfürsorge. Bei ADHS können externe Strukturierungshilfen, klare Routinen und die Nutzung von Stärken und Interessen hilfreich sein. Bei Burnout ist oft eine grundlegende Neuausrichtung des Verhältnisses von Belastung und Erholung notwendig. Professionelle Unterstützung sollte in Anspruch genommen werden, wenn die Anstrengung dauerhaft als überwältigend erlebt wird."
         }
       ],
       literaryDevices: [
         {
-          title: "Die schwere Rüstung",
-          content: "Übermäßige Anstrengung im Alltag kann mit dem Tragen einer schweren Rüstung verglichen werden. Während andere Menschen sich leicht und frei bewegen können, muss die betroffene Person jede Bewegung gegen das Gewicht dieser Rüstung durchführen. Selbst einfache Handgriffe erfordern zusätzliche Kraft, und am Ende des Tages ist die Erschöpfung ungleich größer als bei anderen. Die Rüstung ist für Außenstehende oft unsichtbar, was es schwer macht, die tatsächliche Belastung nachzuvollziehen."
+          title: "Die Energiewährung",
+          content: "Anstrengung kann als eine Art 'Energiewährung' verstanden werden, die wir für verschiedene Aktivitäten 'ausgeben'. Jeder Mensch hat ein bestimmtes tägliches 'Budget' dieser Währung, das durch Schlaf, Erholung und positive Erfahrungen aufgefüllt wird. Bei manchen psychischen Zuständen wie ADHS oder Burnout ist dieses Budget jedoch von vornherein kleiner oder wird schneller aufgebraucht. Bestimmte Aktivitäten kosten auch unterschiedlich viel dieser 'Währung' – was für einen Menschen ein 'Schnäppchen' ist (wenig Anstrengung), kann für einen anderen mit ADHS oder Burnout 'teuer' (sehr anstrengend) sein. Gutes Energiemanagement bedeutet, bewusst zu entscheiden, wofür man seine begrenzte 'Währung' ausgibt und wie man das Budget wieder auffüllen kann."
         }
       ],
       references: [
         "Hockey, R. (2013). The psychology of fatigue: Work, effort and control. Cambridge University Press.",
-        "Baumeister, R. F., & Tierney, J. (2012). Willpower: Rediscovering the greatest human strength. Penguin Books."
+        "Barkley, R. A. (2015). Attention-deficit hyperactivity disorder: A handbook for diagnosis and treatment (4th ed.). Guilford Press."
       ],
-      relatedTerms: ["erschoepfung", "burnout", "belastung", "energiedefizit"]
+      relatedTerms: ["erschoepfung", "burnout", "adhs", "energiemanagement", "selbstfuersorge"]
+    }
+  },
+  {
+    term: "Attention-Deficit Hyperactivity Disorder (ADHS)",
+    slug: "attention-deficit-hyperactivity-disorder",
+    definition: "Siehe ADHS.",
+    tags: ["Diagnose-ADHS"],
+    alias: "ADHS",
+    content: {
+      teaser: "Attention-Deficit Hyperactivity Disorder (ADHS) ist die englische Bezeichnung für die Aufmerksamkeitsdefizit-/Hyperaktivitätsstörung, eine neurobiologische Entwicklungsstörung mit Symptomen wie Unaufmerksamkeit, Impulsivität und/oder Hyperaktivität.",
+      sections: [
+        {
+          title: "Internationale Perspektive und Terminologie",
+          content: "Attention-Deficit Hyperactivity Disorder (ADHS) ist die im englischsprachigen Raum und in internationalen Klassifikationssystemen wie dem DSM-5 (Diagnostic and Statistical Manual of Mental Disorders) verwendete Bezeichnung für die Aufmerksamkeitsdefizit-/Hyperaktivitätsstörung. In deutschsprachigen Ländern wird vorwiegend die Abkürzung ADHS verwendet, während im internationalen wissenschaftlichen Kontext die Abkürzung ADHD gebräuchlich ist. Die Kernsymptomatik und diagnostischen Kriterien sind im Wesentlichen identisch, obwohl es leichte Unterschiede zwischen den Klassifikationssystemen DSM-5 (amerikanisch) und ICD-10/11 (international) gibt."
+        },
+        {
+          title: "Forschung und internationale Zusammenarbeit",
+          content: "Die internationale Forschung zu ADHS/ADHD ist umfangreich und wächst stetig. Die englischsprachige Terminologie dominiert die wissenschaftliche Literatur, weshalb es für Fachleute und interessierte Eltern wichtig sein kann, mit beiden Begrifflichkeiten vertraut zu sein, um auf aktuelle Forschungsergebnisse zugreifen zu können. Internationale Zusammenarbeit hat zu einem besseren Verständnis der neurobiologischen Grundlagen, genetischen Faktoren und wirksamen Behandlungsansätze geführt. Die global vernetzten Selbsthilfe- und Advocacy-Organisationen für Menschen mit ADHS nutzen oft beide Bezeichnungen, um international anschlussfähig zu sein."
+        },
+        {
+          title: "Kulturübergreifende Aspekte",
+          content: "Die Prävalenz, Diagnostik und Behandlung von ADHS/ADHD variiert zwischen verschiedenen Ländern und Kulturen. Diese Unterschiede beruhen teilweise auf kulturellen Faktoren, verschiedenen Bildungs- und Gesundheitssystemen sowie unterschiedlichen diagnostischen Praktiken. In einigen Ländern wird die Diagnose häufiger gestellt als in anderen, was zu Debatten über mögliche Über- oder Unterdiagnostizierung geführt hat. Trotz dieser Unterschiede zeigt die Forschung, dass ADHS/ADHD ein weltweit vorkommendes Phänomen ist, das nicht auf bestimmte Kulturen oder Gesellschaften beschränkt ist. Die Symptome und Beeinträchtigungen sind kulturübergreifend ähnlich, auch wenn sie in verschiedenen Kontexten unterschiedlich interpretiert und behandelt werden können."
+        }
+      ],
+      literaryDevices: [
+        {
+          title: "Die universelle Sprache des ADHS",
+          content: "ADHS/ADHD ist wie eine universelle Sprache, die weltweit von vielen Menschen 'gesprochen' wird, aber in verschiedenen 'Dialekten' (kulturellen Kontexten) zum Ausdruck kommt. Die Grundvokabeln dieser Sprache – Unaufmerksamkeit, Impulsivität, Hyperaktivität – sind überall erkennbar, aber die 'Aussprache' (wie die Symptome sich manifestieren), die 'Grammatik' (wie die Symptome zusammenhängen) und der 'Wortschatz' (welche Symptome im Vordergrund stehen) können je nach kulturellem und sozialem Kontext variieren. Trotz dieser Unterschiede können sich Menschen mit ADHS/ADHD aus verschiedenen Teilen der Welt oft in ihren Erfahrungen wiedererkennen – sie verstehen die 'Sprache' des anderen, auch wenn sie unterschiedliche Worte dafür verwenden."
+        }
+      ],
+      references: [
+        "Faraone, S. V., Asherson, P., Banaschewski, T., Biederman, J., Buitelaar, J. K., Ramos-Quiroga, J. A., ... & Franke, B. (2015). Attention-deficit/hyperactivity disorder. Nature Reviews Disease Primers, 1, 15020.",
+        "Polanczyk, G. V., Willcutt, E. G., Salum, G. A., Kieling, C., & Rohde, L. A. (2014). ADHD prevalence estimates across three decades: An updated systematic review and meta-regression analysis. International Journal of Epidemiology, 43(2), 434-442."
+      ],
+      relatedTerms: ["adhs", "hyperaktivitaet", "aufmerksamkeitsdefizit", "impulsivitaet"]
     }
   },
   {
@@ -493,32 +560,32 @@ export const aTerms: GlossaryItem[] = [
     definition: "Essstörung mit Merkmalen der Anorexia Nervosa, bei der jedoch trotz signifikantem Gewichtsverlust das Gewicht im Normalbereich oder darüber liegt. (ICD-10: F50.1)",
     tags: ["Diagnose-Essstörung"],
     content: {
-      teaser: "Atypische Anorexia nervosa ist eine Essstörung mit den psychologischen Merkmalen der klassischen Anorexie, jedoch ohne das charakteristische Untergewicht.",
+      teaser: "Atypische Anorexia Nervosa bezeichnet eine Essstörung, bei der alle psychologischen Merkmale der Anorexia Nervosa vorliegen, aber das Körpergewicht trotz erheblicher Gewichtsabnahme im Normal- oder Übergewichtsbereich liegt.",
       sections: [
         {
-          title: "Definition und Diagnose",
-          content: "Die atypische Anorexia nervosa ist durch einen signifikanten Gewichtsverlust und anorektisches Verhalten und Denken gekennzeichnet, allerdings liegt das Körpergewicht trotz erheblicher Gewichtsabnahme noch im Normal- oder sogar im Übergewichtsbereich. Betroffene zeigen dieselbe intensive Angst vor Gewichtszunahme, Körperbildstörung und restriktives Essverhalten wie bei der klassischen Anorexie."
+          title: "Definition und Diagnosekriterien",
+          content: "Die atypische Anorexia nervosa ist eine Form der Essstörung, bei der Betroffene einen signifikanten Gewichtsverlust durch Nahrungsrestriktion und/oder übermäßige körperliche Aktivität erzielen, jedoch nicht das Untergewichtskriterium der klassischen Anorexia nervosa erreichen. Sie zeigen dieselben psychologischen Merkmale wie bei der klassischen Form: intensive Angst vor Gewichtszunahme, übermäßiger Einfluss von Körpergewicht oder -form auf die Selbstbewertung und eine Störung in der Wahrnehmung des eigenen Körpers. In der ICD-10 wird diese Störung unter F50.1 'Atypische Anorexia nervosa' klassifiziert, während sie im DSM-5 zu den 'Other Specified Feeding or Eating Disorders' (OSFED) gehört."
         },
         {
-          title: "Klinische Bedeutung und Unterschätzung",
-          content: "Diese Störung wird oft unterschätzt oder übersehen, da Betroffene nicht das typische stark untergewichtige Erscheinungsbild aufweisen. Dennoch können die gleichen schwerwiegenden medizinischen Komplikationen auftreten, besonders wenn der Gewichtsverlust schnell erfolgt ist. Die psychologische Belastung ist ebenso gravierend wie bei der klassischen Anorexie, wobei oft zusätzlich Scham empfunden wird, 'nicht dünn genug zu sein'."
+          title: "Klinische Bedeutung und Folgen",
+          content: "Die atypische Anorexia nervosa wurde lange Zeit unterschätzt, obwohl sie häufiger vorkommt als die klassische Form. Neuere Forschung zeigt, dass die medizinischen Komplikationen und psychologischen Beeinträchtigungen ebenso schwerwiegend sein können wie bei der klassischen Anorexia nervosa. Betroffene können dieselben körperlichen Komplikationen entwickeln, darunter Herzrhythmusstörungen, niedriger Blutdruck, Hormonveränderungen und Knochendichteverlust. Da das Gewicht im Normbereich liegt, wird die Störung oft später erkannt oder nicht ernst genommen, was die Behandlung verzögern und den Krankheitsverlauf verschlechtern kann. Die schnelle Gewichtsabnahme, unabhängig vom Ausgangsgewicht, ist ein wichtigerer Risikofaktor für medizinische Komplikationen als das absolute Gewicht."
         },
         {
-          title: "Behandlungsansätze",
-          content: "Die Behandlung folgt ähnlichen Prinzipien wie bei der klassischen Anorexie und umfasst psychotherapeutische Ansätze (wie kognitive Verhaltenstherapie), Ernährungsberatung und gegebenenfalls medizinische Überwachung. Ein besonderer Fokus liegt auf der Normalisierung des Essverhaltens und der Arbeitsannahme an dysfunktionalen Einstellungen bezüglich Körperbild, Gewicht und Selbstwert."
+          title: "Besondere Herausforderungen und Behandlung",
+          content: "Die Behandlung der atypischen Anorexia nervosa stellt besondere Herausforderungen dar. Betroffene haben oft Schwierigkeiten, ihre Essstörung anzuerkennen, da sie nicht dem stereotypen Bild der 'ausgemergelten Anorektikerin' entsprechen. Auch Fachleute können die Schwere der Störung unterschätzen, wenn sie sich zu sehr am Gewicht orientieren. Die Behandlung sollte sich an denselben Prinzipien orientieren wie bei der klassischen Anorexia nervosa: Normalisierung des Essverhaltens, psychotherapeutische Bearbeitung der Körperbildstörung und der zugrunde liegenden psychologischen Faktoren sowie Behandlung von Begleiterkrankungen. Besondere Aufmerksamkeit sollte auf die Bestimmung eines angemessenen Zielgewichtsbereichs gelegt werden, der die individuelle Gewichtsgeschichte berücksichtigt."
         }
       ],
       literaryDevices: [
         {
-          title: "Das unsichtbare Leiden",
-          content: "Die atypische Anorexia nervosa kann mit einem inneren Feuer verglichen werden, das unter einer scheinbar intakten Oberfläche brennt. Von außen erscheint alles normal oder sogar gesund, während im Inneren der gleiche verzehrende Kampf stattfindet wie bei der klassischen Anorexie. Wie bei einem Haus, das von innen brennt, ohne dass außen Flammen zu sehen sind, ist die Gefahr nicht weniger real, aber leichter zu übersehen."
+          title: "Das unsichtbare Erdbeben",
+          content: "Die atypische Anorexia nervosa kann mit einem Erdbeben verglichen werden, das zwar massive strukturelle Schäden im Inneren eines Gebäudes verursacht, aber von außen kaum sichtbare Spuren hinterlässt. Während Passanten das Gebäude für stabil und unversehrt halten mögen, wissen die Bewohner um die gefährlichen Risse in den tragenden Wänden, die wackelnden Fundamente und die Gefahr eines plötzlichen Einsturzes. Ähnlich können Menschen mit atypischer Anorexie nach außen 'normal' oder sogar 'gesund' erscheinen, während ihr Körper und ihre Psyche unter den massiven Auswirkungen der Nahrungsrestriktion, des Gewichtsverlusts und der verzerrten Körperwahrnehmung leiden."
         }
       ],
       references: [
-        "American Psychiatric Association. (2013). Diagnostic and statistical manual of mental disorders (5th ed.). Arlington, VA: American Psychiatric Publishing.",
-        "Sawyer, S. M., Whitelaw, M., Le Grange, D., Yeo, M., & Hughes, E. K. (2016). Physical and psychological morbidity in adolescents with atypical anorexia nervosa. Pediatrics, 137(4), e20154080."
+        "Sawyer, S. M., Whitelaw, M., Le Grange, D., Yeo, M., & Hughes, E. K. (2016). Physical and psychological morbidity in adolescents with atypical anorexia nervosa. Pediatrics, 137(4), e20154080.",
+        "Forney, K. J., Brown, T. A., Holland-Carter, L. A., Kennedy, G. A., & Keel, P. K. (2017). Defining 'significant weight loss' in atypical anorexia nervosa. International Journal of Eating Disorders, 50(8), 952-962."
       ],
-      relatedTerms: ["anorexia-nervosa", "gewichtsverlust", "koerperschemastoerung", "essstoerung"]
+      relatedTerms: ["anorexia-nervosa", "other-specified-feeding-or-eating-disorders", "koerperbild", "gewichtsverlust"]
     }
   },
   {
@@ -527,32 +594,32 @@ export const aTerms: GlossaryItem[] = [
     definition: "Essstörung mit Merkmalen der Bulimia Nervosa, bei der jedoch nicht alle diagnostischen Kriterien (z.B. Häufigkeit der Essanfälle/Purging) erfüllt sind. (ICD-10: F50.3)",
     tags: ["Diagnose-Essstörung"],
     content: {
-      teaser: "Atypische Bulimia nervosa ist eine Essstörung, die wesentliche Merkmale der Bulimie aufweist, jedoch nicht alle diagnostischen Kriterien vollständig erfüllt.",
+      teaser: "Die atypische Bulimia Nervosa ist eine Essstörung, bei der einige, aber nicht alle diagnostischen Kriterien der klassischen Bulimia Nervosa erfüllt sind, während dennoch ein klinisch bedeutsames Störungsbild vorliegt.",
       sections: [
         {
-          title: "Definition und Abgrenzung",
-          content: "Die atypische Bulimia nervosa bezeichnet ein Essstörungsbild, bei dem wichtige Elemente der klassischen Bulimie vorhanden sind, aber nicht alle diagnostischen Kriterien erfüllt werden. Dies kann die Häufigkeit oder Dauer der Essanfälle betreffen, das kompensatorische Verhalten (wie Erbrechen oder Abführmittelmissbrauch) oder die übermäßige Bedeutung von Figur und Gewicht für das Selbstwertgefühl."
+          title: "Definition und diagnostische Einordnung",
+          content: "Die atypische Bulimia Nervosa (ICD-10: F50.3) beschreibt ein Störungsbild, bei dem wesentliche Merkmale der Bulimia Nervosa vorhanden sind, aber nicht alle diagnostischen Kriterien erfüllt werden. Dies kann die Häufigkeit der Essanfälle betreffen (weniger als zweimal pro Woche), die Dauer der Erkrankung (weniger als drei Monate) oder das Fehlen bestimmter psychologischer Merkmale wie die übermäßige Bedeutung von Figur und Gewicht für das Selbstwertgefühl. Im DSM-5 würde diese Störung unter 'Other Specified Feeding or Eating Disorder' (OSFED) mit der Spezifizierung 'Bulimia Nervosa of low frequency and/or limited duration' klassifiziert werden."
         },
         {
-          title: "Klinische Bedeutung",
-          content: "Obwohl die atypische Form nicht alle Kriterien der vollen Diagnose erfüllt, kann sie dennoch erhebliches Leiden und Beeinträchtigungen verursachen. Betroffene leiden unter ähnlichen psychischen und physischen Folgen wie bei der typischen Bulimie und haben ein erhöhtes Risiko, im Verlauf eine vollständige Essstörung zu entwickeln. Die rechtzeitige Erkennung und Behandlung ist daher ebenso wichtig."
+          title: "Symptomatik und klinische Bedeutung",
+          content: "Menschen mit atypischer Bulimia Nervosa erleben wiederkehrende Episoden von Essanfällen, gefolgt von kompensatorischem Verhalten wie selbstinduziertem Erbrechen, Missbrauch von Abführmitteln oder exzessivem Sport, jedoch in geringerer Häufigkeit oder Intensität als bei der typischen Form. Trotz der 'atypischen' Klassifikation kann die Störung erhebliches Leiden verursachen und mit ähnlichen körperlichen und psychischen Komplikationen einhergehen wie die vollausgeprägte Bulimia Nervosa, darunter Elektrolytstörungen, Zahnschäden durch Magensäure, Depressionen und Angststörungen. Die Betroffenen zeigen oft dieselben Muster von dysfunktionalen Gedanken über Essen, Gewicht und Figur und dieselben Schwierigkeiten mit der Emotionsregulation."
         },
         {
-          title: "Behandlungsansätze",
-          content: "Die Behandlung orientiert sich an den Methoden für die klassische Bulimia nervosa, mit Anpassungen je nach individueller Symptomatik. Kognitive Verhaltenstherapie gilt als Methode der Wahl, ergänzt durch Ernährungsberatung und bei Bedarf medikamentöse Unterstützung. Ein wichtiges Ziel ist die Normalisierung des Essverhaltens und die Reduktion des kompensatorischen Verhaltens."
+          title: "Verlauf und Behandlung",
+          content: "Die atypische Bulimia Nervosa kann ein Frühstadium der vollausgeprägten Störung darstellen, aber auch eine eigenständige, länger andauernde Form der Essstörung sein. Sie kann außerdem eine Übergangsform im Genesungsprozess von einer vollausgeprägten Bulimia Nervosa repräsentieren. Die Behandlung orientiert sich an den Leitlinien für Bulimia Nervosa, wobei die kognitive Verhaltenstherapie für Essstörungen (CBT-E) als Methode der ersten Wahl gilt. Ziele sind die Normalisierung des Essverhaltens, die Unterbrechung des Teufelskreises aus Essanfällen und kompensatorischem Verhalten, die Veränderung dysfunktionaler Gedanken über Essen, Gewicht und Figur sowie die Verbesserung der Emotionsregulation. Eine frühzeitige Intervention ist wichtig, da sie die Chance auf vollständige Genesung erhöht und die Entwicklung einer vollausgeprägten Essstörung verhindern kann."
         }
       ],
       literaryDevices: [
         {
-          title: "Der unvollständige Kreis",
-          content: "Die atypische Bulimia nervosa kann mit einem fast geschlossenen Kreis verglichen werden. Obwohl er nicht vollständig geschlossen ist (nicht alle diagnostischen Kriterien sind erfüllt), ist die Form des Kreises dennoch klar erkennbar. Die Lücke im Kreis bedeutet jedoch nicht, dass das Leid der betroffenen Person geringer oder weniger behandlungsbedürftig ist – sie sitzt immer noch in der gleichen kreisförmigen Falle aus Essanfällen, Kompensation und Scham."
+          title: "Das unvollständige Puzzle",
+          content: "Die atypische Bulimia Nervosa kann mit einem Puzzle verglichen werden, bei dem die meisten, aber nicht alle Teile vorhanden sind. Obwohl einige Stücke fehlen mögen, ist das Gesamtbild dennoch erkennbar und die Lücken beeinträchtigen die Struktur und Stabilität des Puzzles. Ähnlich wie ein unvollständiges Puzzle dennoch viel Aufmerksamkeit und Sorgfalt beim Zusammensetzen erfordert, benötigen Menschen mit atypischer Bulimia Nervosa dieselbe ernsthafte Behandlung und Unterstützung wie jene mit der vollständig ausgeprägten Form. Die fehlenden 'Puzzleteile' (diagnostische Kriterien) bedeuten nicht, dass das Problem weniger real oder belastend ist."
         }
       ],
       references: [
-        "World Health Organization. (2019). International statistical classification of diseases and related health problems (11th ed.).",
-        "Fairburn, C. G., & Harrison, P. J. (2003). Eating disorders. The Lancet, 361(9355), 407-416."
+        "Fairburn, C. G. (2008). Cognitive behavior therapy and eating disorders. Guilford Press.",
+        "Machado, P. P. P., Machado, B. C., Gonçalves, S., & Hoek, H. W. (2007). The prevalence of eating disorders not otherwise specified. International Journal of Eating Disorders, 40(3), 212-217."
       ],
-      relatedTerms: ["bulimia-nervosa", "essanfall", "purging", "essstoerung"]
+      relatedTerms: ["bulimia-nervosa", "essanfaelle", "purging", "other-specified-feeding-or-eating-disorders"]
     }
   },
   {
@@ -561,66 +628,32 @@ export const aTerms: GlossaryItem[] = [
     definition: "Verhalten eines Kindes, das von Gleichaltrigen abweicht und bei Eltern oder Erziehern Anlass zur Sorge gibt.",
     tags: ["Alltag", "Elternsprache", "Symptom-ADHS", "Symptom-Essstörung"],
     content: {
-      teaser: "Der Begriff 'auffällig' beschreibt in der Elternsprache ein kindliches Verhalten, das von der erwarteten Norm abweicht und bei Betreuungspersonen Besorgnis auslöst.",
+      teaser: "Der Begriff 'auffällig' beschreibt im Kontext von Kindern und Jugendlichen ein Verhalten, das von der Norm abweicht und Aufmerksamkeit oder Sorge bei Erwachsenen weckt.",
       sections: [
         {
-          title: "Bedeutung und Verwendung",
-          content: "Wenn Eltern oder Erziehungspersonen ein Kind als 'auffällig' beschreiben, meinen sie damit, dass sein Verhalten in bestimmten Bereichen von dem abweicht, was sie als altersgerecht oder normal betrachten. Der Begriff ist unspezifisch und kann sich auf verschiedene Verhaltensweisen beziehen, wie Unruhe, Konzentrationsschwierigkeiten, soziale Probleme, emotionale Ausbrüche oder ungewöhnliche Essgewohnheiten. Als Alltagsbegriff dient er oft als erster Ausdruck elterlicher Sorge, bevor eine fachliche Einschätzung erfolgt."
+          title: "Was bedeutet 'auffälliges Verhalten'?",
+          content: "Der Begriff 'auffällig' wird im Alltag von Eltern, Erziehern und Lehrern verwendet, um Verhaltensweisen zu beschreiben, die vom erwarteten altersgerechten Verhalten abweichen und Anlass zur Beobachtung oder Sorge geben. Diese Abweichungen können sich in verschiedenen Bereichen zeigen: im Sozialverhalten (z.B. extreme Schüchternheit oder Aggressivität), in der Aufmerksamkeit und Konzentration (z.B. erhöhte Ablenkbarkeit, Hyperaktivität), im emotionalen Bereich (z.B. übermäßige Ängstlichkeit, Stimmungsschwankungen) oder im Essverhalten (z.B. stark selektives Essen, Nahrungsverweigerung). Wichtig ist, dass 'Auffälligkeit' zunächst nur eine Beobachtung beschreibt und keine Diagnose darstellt."
         },
         {
-          title: "Auffälligkeit im Kontext von ADHS",
-          content: "Im Zusammenhang mit ADHS können 'auffällige' Verhaltensweisen erhöhte motorische Aktivität, Impulsivität, Konzentrationsschwierigkeiten oder Probleme beim Befolgen von Regeln umfassen. Eltern bemerken oft, dass ihr Kind im Vergleich zu Gleichaltrigen mehr Bewegungsdrang hat, leichter ablenkbar ist oder Schwierigkeiten hat, altersangemessene Aufgaben zu bewältigen."
+          title: "Einordnung und Umgang",
+          content: "Die Einordnung, was als 'auffällig' gilt, ist stark kontextabhängig und wird von kulturellen, sozialen und individuellen Faktoren beeinflusst. Was in einem Umfeld als problematisch angesehen wird, kann in einem anderen als Variante der Normalität gelten. Bei der Beurteilung von auffälligem Verhalten sollten verschiedene Aspekte berücksichtigt werden: die Entwicklungsstufe des Kindes, die Intensität und Häufigkeit des Verhaltens, die Situationen, in denen es auftritt, und die Beeinträchtigung des Kindes oder seines Umfelds. Wenn Eltern Verhaltensweisen als auffällig wahrnehmen, ist eine beobachtende und nicht wertende Haltung hilfreich, verbunden mit der Bereitschaft, bei anhaltenden Sorgen fachliche Unterstützung zu suchen."
         },
         {
-          title: "Auffälligkeit bei Essstörungen",
-          content: "Im Kontext von Essstörungen können auffällige Verhaltensweisen veränderte Essgewohnheiten, übermäßige Beschäftigung mit Nahrung oder Gewicht, Vermeiden gemeinsamer Mahlzeiten oder ungewöhnliche Rituale rund ums Essen sein. Besonders bei jüngeren Kindern zeigen sich Essstörungen oft zunächst als 'auffälliges' Verhalten rund um Nahrungsaufnahme, bevor eine klinische Diagnose gestellt wird."
+          title: "Der Weg von 'auffällig' zur Diagnose",
+          content: "Wenn Verhaltensmuster über längere Zeit bestehen und zu Beeinträchtigungen im Alltag führen, kann eine diagnostische Abklärung sinnvoll sein. Der Weg führt oft vom Kinderarzt zu spezialisierten Fachleuten wie Kinder- und Jugendpsychiatern oder -psychotherapeuten. Dabei wird eine umfassende Diagnostik durchgeführt, die Gespräche, standardisierte Fragebögen, Verhaltensbeobachtungen und bei Bedarf weitere Tests umfasst. Es ist wichtig zu verstehen, dass nicht jedes 'auffällige' Verhalten auf eine psychische Störung hindeutet – oft handelt es sich um vorübergehende Entwicklungsphasen oder Reaktionen auf Umweltbedingungen. Bei bestätigten Diagnosen wie ADHS oder beginnenden Essstörungen ist eine frühe, angemessene Intervention entscheidend für einen positiven Verlauf."
         }
       ],
       literaryDevices: [
         {
-          title: "Der rote Punkt",
-          content: "Ein 'auffälliges' Kind in einer Gruppe kann mit einem roten Punkt auf einem weißen Blatt verglichen werden. Der rote Punkt zieht sofort alle Blicke auf sich und scheint nicht ins Gesamtbild zu passen. Doch ob dieser Punkt tatsächlich ein Problem darstellt oder einfach nur eine andere Farbe ist, erfordert eine genauere Betrachtung. Manchmal ist der rote Punkt einfach Teil eines größeren, noch nicht erkannten Musters."
+          title: "Das bunte Orchester",
+          content: "Kindliches Verhalten kann mit einem Orchester verglichen werden, in dem jedes Kind sein eigenes Instrument spielt. Die meisten Kinder spielen in einer ähnlichen Lautstärke und Tonart, die für das 'Gesamtstück' passend erscheint. Ein 'auffälliges' Kind spielt sein Instrument entweder viel lauter oder leiser als die anderen, in einer anderen Tonart oder mit einem völlig anderen Rhythmus. Dies kann das Gesamtbild des Orchesters stören, macht die individuelle Melodie des Kindes aber nicht weniger wertvoll. Die Herausforderung für Eltern und Pädagogen besteht darin, zu erkennen, ob das Kind einfach seinen eigenen einzigartigen Musikstil entwickelt (eine Variante der Normalität) oder ob sein Spiel Ausdruck davon ist, dass es sein Instrument nicht richtig handhaben kann oder Unterstützung beim Erlernen der gemeinsamen Melodie benötigt (und somit professionelle Hilfe brauchen könnte)."
         }
       ],
       references: [
-        "Döpfner, M., & Banaschewski, T. (2013). Aufmerksamkeitsdefizit-/Hyperaktivitätsstörungen (ADHS). In F. Petermann (Hrsg.), Lehrbuch der Klinischen Kinderpsychologie (7. Aufl., S. 271-290). Göttingen: Hogrefe.",
-        "Herpertz-Dahlmann, B. (2015). Adolescent eating disorders: update on definitions, symptomatology, epidemiology, and comorbidity. Child and adolescent psychiatric clinics of North America, 24(1), 177-196."
+        "Döpfner, M., & Petermann, F. (2012). Diagnostik psychischer Störungen im Kindes- und Jugendalter. Hogrefe Verlag.",
+        "Steinhausen, H. C. (2019). Psychische Störungen bei Kindern und Jugendlichen: Lehrbuch der Kinder- und Jugendpsychiatrie und -psychotherapie. Urban & Fischer."
       ],
-      relatedTerms: ["adhs", "verhaltensauffaelligkeit", "verhaltensstoerung", "essstoerung"]
-    }
-  },
-  {
-    term: "Aufmerksamkeit",
-    slug: "aufmerksamkeit",
-    definition: "Die Fähigkeit, sich auf bestimmte Informationen oder Reize zu konzentrieren und andere auszublenden.",
-    tags: ["Konzept-Psychologie", "Kognition"],
-    content: {
-      teaser: "Aufmerksamkeit ist die Fähigkeit, sich auf bestimmte Informationen zu konzentrieren und andere auszublenden. Sie ist eine wichtige Voraussetzung für viele kognitive Prozesse.",
-      sections: [
-        {
-          title: "Was ist Aufmerksamkeit?",
-          content: "Aufmerksamkeit ist ein kognitiver Prozess, der es uns ermöglicht, uns auf bestimmte Informationen oder Reize zu konzentrieren und andere auszublenden. Sie ist eine begrenzte Ressource, d.h. wir können nicht unbegrenzt viele Dinge gleichzeitig beachten."
-        },
-        {
-          title: "Arten der Aufmerksamkeit",
-          content: "Es gibt verschiedene Arten der Aufmerksamkeit, wie z.B. selektive Aufmerksamkeit (die Fähigkeit, irrelevante Informationen auszublenden), geteilte Aufmerksamkeit (die Fähigkeit, mehrere Aufgaben gleichzeitig zu bearbeiten) und dauerhafte Aufmerksamkeit (die Fähigkeit, sich über einen längeren Zeitraum auf eine Aufgabe zu konzentrieren)."
-        },
-        {
-          title: "Aufmerksamkeit und ADHS",
-          content: "Bei Menschen mit ADHS ist die Aufmerksamkeit oft beeinträchtigt. Sie haben Schwierigkeiten, sich zu konzentrieren, lassen sich leicht ablenken und machen Flüchtigkeitsfehler."
-        }
-      ],
-      literaryDevices: [
-        {
-          title: "Der Scheinwerfer",
-          content: "Stellen Sie sich die Aufmerksamkeit wie einen Scheinwerfer vor, den wir auf bestimmte Dinge richten können. Je stärker wir uns konzentrieren, desto heller leuchtet der Scheinwerfer. Wenn wir abgelenkt sind, flackert der Scheinwerfer oder richtet sich auf andere Dinge."
-        }
-      ],
-      references: [
-        "Posner, M. I. (1994). Attention: The mechanisms of consciousness. Proceedings of the National Academy of Sciences, 91(16), 7398-7403.",
-        "Styles, E. A. (2006). Attention, perception and memory. Hove: Psychology Press."
-      ],
-      relatedTerms: ["konzentration", "ablenkung", "adhs"]
+      relatedTerms: ["adhs", "essverhalten", "entwicklung", "verhaltensstoerungen", "diagnostik"]
     }
   },
   {
@@ -629,32 +662,32 @@ export const aTerms: GlossaryItem[] = [
     definition: "Zustand tiefer emotionaler und körperlicher Erschöpfung, oft verbunden mit dem Gefühl, keine Energiereserven mehr zu haben.",
     tags: ["Alltag", "Elternsprache", "Symptom-Burnout"],
     content: {
-      teaser: "'Ausgelaugt sein' bezeichnet einen Zustand umfassender Erschöpfung mit dem Gefühl, dass die eigenen Energiereserven vollständig verbraucht sind.",
+      teaser: "Ausgelaugt sein beschreibt einen Zustand tiefgreifender Erschöpfung, bei dem die körperlichen und emotionalen Reserven aufgebraucht erscheinen und selbst alltägliche Aufgaben zur Belastung werden.",
       sections: [
         {
-          title: "Bedeutung und Erleben",
-          content: "Das Gefühl, 'ausgelaugt' zu sein, beschreibt einen Zustand tiefer körperlicher und emotionaler Erschöpfung. Betroffene empfinden eine extreme Müdigkeit, die sich durch Schlaf allein nicht beheben lässt, verbunden mit dem Gefühl, dass ihnen die Kraft für alltägliche Aufgaben fehlt. Der Begriff veranschaulicht bildlich, dass alle Ressourcen und Energiereserven wie 'herausgesaugt' oder 'ausgewaschen' wurden."
+          title: "Das Erleben von Ausgelaugtsein",
+          content: "Der Ausdruck 'ausgelaugt sein' beschreibt bildhaft das Gefühl, als seien alle Kräfte und Ressourcen aus dem Körper 'herausgelaugt' oder extrahiert worden. Betroffene berichten von einer durchdringenden Müdigkeit, die durch Schlaf kaum besser wird, verminderter Leistungsfähigkeit und dem Gefühl, 'nichts mehr geben zu können'. Die Erschöpfung betrifft dabei sowohl die körperliche Ebene (z.B. Schwere in den Gliedern, erhöhtes Schlafbedürfnis, Anfälligkeit für Infekte) als auch die emotionale (z.B. Reizbarkeit, Gefühl der Leere, verminderte Empathiefähigkeit) und kognitive Ebene (z.B. Konzentrationsprobleme, verlangsamtes Denken)."
         },
         {
-          title: "Ausgelaugt sein im Elternalltag",
-          content: "Besonders Eltern verwenden diesen Begriff häufig, um ihre Erschöpfung nach anhaltenden Belastungen zu beschreiben. Der chronische Schlafmangel, die ständige Sorge um das Wohlbefinden der Kinder, die permanente Verfügbarkeit und der Mangel an Erholungsphasen können dazu führen, dass Eltern sich 'ausgelaugt' fühlen. Dieses Gefühl geht oft mit Schuldgefühlen einher, nicht mehr genug Energie für die Bedürfnisse der Kinder zu haben."
+          title: "Ausgelaugtsein bei Eltern",
+          content: "Eltern sind besonders anfällig dafür, sich ausgelaugt zu fühlen, da die Betreuung von Kindern eine kontinuierliche körperliche und emotionale Anforderung darstellt, oft verbunden mit Schlafmangel und wenig Zeit zur Regeneration. Besonders belastend ist die Situation für Alleinerziehende oder Eltern von Kindern mit besonderen Bedürfnissen, wie ADHS oder chronischen Erkrankungen. Wenn Eltern sich ausgelaugt fühlen, kann dies ihre Beziehung zum Kind beeinträchtigen – sie reagieren möglicherweise gereizter, ungeduldiger oder emotional distanzierter als sie es sich wünschen würden. Gleichzeitig können Schuldgefühle auftreten, den eigenen Ansprüchen nicht gerecht zu werden, was die Erschöpfung noch verstärkt."
         },
         {
-          title: "Bezug zum Burnout",
-          content: "Das Gefühl, 'ausgelaugt' zu sein, ist ein wichtiges Warnsignal für ein beginnedes oder fortgeschrittenes Burnout. Es entspricht der Erschöpfungskomponente des Burnout-Syndroms und zeigt an, dass die Belastungsgrenze erreicht oder bereits überschritten wurde. In diesem Stadium ist professionelle Unterstützung und eine umfassende Selbstfürsorgestrategie besonders wichtig, um eine weitere Verschlechterung zu verhindern."
+          title: "Regeneration und Unterstützung",
+          content: "Der Zustand des Ausgelaugtseins signalisiert einen dringenden Bedarf nach Regeneration und Unterstützung. Kurzfristige Erleichterung können Pausen und kurze 'Auszeiten' im Alltag bringen, in denen bewusst Energie getankt wird (z.B. ein kurzer Spaziergang allein, eine Tasse Tee in Ruhe trinken). Mittelfristig ist es wichtig, regelmäßige Erholungsphasen einzuplanen und Unterstützung zu organisieren, etwa durch Partner, Familie, Freunde oder professionelle Hilfen. Langfristig kann es notwendig sein, die eigene Lebenssituation zu überdenken und strukturelle Änderungen vorzunehmen, um eine bessere Balance zwischen Belastung und Erholung zu erreichen. Bei anhaltendem Ausgelaugtsein sollte auch eine ärztliche Abklärung erfolgen, da chronische Erschöpfung ein Symptom verschiedener körperlicher und psychischer Erkrankungen sein kann, darunter Burnout, Depression oder bestimmte Autoimmunerkrankungen."
         }
       ],
       literaryDevices: [
         {
           title: "Der ausgetrocknete Schwamm",
-          content: "Ein ausgelaugter Mensch gleicht einem völlig ausgetrockneten Schwamm. Normalerweise kann ein Schwamm Wasser aufnehmen und wieder abgeben - er hat Ressourcen und kann funktionieren. Doch wenn er zu lange trocken bleibt, verhärtet er sich, verliert seine Elastizität und kann seine Funktion nicht mehr erfüllen. Erst wenn er gründlich und langanhaltend mit Wasser getränkt wird, nicht nur oberflächlich befeuchtet, kann er seine ursprüngliche Funktionalität zurückgewinnen."
+          content: "Ein ausgelaugter Mensch ähnelt einem vollständig ausgetrockneten Schwamm. Ein frischer, feuchter Schwamm kann viel Flüssigkeit aufnehmen und wieder abgeben – er ist elastisch, anpassungsfähig und funktional. Wenn er jedoch zu oft ausgewrungen wird, ohne wieder Feuchtigkeit aufnehmen zu können, wird er hart, spröde und brüchig. Er kann seine Funktion nicht mehr erfüllen und zerbricht leicht bei Druck. In ähnlicher Weise verliert ein chronisch ausgelaugter Mensch seine emotionale und physische Elastizität, seine Anpassungsfähigkeit und seine Fähigkeit, auf die Bedürfnisse anderer zu reagieren. Der Heilungsprozess besteht darin, dem Schwamm – oder dem Menschen – Zeit zu geben, sich wieder mit Feuchtigkeit – oder Energie und Lebensfreude – zu füllen, bis er wieder seine natürliche Flexibilität und Funktionalität zurückgewinnt."
         }
       ],
       references: [
-        "Maslach, C., & Leiter, M. P. (2016). Understanding the burnout experience: Recent research and its implications for psychiatry. World Psychiatry, 15(2), 103-111.",
-        "Mikolajczak, M., & Roskam, I. (2018). A Theoretical and Clinical Framework for Parental Burnout: The Balance Between Risks and Resources (BR2). Frontiers in Psychology, 9, 886."
+        "Kaluza, G. (2018). Stressbewältigung: Trainingsmanual zur psychologischen Gesundheitsförderung. Springer-Verlag.",
+        "Rösing, I. (2003). Ist die Burnout-Forschung ausgebrannt? Analyse und Kritik der internationalen Burnout-Forschung. Kröning: Asanger."
       ],
-      relatedTerms: ["burnout", "erschoepfung", "am-ende-sein", "erholung"]
+      relatedTerms: ["burnout", "erschoepfung", "stress", "selbstfuersorge", "am-ende-sein"]
     }
   },
   {
@@ -663,102 +696,67 @@ export const aTerms: GlossaryItem[] = [
     definition: "Umgangssprachlich für Burnout; Zustand völliger Erschöpfung durch chronische Überlastung.",
     tags: ["Alltag", "Elternsprache", "Symptom-Burnout"],
     content: {
-      teaser: "'Ausgebrannt sein' beschreibt einen Zustand vollständiger emotionaler, körperlicher und mentaler Erschöpfung als Folge langanhaltender Überlastung.",
+      teaser: "Ausgebrannt sein beschreibt einen Zustand tiefgreifender körperlicher, emotionaler und mentaler Erschöpfung als Folge langanhaltender Überlastung und Stress.",
       sections: [
         {
-          title: "Bedeutung und Symptomatik",
-          content: "Der Begriff 'ausgebrannt' bezeichnet einen Zustand, in dem jemand durch chronische Überlastung und Stress völlig erschöpft ist. Er umfasst mehr als nur Müdigkeit – es handelt sich um eine umfassende Erschöpfung, die körperliche, emotionale und mentale Aspekte beinhaltet. Typische Anzeichen sind anhaltende Erschöpfung, Antriebslosigkeit, emotionale Distanzierung, verringerte Leistungsfähigkeit und oft zynische Einstellungen zur eigenen Tätigkeit oder Rolle."
+          title: "Das Phänomen des Ausgebranntseins",
+          content: "Der Begriff 'ausgebrannt' oder 'Burnout' stammt ursprünglich aus dem Englischen ('burned out') und wurde in den 1970er Jahren vom amerikanischen Psychoanalytiker Herbert Freudenberger geprägt. Er beschrieb damit einen Zustand der völligen Erschöpfung bei hochengagierten Helfern im sozialen Bereich. Heute wird der Begriff breiter verwendet und beschreibt einen Prozess, der durch chronischen Stress und Überforderung ausgelöst wird und zu physischer und psychischer Erschöpfung, Entfremdung von der eigenen Tätigkeit (Zynismus, innere Distanzierung) und reduzierter Leistungsfähigkeit führt. Es handelt sich um mehr als nur Müdigkeit – vielmehr um das Gefühl, 'nichts mehr zu haben', womit man Anforderungen begegnen könnte."
         },
         {
-          title: "Entstehung und Verlauf",
-          content: "Das 'Ausbrennen' ist kein plötzliches Ereignis, sondern ein schleichender Prozess, der sich über Monate oder Jahre entwickeln kann. Es beginnt oft mit großem Engagement und hohem Energieeinsatz, gefolgt von zunehmender Erschöpfung, wenn die Belastungen die vorhandenen Ressourcen übersteigen. Ohne Intervention kann dies zu völliger Erschöpfung und Funktionsunfähigkeit führen – dem Gefühl, 'nichts mehr zu haben, was brennen könnte'."
+          title: "Ausgebranntsein bei Eltern",
+          content: "Eltern sind besonders gefährdet, auszubrennen, da die Elternschaft eine kontinuierliche, emotional fordernde Aufgabe darstellt, bei der kaum Pausen möglich sind und die Anforderungen sich ständig verändern. Der Begriff 'Parental Burnout' oder 'Eltern-Burnout' beschreibt dieses spezifische Phänomen. Typische Anzeichen sind chronische Erschöpfung in der Elternrolle, emotionale Distanzierung vom Kind ('Ich funktioniere nur noch auf Autopilot'), Verlust der Erfüllung in der Elternschaft und ein Kontrast zwischen dem früheren und dem aktuellen elterlichen Selbst ('Ich bin nicht mehr der Vater/die Mutter, der/die ich sein möchte'). Besonders betroffen sind oft perfektionistische Eltern, alleinerziehende Eltern und Eltern von Kindern mit besonderen Bedürfnissen."
         },
         {
-          title: "Auswege und Behandlung",
-          content: "Die Erholung vom 'Ausgebranntheit' erfordert mehr als nur eine kurze Pause. Sie umfasst meist eine grundlegende Neuausrichtung der Lebensweise mit Fokus auf Selbstfürsorge, Grenzsetzung und Stressreduktion. Professionelle Unterstützung durch Therapie, Coaching oder Beratung ist oft notwendig. Wichtig ist auch die Erkenntnis, dass nicht nur individuelle Faktoren, sondern auch strukturelle Bedingungen zum Burnout beitragen können, die möglicherweise geändert werden müssen."
+          title: "Wege aus dem Ausgebranntsein",
+          content: "Die Erholung von einem Burnout-Zustand erfordert in der Regel mehr als nur eine kurze Auszeit – sie beinhaltet eine grundlegende Neuausrichtung des Verhältnisses von Belastung und Erholung. Kurzfristig sind direkte Entlastung, ausreichend Schlaf und Unterstützung durch andere wichtig. Mittelfristig geht es um den Aufbau nachhaltiger Selbstfürsorgepraktiken, das Setzen von Grenzen und die Überprüfung persönlicher Standards und Erwartungen. Der Prozess umfasst auch das Erkennen und Verändern dysfunktionaler Denkmuster und Überzeugungen, die zur Überlastung beigetragen haben. Professionelle Unterstützung durch Psychotherapie kann dabei hilfreich sein. Für Eltern ist es besonders wichtig, Unterstützungsnetzwerke zu aktivieren oder aufzubauen und sich von dem Idealbild der 'perfekten' oder 'sich selbst aufopfernden' Elternschaft zu lösen."
         }
       ],
       literaryDevices: [
         {
-          title: "Die erloschene Flamme",
-          content: "Ein ausgebrannter Mensch gleicht einer Kerze, die einst hell brannte, aber nun nur noch ein verkohlter Docht ist. Die Flamme, die für Wärme, Licht und Energie stand, ist erloschen. Weder gibt es noch Wachs zum Schmelzen (Ressourcen), noch eine Flamme zum Brennen (Energie und Begeisterung). Um wieder zu leuchten, braucht es nicht nur einen neuen Funken, sondern eine komplett neue Kerze – also tiefgreifende Erholung und oft eine Neuorientierung im Leben."
+          title: "Die erloschene Kerze",
+          content: "Das Ausgebranntsein kann mit einer Kerze verglichen werden, die zu lange und zu intensiv gebrannt hat. Eine Kerze gibt Licht und Wärme, solange sie Brennstoff hat. Wenn sie jedoch keine Pausen bekommt und ständig brennt, wird der Wachs immer weniger, die Flamme schwächer, bis schließlich nur noch ein verkohlter Docht übrig bleibt – ausgebrannt, unfähig, weiter Licht oder Wärme zu spenden. Ähnlich verhält es sich mit Menschen, die zu lange ohne Pausen und Energiezufuhr für andere 'brennen' – sei es im Beruf oder in der Familie. Die gute Nachricht ist: Anders als eine Kerze kann ein Mensch seinen 'Brennstoff' erneuern. Es braucht jedoch Zeit, Selbstfürsorge und oft eine neue Art zu 'brennen', die nachhaltiger ist und das eigene Wohlbefinden nicht aufzehrt."
         }
       ],
       references: [
-        "Maslach, C., & Leiter, M. P. (2016). Understanding the burnout experience: Recent research and its implications for psychiatry. World Psychiatry, 15(2), 103-111.",
-        "Freudenberger, H. J. (1974). Staff burn-out. Journal of Social Issues, 30(1), 159-165."
+        "Freudenberger, H. J. (1974). Staff burn-out. Journal of Social Issues, 30(1), 159-165.",
+        "Roskam, I., Raes, M. E., & Mikolajczak, M. (2017). Exhausted parents: Development and preliminary validation of the Parental Burnout Inventory. Frontiers in Psychology, 8, 163."
       ],
-      relatedTerms: ["burnout", "erschoepfung", "ausgelaugt", "erholung"]
-    }
-  },
-  {
-    term: "Autismus",
-    slug: "autismus",
-    definition: "Eine neurologische Entwicklungsstörung, die sich durch Schwierigkeiten in der sozialen Interaktion und Kommunikation sowie durch repetitive Verhaltensweisen auszeichnet.",
-    tags: ["Diagnose", "Kinder", "Erwachsene", "Verhalten"],
-    alias: "Autismus-Spektrum-Störung",
-    content: {
-      teaser: "Autismus ist eine neurologische Entwicklungsstörung, die sich durch Schwierigkeiten in der sozialen Interaktion und Kommunikation sowie durch repetitive Verhaltensweisen auszeichnet und ein breites Spektrum umfasst.",
-      sections: [
-        {
-          title: "Was ist Autismus?",
-          content: "Autismus ist eine komplexe neurologische Entwicklungsstörung, die sich auf die Art und Weise auswirkt, wie eine Person die Welt wahrnimmt und mit ihr interagiert. Sie beginnt in der frühen Kindheit und dauert in der Regel ein Leben lang an."
-        },
-        {
-          title: "Symptome von Autismus",
-          content: "Zu den Hauptsymptomen gehören Schwierigkeiten in der sozialen Interaktion und Kommunikation, repetitive Verhaltensweisen, eingeschränkte Interessen und sensorische Empfindlichkeiten. Die Ausprägung der Symptome ist von Person zu Person sehr unterschiedlich."
-        },
-        {
-          title: "Diagnose und Behandlung",
-          content: "Die Diagnose von Autismus erfolgt in der Regel durch eine umfassende Bewertung, einschließlich Verhaltensbeobachtungen und standardisierten Tests. Die Behandlung kann Verhaltenstherapie, Sprachtherapie, Ergotherapie und unterstützende Maßnahmen umfassen."
-        }
-      ],
-      literaryDevices: [
-        {
-          title: "Die andere Sprache",
-          content: "Stellen Sie sich vor, Sie reisen in ein fremdes Land, in dem die Menschen eine andere Sprache sprechen und andere soziale Regeln haben. Es ist schwer, sich zu verständigen und Kontakte zu knüpfen. Das ist ein bisschen so, wie es sich anfühlt, mit Autismus zu leben."
-        }
-      ],
-      references: [
-        "American Psychiatric Association. (2013). Diagnostic and statistical manual of mental disorders (5th ed.). Arlington, VA: American Psychiatric Publishing.",
-        "Volkmar, F. R., Siegel, M., Woodbury-Smith, M., King, B., Trajkovski, S., & Hodgdon, J. (2014). Handbook of autism and pervasive developmental disorders (4th ed.). Hoboken, NJ: John Wiley & Sons."
-      ],
-      relatedTerms: ["soziale-interaktion", "kommunikation", "repetitive-verhalten"]
+      relatedTerms: ["burnout", "erschoepfung", "stress", "selbstfuersorge", "ausgelaugt"]
     }
   },
   {
     term: "Avoidant/Restrictive Food Intake Disorder (ARFID)",
-    slug: "arfid",
+    slug: "avoidant-restrictive-food-intake-disorder",
     definition: "Essstörung gekennzeichnet durch eine vermeidende oder restriktive Nahrungsaufnahme, die zu Gewichtsverlust, Nährstoffmangel oder Abhängigkeit von Sondennahrung führt, ohne die Angst vor Gewichtszunahme oder Körperbildstörung der Anorexie. (ICD-10: F50.89)",
     tags: ["Diagnose-Essstörung"],
-    alias: "Vermeidende/Restriktive Nahrungsaufnahmestörung",
     content: {
-      teaser: "ARFID ist eine Essstörung, bei der die Nahrungsaufnahme stark eingeschränkt wird, jedoch nicht aufgrund von Gewichts- oder Figursorgen, sondern aus anderen Gründen wie sensorischer Empfindlichkeit oder Angst.",
+      teaser: "ARFID ist eine Essstörung, bei der die Nahrungsaufnahme stark eingeschränkt ist, nicht aufgrund von Gewichts- oder Körperbildsorgen, sondern wegen Desinteresse an Nahrung, sensorischen Eigenschaften oder Ängsten wie Erstickungsangst.",
       sections: [
         {
-          title: "Definition und Abgrenzung",
-          content: "Die vermeidende/restriktive Nahrungsaufnahmestörung (ARFID) ist eine Essstörung, bei der die Betroffenen die Nahrungsaufnahme erheblich einschränken, was zu Untergewicht, Nährstoffmangel oder der Abhängigkeit von Nahrungsergänzungsmitteln oder Sondenernährung führen kann. Im Gegensatz zu Anorexia nervosa sind die Einschränkungen nicht durch Gewichts- oder Figursorgen motiviert, sondern durch andere Faktoren wie mangelndes Interesse an Nahrung, sensorische Eigenschaften von Lebensmitteln oder Angst vor negativen Konsequenzen des Essens (z.B. Erstickung oder Erbrechen)."
+          title: "Definition und Merkmale",
+          content: "Die Avoidant/Restrictive Food Intake Disorder (ARFID, dt. vermeidende/restriktive Nahrungsaufnahmestörung) ist eine Essstörung, die durch eine deutliche Einschränkung der Nahrungsaufnahme gekennzeichnet ist, aber im Gegensatz zu Anorexia nervosa nicht mit Gewichtssorgen oder einer Körperbildstörung verbunden ist. Die gestörte Nahrungsaufnahme führt zu signifikanten Folgen wie Gewichtsverlust, Nährstoffmangel, Abhängigkeit von Sondenernährung oder Nahrungsergänzungsmitteln und/oder erheblichen Beeinträchtigungen im psychosozialen Funktionsniveau. Die Störung kann nicht besser durch mangelnde Verfügbarkeit von Nahrung, kulturelle Praktiken oder eine andere medizinische oder psychische Erkrankung erklärt werden."
         },
         {
-          title: "Erscheinungsformen und Betroffene",
-          content: "ARFID kann sich in unterschiedlichen Formen manifestieren: als extremes 'Picky Eating' (sehr wählerisches Essverhalten), als generelles Desinteresse an Nahrung oder als angstmotivierte Vermeidung bestimmter Nahrungsmittel. Die Störung tritt oft bereits im Kindesalter auf, kann aber auch bei Jugendlichen und Erwachsenen diagnostiziert werden. Sie betrifft alle Geschlechter und scheint bei Menschen mit Angststörungen, Autismus-Spektrum-Störungen oder sensorischen Verarbeitungsstörungen häufiger aufzutreten."
+          title: "Erscheinungsformen und Ursachen",
+          content: "ARFID kann verschiedene Erscheinungsformen haben und aus unterschiedlichen Gründen entstehen: Einige Betroffene zeigen ein generelles Desinteresse an Nahrung oder haben einen geringen Appetit, andere reagieren empfindlich auf sensorische Eigenschaften wie Geschmack, Geruch, Textur oder Aussehen bestimmter Lebensmittel. Eine dritte Gruppe vermeidet Nahrung aufgrund spezifischer Ängste wie Erstickungsangst, Angst vor Erbrechen oder negativen gastrointestinalen Symptomen. ARFID kann in jedem Alter auftreten, ist aber besonders häufig bei Kindern und Jugendlichen und oft mit anderen Erkrankungen wie Autismus-Spektrum-Störungen, ADHS, Angststörungen oder gastrointestinalen Problemen verbunden."
         },
         {
-          title: "Behandlungsansätze",
-          content: "Die Behandlung von ARFID erfordert einen multidisziplinären Ansatz, der je nach individueller Problematik angepasst wird. Sie kann kognitive Verhaltenstherapie, Expositionstherapie für angstmotivierte Vermeidung, sensorische Integration für sensorische Empfindlichkeiten und Ernährungsberatung umfassen. Bei Untergewicht steht zunächst die Gewichtsnormalisierung im Vordergrund, parallel zur Behandlung der zugrundeliegenden psychischen Faktoren."
+          title: "Diagnose und Behandlung",
+          content: "Die Diagnose von ARFID erfordert eine umfassende Evaluation durch Fachleute, um andere medizinische und psychische Ursachen für das gestörte Essverhalten auszuschließen. Die Behandlung ist multidisziplinär und umfasst ernährungstherapeutische, psychotherapeutische und bei Bedarf medizinische Interventionen. Ein wichtiger Ansatz ist die schrittweise Exposition gegenüber gemiedenen Lebensmitteln, kombiniert mit kognitiv-verhaltenstherapeutischen Techniken zur Bewältigung von Ängsten oder Aversionen. Bei Kindern ist der Einbezug der Familie essenziell. Im Gegensatz zu anderen Essstörungen wird bei ARFID in der Regel eine Erweiterung des Nahrungsspektrums und nicht eine Reduzierung angestrebt. Die Prognose ist bei früher Intervention und angemessener Behandlung günstig, wobei besonders bei lange bestehenden Fällen mit ausgeprägten Nährstoffdefiziten eine längere Behandlungsdauer zu erwarten ist."
         }
       ],
       literaryDevices: [
         {
-          title: "Die verschlossene Tür",
-          content: "ARFID kann mit einer verschlossenen Tür verglichen werden, hinter der sich eine Vielfalt an Nahrungsmitteln befindet. Während die Person mit Anorexie die Tür bewusst verschlossen hält aus Angst vor Gewichtszunahme, ist bei der Person mit ARFID der Schlüssel verloren gegangen oder die Tür scheint bedrohlich. Sie möchte vielleicht hinein, findet aber keinen Zugang oder fürchtet, was hinter der Tür auf sie warten könnte. Die Therapie hilft dabei, einen neuen Schlüssel zu finden oder die Angst vor dem Öffnen der Tür schrittweise zu überwinden."
+          title: "Die Festung um den Teller",
+          content: "ARFID kann mit einer Festung verglichen werden, die ein Kind oder einen Erwachsenen von der Vielfalt der Nahrung trennt. Während bei Anorexie diese Festung gebaut wird, um das Innere (den Körper) vor dem 'bedrohlichen' Essen zu schützen, entsteht die ARFID-Festung aus anderen Gründen: Manchmal sind die Mauern aus sensorischen Barrieren gebaut – die Textur oder der Geschmack erscheinen unerträglich. Bei anderen sind es Angstmauern – die Furcht vor dem Ersticken oder Erbrechen bildet unüberwindbare Hindernisse. Bei wieder anderen scheint die Festung eher wie ein Nebel zu sein – das Interesse oder der Appetit fehlen einfach. Die Behandlung gleicht dem behutsamen, geduldigen Abbau dieser Mauern, Stein für Stein, oder dem langsamen Lichten des Nebels, bis der Weg zu einer vielfältigeren, nährstoffreichen Ernährung frei ist."
         }
       ],
       references: [
-        "American Psychiatric Association. (2013). Diagnostic and statistical manual of mental disorders (5th ed.). Arlington, VA: American Psychiatric Publishing.",
-        "Bryant-Waugh, R., Markham, L., Kreipe, R. E., & Walsh, B. T. (2010). Feeding and eating disorders in childhood. International Journal of Eating Disorders, 43(2), 98-111."
+        "Bryant-Waugh, R., Markham, L., Kreipe, R. E., & Walsh, B. T. (2010). Feeding and eating disorders in childhood. International Journal of Eating Disorders, 43(2), 98-111.",
+        "Thomas, J. J., Lawson, E. A., Micali, N., Misra, M., Deckersbach, T., & Eddy, K. T. (2017). Avoidant/restrictive food intake disorder: A three-dimensional model of neurobiology with implications for etiology and treatment. Current Psychiatry Reports, 19(8), 54."
       ],
-      relatedTerms: ["essstoerung", "nahrungsvermeidung", "selektives-essen"]
+      relatedTerms: ["essverhalten", "essensaversion", "selektives-essen", "picky-eating", "naehrstoffmangel"]
     }
   }
 ];
+
