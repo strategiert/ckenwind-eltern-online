@@ -10,7 +10,7 @@ const GlossarPreview: React.FC = () => {
   // Find specific terms to feature: ADHS, Burn-out, and a random term from B
   const featuredTerms = [
     glossaryData.find(term => term.term === "ADHS"),
-    glossaryData.find(term => term.term === "Burn-out"),
+    glossaryData.find(term => term.term === "Belastung"),
     ...glossaryData
       .filter(term => term.term.startsWith("B"))
       .sort(() => 0.5 - Math.random())
