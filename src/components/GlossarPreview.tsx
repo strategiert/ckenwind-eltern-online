@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { glossaryData } from '@/data/glossaryData';
+import { glossaryData } from '@/data/glossary';
 import { BookOpen } from 'lucide-react';
 
 const GlossarPreview: React.FC = () => {

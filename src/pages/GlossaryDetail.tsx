@@ -2,7 +2,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams, Link } from 'react-router-dom';
-import { getTermBySlug, getRelatedTerms, glossaryData } from '@/data/glossaryData';
+import { getTermBySlug, getRelatedTerms, glossaryData } from '@/data/glossary';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Badge } from "@/components/ui/badge";
