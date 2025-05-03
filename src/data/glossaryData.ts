@@ -443,4 +443,4 @@ export const glossaryData: GlossaryItem[] = [
           content: "Benehmen bezieht sich auf das sichtbare Verhalten einer Person und dessen Übereinstimmung mit sozialen Normen und Erwartungen. Was als 'gutes' oder 'schlechtes' Benehmen gilt, ist stark kulturell und kontextuell geprägt und unterliegt einem stetigen Wandel. In der Erziehung ist die Vermittlung von sozial akzeptablem Benehmen ein zentrales Anliegen, wobei Kinder lernen, ihr Verhalten an unterschiedliche soziale Situationen anzupassen."
         },
         {
-          title: "Herausforderungen bei
+          title: "Herausforderungen bei ADHS",
