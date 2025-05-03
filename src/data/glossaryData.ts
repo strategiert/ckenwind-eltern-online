@@ -464,3 +464,19 @@ export const glossaryData: GlossaryItem[] = [
     }
   }
 ]
+
+/**
+ * Find a specific term by its slug
+ */
+export const getTermBySlug = (slug: string): GlossaryItem | undefined => {
+  return glossaryData.find(term => term.slug === slug);
+};
+
+/**
+ * Get related terms from an array of slugs
+ */
+export const getRelatedTerms = (slugs: string[]): GlossaryItem[] => {
+  return slugs
+    .map(slug => glossaryData.find(term => term.slug === slug))
+    .filter((term): term is GlossaryItem => term !== undefined);
+};
