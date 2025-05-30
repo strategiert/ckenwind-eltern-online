@@ -23,7 +23,6 @@ interface ChatMessage {
 const MentalHealthChat = () => {
   const [message, setMessage] = useState('');
   const [sessionId, setSessionId] = useState<string>('');
-  const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -32,13 +31,8 @@ const MentalHealthChat = () => {
   const getOrCreateSession = async () => {
     // Try to get existing session from localStorage
     const storedSessionId = localStorage.getItem('mental-health-session-id');
-    const storedSessionDate = localStorage.getItem('mental-health-session-date');
     
-    // Check if stored session is from today (sessions expire daily)
-    const today = new Date().toDateString();
-    const isSessionValid = storedSessionId && storedSessionDate === today;
-    
-    if (isSessionValid) {
+    if (storedSessionId) {
       return storedSessionId;
     } else {
       // Create new session
@@ -53,7 +47,6 @@ const MentalHealthChat = () => {
 
       if (data && !error) {
         localStorage.setItem('mental-health-session-id', data.id);
-        localStorage.setItem('mental-health-session-date', today);
         return data.id;
       }
       throw new Error('Failed to create session');
@@ -142,7 +135,6 @@ const MentalHealthChat = () => {
   const startNewConversation = async () => {
     try {
       localStorage.removeItem('mental-health-session-id');
-      localStorage.removeItem('mental-health-session-date');
       const newSessionId = await getOrCreateSession();
       setSessionId(newSessionId);
       toast({
@@ -158,11 +150,6 @@ const MentalHealthChat = () => {
       });
     }
   };
-
-  // Auto-scroll to bottom when messages change
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, sendMessageMutation.isPending]);
 
   // Focus input on load
   useEffect(() => {
@@ -240,8 +227,6 @@ const MentalHealthChat = () => {
                   messages={messages} 
                   isLoading={sendMessageMutation.isPending} 
                 />
-                {/* Scroll anchor */}
-                <div ref={messagesEndRef} />
               </Card>
 
               <Card className="border-0 shadow-lg">

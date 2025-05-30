@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Heart, User, Bot } from 'lucide-react';
@@ -17,6 +17,13 @@ interface ChatInterfaceProps {
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, isLoading }) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // Auto-scroll to bottom when messages change or when loading state changes
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isLoading]);
+  
   return (
     <Card className="border-0 shadow-lg">
       <CardContent className="p-0">
@@ -77,6 +84,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, isLoading }) =>
                   </div>
                 </div>
               )}
+              {/* Scroll anchor */}
+              <div ref={messagesEndRef} />
             </div>
           )}
         </ScrollArea>
