@@ -5,6 +5,8 @@ import Footer from '@/components/Footer';
 import BlogPreview from '@/components/BlogPreview';
 import BlogFeaturedPost from '@/components/BlogFeaturedPost';
 import BlogTagFilter from '@/components/BlogTagFilter';
+import BlogPagination from '@/components/BlogPagination';
+import BlogBreadcrumb from '@/components/BlogBreadcrumb';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Helmet } from 'react-helmet-async';
@@ -15,6 +17,8 @@ const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [sortOrder, setSortOrder] = useState<'newest' | 'oldest' | 'popular'>('newest');
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 9;
 
   // Extract featured post (first post or one marked as featured)
   const featuredPost = blogPostsListing.find(post => post.featured) || blogPostsListing[0];
@@ -54,6 +58,11 @@ const Blog = () => {
     }
   });
 
+  // Pagination logic
+  const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
+  const startIndex = (currentPage - 1) * postsPerPage;
+  const paginatedPosts = sortedPosts.slice(startIndex, startIndex + postsPerPage);
+
   const categories = [
     { value: '', label: 'Alle Kategorien' },
     { value: 'burnout', label: 'Eltern-Burnout' },
@@ -70,6 +79,7 @@ const Blog = () => {
         ? prev.filter(t => t !== tag)
         : [...prev, tag]
     );
+    setCurrentPage(1); // Reset to first page when filtering
   };
 
   const clearAllFilters = () => {
@@ -77,7 +87,18 @@ const Blog = () => {
     setSelectedCategory('');
     setSelectedTags([]);
     setSortOrder('newest');
+    setCurrentPage(1);
   };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Reset page when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategory, selectedTags, sortOrder]);
 
   return (
     <>
@@ -92,6 +113,7 @@ const Blog = () => {
         {/* Blog Header */}
         <section className="bg-gradient-to-b from-rueckenwind-light-purple to-white py-16 md:py-24">
           <div className="container-custom">
+            <BlogBreadcrumb />
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-4xl md:text-5xl font-display font-semibold mb-6">Blog</h1>
               <p className="text-xl text-gray-700">
@@ -191,15 +213,26 @@ const Blog = () => {
                 {(searchTerm || selectedCategory || selectedTags.length > 0) && 
                   ` für Ihre Filterkriterien`
                 }
+                {totalPages > 1 && (
+                  <span> (Seite {currentPage} von {totalPages})</span>
+                )}
               </p>
             </div>
 
-            {sortedPosts.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {sortedPosts.map(post => (
-                  <BlogPreview key={post.id} post={post} />
-                ))}
-              </div>
+            {paginatedPosts.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {paginatedPosts.map(post => (
+                    <BlogPreview key={post.id} post={post} />
+                  ))}
+                </div>
+                
+                <BlogPagination 
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </>
             ) : (
               <div className="text-center py-16">
                 <h3 className="text-xl font-medium mb-2">Keine Beiträge gefunden</h3>

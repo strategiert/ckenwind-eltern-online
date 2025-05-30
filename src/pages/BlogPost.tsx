@@ -4,6 +4,9 @@ import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BlogReadingProgress from '@/components/BlogReadingProgress';
+import BlogBreadcrumb from '@/components/BlogBreadcrumb';
+import BlogSocialShare from '@/components/BlogSocialShare';
+import BlogNewsletter from '@/components/BlogNewsletter';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import BlogPreview from '@/components/BlogPreview';
@@ -24,6 +27,7 @@ const BlogPost = () => {
       <>
         <Navbar />
         <main className="container-custom py-16 md:py-24">
+          <BlogBreadcrumb />
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-display font-semibold mb-6">Beitrag nicht gefunden</h1>
             <p className="text-xl text-gray-700 mb-8">Der gesuchte Beitrag existiert leider nicht.</p>
@@ -69,6 +73,7 @@ const BlogPost = () => {
             />
             <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
               <div className="container-custom">
+                <BlogBreadcrumb title={post.title} category={post.category} categoryLabel={post.categoryLabel} />
                 <div className="max-w-4xl">
                   <div className="flex flex-wrap items-center gap-4 mb-4">
                     <Badge className="bg-rueckenwind-purple">
@@ -114,6 +119,11 @@ const BlogPost = () => {
               <div className="lg:col-span-2">
                 <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: post.content }}></div>
                 
+                {/* Social Share */}
+                <div className="mt-8 pt-8 border-t">
+                  <BlogSocialShare title={post.title} slug={post.slug} excerpt={post.excerpt} />
+                </div>
+                
                 <div className="mt-12 pt-8 border-t">
                   <h3 className="text-2xl font-display mb-4">Über die Autorin</h3>
                   <div className="flex items-center">
@@ -143,6 +153,11 @@ const BlogPost = () => {
                     </ul>
                   </div>
                 )}
+                
+                {/* Newsletter Subscription */}
+                <div className="mb-8">
+                  <BlogNewsletter />
+                </div>
                 
                 <div className="sticky top-24">
                   <h3 className="text-xl font-display mb-4">Das könnte Sie auch interessieren</h3>
