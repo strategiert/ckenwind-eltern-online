@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -13,7 +14,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useBlogPosts, useFeaturedPosts } from '@/hooks/useBlogPosts';
-import { BookOpen, Users, Calendar, TrendingUp } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { BookOpen, Users, Calendar, TrendingUp, Shield } from 'lucide-react';
 
 const POSTS_PER_PAGE = 6;
 
@@ -40,6 +42,7 @@ const Blog = () => {
 
   const { data: blogPosts, isLoading: postsLoading, error: postsError } = useBlogPosts();
   const { data: featuredPosts, isLoading: featuredLoading } = useFeaturedPosts();
+  const { user, isAdmin } = useAuth();
 
   // Transform and filter posts
   const transformedPosts = blogPosts ? blogPosts.map(transformPost) : [];
@@ -226,11 +229,14 @@ const Blog = () => {
               onTagToggle={handleTagFilter}
             />
 
-            {/* Admin Link - only show in development or for admins */}
-            {process.env.NODE_ENV === 'development' && (
+            {/* Admin Link - only show for authenticated admins */}
+            {user && isAdmin && (
               <div className="mb-6">
                 <Button asChild variant="outline">
-                  <Link to="/admin/blog">Blog Admin</Link>
+                  <Link to="/admin/blog">
+                    <Shield className="w-4 h-4 mr-2" />
+                    Blog Administration
+                  </Link>
                 </Button>
               </div>
             )}

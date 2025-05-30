@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import { AuthProvider } from "@/contexts/AuthContext";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import UeberMich from "./pages/UeberMich";
 import Blog from "./pages/Blog";
@@ -13,6 +15,7 @@ import BlogPost from "./pages/BlogPost";
 import BlogCategory from "./pages/BlogCategory";
 import BlogArchive from "./pages/BlogArchive";
 import BlogAdmin from "./pages/BlogAdmin";
+import Auth from "./pages/Auth";
 import GratisBuch from "./pages/GratisBuch";
 import Glossar from "./pages/Glossar";
 import GlossaryDetail from "./pages/GlossaryDetail";
@@ -32,38 +35,48 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <HelmetProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <ICD10DataSeeder />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/ueber-mich" element={<UeberMich />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/blog/category/:category" element={<BlogCategory />} />
-              <Route path="/blog/archive" element={<BlogArchive />} />
-              <Route path="/admin/blog" element={<BlogAdmin />} />
-              <Route path="/gratis-buch" element={<GratisBuch />} />
-              <Route path="/glossar" element={<Glossar />} />
-              <Route path="/glossar/:slug" element={<GlossaryDetail />} />
-              <Route path="/kontakt" element={<Kontakt />} />
-              <Route path="/mental-health-chat" element={<MentalHealthChat />} />
-              <Route path="/impressum" element={<Impressum />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            
-            {/* Floating Chat Button - only show on non-chat pages */}
-            <FloatingChatButton onClick={() => setIsChatModalOpen(true)} />
-            
-            {/* Chat Modal */}
-            <ChatModal 
-              isOpen={isChatModalOpen} 
-              onClose={() => setIsChatModalOpen(false)} 
-            />
-          </BrowserRouter>
-        </TooltipProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <ICD10DataSeeder />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/ueber-mich" element={<UeberMich />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/blog/category/:category" element={<BlogCategory />} />
+                <Route path="/blog/archive" element={<BlogArchive />} />
+                <Route path="/auth/login" element={<Auth />} />
+                <Route 
+                  path="/admin/blog" 
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <BlogAdmin />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route path="/gratis-buch" element={<GratisBuch />} />
+                <Route path="/glossar" element={<Glossar />} />
+                <Route path="/glossar/:slug" element={<GlossaryDetail />} />
+                <Route path="/kontakt" element={<Kontakt />} />
+                <Route path="/mental-health-chat" element={<MentalHealthChat />} />
+                <Route path="/impressum" element={<Impressum />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              
+              {/* Floating Chat Button - only show on non-chat pages */}
+              <FloatingChatButton onClick={() => setIsChatModalOpen(true)} />
+              
+              {/* Chat Modal */}
+              <ChatModal 
+                isOpen={isChatModalOpen} 
+                onClose={() => setIsChatModalOpen(false)} 
+              />
+            </BrowserRouter>
+          </TooltipProvider>
+        </AuthProvider>
       </HelmetProvider>
     </QueryClientProvider>
   );

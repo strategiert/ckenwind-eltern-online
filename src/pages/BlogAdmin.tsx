@@ -2,13 +2,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Plus, Edit, Trash2, Eye, EyeOff } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, EyeOff, LogOut, Shield } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAllBlogPosts, useDeleteBlogPost, useUpdateBlogPost } from '@/hooks/useBlogPosts';
+import { useAuth } from '@/contexts/AuthContext';
 import BlogPostForm from '@/components/admin/BlogPostForm';
 
 const BlogAdmin = () => {
@@ -16,6 +17,7 @@ const BlogAdmin = () => {
   const [editingPost, setEditingPost] = useState(null);
   
   const { data: posts, isLoading, error } = useAllBlogPosts();
+  const { user, signOut } = useAuth();
   const deleteMutation = useDeleteBlogPost();
   const updateMutation = useUpdateBlogPost();
 
@@ -56,32 +58,57 @@ const BlogAdmin = () => {
       <Helmet>
         <title>Blog Admin | Rückenwind Eltern</title>
         <meta name="description" content="Blog administration interface" />
+        <meta name="robots" content="noindex, nofollow" />
       </Helmet>
       <Navbar />
       <main>
         <section className="py-16">
           <div className="container-custom">
             <div className="flex justify-between items-center mb-8">
-              <h1 className="text-3xl font-display font-semibold">Blog Administration</h1>
-              <Button onClick={() => setShowForm(true)}>
-                <Plus className="w-4 h-4 mr-2" />
-                New Post
-              </Button>
+              <div>
+                <h1 className="text-3xl font-display font-semibold flex items-center gap-2">
+                  <Shield className="w-8 h-8 text-rueckenwind-purple" />
+                  Blog Administration
+                </h1>
+                <p className="text-gray-600 mt-2">
+                  Angemeldet als: {user?.email}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Button onClick={() => setShowForm(true)}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Neuer Artikel
+                </Button>
+                <Button variant="outline" onClick={signOut}>
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Abmelden
+                </Button>
+              </div>
             </div>
 
             {isLoading && (
               <div className="text-center py-12">
-                <p>Loading blog posts...</p>
+                <p>Blog-Artikel werden geladen...</p>
               </div>
             )}
 
             {error && (
               <div className="text-center py-12">
-                <p className="text-red-600">Error loading posts: {error.message}</p>
+                <p className="text-red-600">Fehler beim Laden der Artikel: {error.message}</p>
               </div>
             )}
 
-            {posts && (
+            {posts && posts.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-gray-600">Noch keine Blog-Artikel vorhanden.</p>
+                <Button onClick={() => setShowForm(true)} className="mt-4">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Ersten Artikel erstellen
+                </Button>
+              </div>
+            )}
+
+            {posts && posts.length > 0 && (
               <div className="grid gap-6">
                 {posts.map((post) => (
                   <Card key={post.id}>
@@ -91,17 +118,17 @@ const BlogAdmin = () => {
                           <CardTitle className="text-xl mb-2">{post.title}</CardTitle>
                           <div className="flex items-center gap-2 mb-2">
                             <Badge variant={post.published ? "default" : "secondary"}>
-                              {post.published ? "Published" : "Draft"}
+                              {post.published ? "Veröffentlicht" : "Entwurf"}
                             </Badge>
                             <Badge variant="outline">{post.category_label}</Badge>
                             {post.featured && (
-                              <Badge variant="destructive">Featured</Badge>
+                              <Badge variant="destructive">Empfohlen</Badge>
                             )}
                           </div>
                           <p className="text-sm text-gray-600">
-                            Created: {new Date(post.created_at).toLocaleDateString('de-DE')}
+                            Erstellt: {new Date(post.created_at).toLocaleDateString('de-DE')}
                             {post.published_at && (
-                              <> • Published: {new Date(post.published_at).toLocaleDateString('de-DE')}</>
+                              <> • Veröffentlicht: {new Date(post.published_at).toLocaleDateString('de-DE')}</>
                             )}
                           </p>
                         </div>
@@ -110,6 +137,7 @@ const BlogAdmin = () => {
                             variant="ghost"
                             size="sm"
                             onClick={() => togglePublished(post)}
+                            title={post.published ? "Verstecken" : "Veröffentlichen"}
                           >
                             {post.published ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                           </Button>
@@ -117,6 +145,7 @@ const BlogAdmin = () => {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleEdit(post)}
+                            title="Bearbeiten"
                           >
                             <Edit className="w-4 h-4" />
                           </Button>
@@ -125,13 +154,14 @@ const BlogAdmin = () => {
                             size="sm"
                             onClick={() => handleDelete(post.id)}
                             className="text-red-600 hover:text-red-700"
+                            title="Löschen"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
                           {post.published && (
-                            <Button variant="ghost" size="sm" asChild>
+                            <Button variant="ghost" size="sm" asChild title="Ansehen">
                               <Link to={`/blog/${post.slug}`} target="_blank">
-                                View
+                                Ansehen
                               </Link>
                             </Button>
                           )}
