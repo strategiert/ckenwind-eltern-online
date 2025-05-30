@@ -3,22 +3,22 @@ import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import BlogReadingProgress from '@/components/BlogReadingProgress';
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import BlogPreview from '@/components/BlogPreview';
 import { Helmet } from 'react-helmet-async';
 import { blogPostsData } from '@/data/blogPosts';
+import { Clock, User, Calendar } from 'lucide-react';
 
 const BlogPost = () => {
   const { slug } = useParams();
   const post = blogPostsData.find(post => post.slug === slug);
   
-  // Scroll to top when the component mounts
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Show 404 or redirect if post not found
   if (!post) {
     return (
       <>
@@ -37,7 +37,6 @@ const BlogPost = () => {
     );
   }
 
-  // Related posts based on category
   const relatedPosts = blogPostsData
     .filter(p => p.category === post.category && p.id !== post.id)
     .slice(0, 3);
@@ -56,6 +55,7 @@ const BlogPost = () => {
         <meta property="article:section" content={post.categoryLabel} />
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
+      <BlogReadingProgress />
       <Navbar />
       <main>
         {/* Blog Header */}
@@ -70,17 +70,37 @@ const BlogPost = () => {
             <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
               <div className="container-custom">
                 <div className="max-w-4xl">
-                  <div className="mb-4">
-                    <Link 
-                      to={`/blog?category=${post.category}`} 
-                      className="text-rueckenwind-light-purple hover:text-white transition-colors"
-                    >
+                  <div className="flex flex-wrap items-center gap-4 mb-4">
+                    <Badge className="bg-rueckenwind-purple">
                       {post.categoryLabel}
-                    </Link>
-                    <span className="mx-2">•</span>
-                    <span>{post.date}</span>
+                    </Badge>
+                    <div className="flex items-center gap-4 text-sm">
+                      <div className="flex items-center">
+                        <Calendar className="w-4 h-4 mr-1" />
+                        {post.date}
+                      </div>
+                      <div className="flex items-center">
+                        <User className="w-4 h-4 mr-1" />
+                        {post.author || 'Janike Arent'}
+                      </div>
+                      {post.readingTime && (
+                        <div className="flex items-center">
+                          <Clock className="w-4 h-4 mr-1" />
+                          {post.readingTime} Min. Lesezeit
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <h1 className="text-3xl md:text-5xl font-display font-semibold mb-4">{post.title}</h1>
+                  {post.tags && post.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.map(tag => (
+                        <Badge key={tag} variant="secondary" className="bg-white/20 text-white">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -111,16 +131,18 @@ const BlogPost = () => {
               </div>
               
               <div className="lg:col-span-1">
-                <div className="bg-gray-50 p-6 rounded-lg mb-8">
-                  <h3 className="text-xl font-display mb-4">Inhaltsverzeichnis</h3>
-                  <ul className="space-y-2">
-                    {post.tableOfContents?.map((item, index) => (
-                      <li key={index}>
-                        <a href={`#${item.anchor}`} className="text-rueckenwind-purple hover:underline">{item.title}</a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {post.tableOfContents && post.tableOfContents.length > 0 && (
+                  <div className="bg-gray-50 p-6 rounded-lg mb-8">
+                    <h3 className="text-xl font-display mb-4">Inhaltsverzeichnis</h3>
+                    <ul className="space-y-2">
+                      {post.tableOfContents.map((item, index) => (
+                        <li key={index}>
+                          <a href={`#${item.anchor}`} className="text-rueckenwind-purple hover:underline">{item.title}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
                 
                 <div className="sticky top-24">
                   <h3 className="text-xl font-display mb-4">Das könnte Sie auch interessieren</h3>
