@@ -174,7 +174,8 @@ const BlogPost = () => {
               <div className="flex flex-wrap items-center gap-4">
                 <BlogSocialShare 
                   title={post.title}
-                  url={window.location.href}
+                  slug={post.slug}
+                  excerpt={post.excerpt}
                 />
                 <BlogPrintView post={transformedPost} />
               </div>

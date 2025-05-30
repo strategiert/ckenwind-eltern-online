@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -65,9 +64,9 @@ const Blog = () => {
   const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
   const paginatedPosts = filteredPosts.slice(startIndex, startIndex + POSTS_PER_PAGE);
 
-  const handleTagFilter = (tag: string | null) => {
+  const handleTagFilter = (tag: string) => {
     const params = new URLSearchParams(searchParams);
-    if (tag) {
+    if (tag && selectedTag !== tag) {
       params.set('tag', tag);
     } else {
       params.delete('tag');
@@ -223,8 +222,8 @@ const Blog = () => {
             {/* Tag Filter */}
             <BlogTagFilter 
               tags={allTags}
-              selectedTag={selectedTag}
-              onTagSelect={handleTagFilter}
+              selectedTags={selectedTag ? [selectedTag] : []}
+              onTagToggle={handleTagFilter}
             />
 
             {/* Admin Link - only show in development or for admins */}
