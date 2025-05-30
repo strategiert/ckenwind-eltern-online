@@ -158,22 +158,26 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl h-[80vh] flex flex-col p-0">
-        <DialogHeader className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-4 rounded-t-lg">
+      <DialogContent className="max-w-4xl h-[80vh] flex flex-col p-0 rounded-xl border-0 shadow-2xl overflow-hidden">
+        <DialogHeader className="bg-gradient-to-r from-rueckenwind-purple to-rueckenwind-dark-purple text-white px-6 py-4 rounded-t-xl">
           <DialogTitle className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Heart className="h-5 w-5" />
-              Mental Health Support
+            <div className="flex items-center gap-3">
+              <div className="bg-white/20 p-2 rounded-lg">
+                <Heart className="h-5 w-5" />
+              </div>
+              <span className="font-display text-lg">Mental Health Support</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               {messages.length > 0 && (
-                <span className="text-sm opacity-90">{messages.length} Nachrichten</span>
+                <span className="text-sm opacity-90 bg-white/20 px-3 py-1 rounded-lg">
+                  {messages.length} Nachrichten
+                </span>
               )}
               <Button
                 onClick={startNewConversation}
                 variant="ghost"
                 size="sm"
-                className="text-white hover:bg-white/20"
+                className="text-white hover:bg-white/20 rounded-lg transition-all duration-200"
               >
                 <Plus className="h-4 w-4 mr-1" />
                 Neu
@@ -182,7 +186,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 flex flex-col min-h-0">
+        <div className="flex-1 flex flex-col min-h-0 bg-rueckenwind-warm-white">
           {sessionId ? (
             <>
               <div className="flex-1 min-h-0">
@@ -192,20 +196,20 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
                 />
               </div>
 
-              <div className="p-4 border-t bg-white">
-                <form onSubmit={handleSendMessage} className="flex gap-2">
+              <div className="p-6 border-t border-rueckenwind-soft-gray bg-white rounded-b-xl">
+                <form onSubmit={handleSendMessage} className="flex gap-3">
                   <Input
                     ref={inputRef}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Teilen Sie mit, was Sie beschäftigt..."
                     disabled={sendMessageMutation.isPending}
-                    className="flex-1"
+                    className="flex-1 rounded-lg border-rueckenwind-soft-gray focus:border-rueckenwind-purple focus:ring-rueckenwind-purple/20"
                   />
                   <Button 
                     type="submit" 
                     disabled={!message.trim() || sendMessageMutation.isPending}
-                    className="bg-blue-500 hover:bg-blue-600"
+                    className="bg-rueckenwind-purple hover:bg-rueckenwind-dark-purple rounded-lg px-6 transition-all duration-200 shadow-sm"
                   >
                     {sendMessageMutation.isPending ? (
                       <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
@@ -215,17 +219,21 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose }) => {
                   </Button>
                 </form>
                 
-                <div className="mt-3 text-xs text-gray-500 text-center">
-                  <p>🔒 Dieses Gespräch ist vertraulich und anonymous</p>
+                <div className="mt-4 text-xs text-gray-600 text-center bg-rueckenwind-soft-gray p-3 rounded-lg">
+                  <p className="flex items-center justify-center gap-2 font-medium mb-1">
+                    🔒 Dieses Gespräch ist vertraulich und anonym
+                  </p>
                   <p>Für akute Krisen wenden Sie sich bitte an den Notdienst oder eine Krisenhotline</p>
                 </div>
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center">
+            <div className="flex-1 flex items-center justify-center bg-rueckenwind-warm-white">
               <div className="text-center">
-                <Brain className="h-8 w-8 animate-spin mx-auto mb-4" />
-                <p>Ihr Support-Chat wird vorbereitet...</p>
+                <div className="bg-rueckenwind-light-purple p-4 rounded-xl mb-4 inline-block">
+                  <Brain className="h-8 w-8 animate-spin text-rueckenwind-purple mx-auto" />
+                </div>
+                <p className="text-rueckenwind-dark-purple font-medium">Ihr Support-Chat wird vorbereitet...</p>
               </div>
             </div>
           )}
