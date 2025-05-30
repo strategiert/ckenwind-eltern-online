@@ -5,7 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Send, Heart, Brain } from 'lucide-react';
+import { Send, Heart, Brain, Plus, MessageCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Helmet } from 'react-helmet-async';
 import Navbar from '@/components/Navbar';
@@ -24,12 +24,24 @@ const MentalHealthChat = () => {
   const [message, setMessage] = useState('');
   const [sessionId, setSessionId] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Create or get session
-  useEffect(() => {
-    const createSession = async () => {
+  // Helper function to get stored session or create new one
+  const getOrCreateSession = async () => {
+    // Try to get existing session from localStorage
+    const storedSessionId = localStorage.getItem('mental-health-session-id');
+    const storedSessionDate = localStorage.getItem('mental-health-session-date');
+    
+    // Check if stored session is from today (sessions expire daily)
+    const today = new Date().toDateString();
+    const isSessionValid = storedSessionId && storedSessionDate === today;
+    
+    if (isSessionValid) {
+      return storedSessionId;
+    } else {
+      // Create new session
       const { data, error } = await supabase
         .from('chat_sessions')
         .insert({
@@ -40,12 +52,32 @@ const MentalHealthChat = () => {
         .single();
 
       if (data && !error) {
-        setSessionId(data.id);
+        localStorage.setItem('mental-health-session-id', data.id);
+        localStorage.setItem('mental-health-session-date', today);
+        return data.id;
+      }
+      throw new Error('Failed to create session');
+    }
+  };
+
+  // Create or get session on mount
+  useEffect(() => {
+    const initSession = async () => {
+      try {
+        const newSessionId = await getOrCreateSession();
+        setSessionId(newSessionId);
+      } catch (error) {
+        console.error('Failed to initialize session:', error);
+        toast({
+          title: "Fehler",
+          description: "Sitzung konnte nicht gestartet werden. Bitte laden Sie die Seite neu.",
+          variant: "destructive",
+        });
       }
     };
 
-    createSession();
-  }, []);
+    initSession();
+  }, [toast]);
 
   // Fetch chat messages
   const { data: messages = [], isLoading: messagesLoading } = useQuery({
@@ -82,6 +114,8 @@ const MentalHealthChat = () => {
       queryClient.invalidateQueries({ queryKey: ['chat-messages', sessionId] });
       queryClient.invalidateQueries({ queryKey: ['symptom-assessments', sessionId] });
       setMessage('');
+      // Focus back on input after sending
+      setTimeout(() => inputRef.current?.focus(), 100);
       toast({
         title: "Nachricht gesendet",
         description: "Ich bin hier, um Ihnen zuzuhören und Sie zu unterstützen.",
@@ -104,10 +138,36 @@ const MentalHealthChat = () => {
     sendMessageMutation.mutate(message);
   };
 
-  // Auto-scroll to bottom
+  // Start new conversation
+  const startNewConversation = async () => {
+    try {
+      localStorage.removeItem('mental-health-session-id');
+      localStorage.removeItem('mental-health-session-date');
+      const newSessionId = await getOrCreateSession();
+      setSessionId(newSessionId);
+      toast({
+        title: "Neue Unterhaltung gestartet",
+        description: "Sie können jetzt ein neues Gespräch beginnen.",
+      });
+    } catch (error) {
+      console.error('Failed to start new conversation:', error);
+      toast({
+        title: "Fehler",
+        description: "Neue Unterhaltung konnte nicht gestartet werden.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Auto-scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, sendMessageMutation.isPending]);
+
+  // Focus input on load
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   if (!sessionId) {
     return (
@@ -152,21 +212,43 @@ const MentalHealthChat = () => {
             <div className="lg:col-span-2">
               <Card className="mb-6 border-0 shadow-lg">
                 <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-t-lg">
-                  <CardTitle className="flex items-center gap-2">
-                    <Brain className="h-5 w-5" />
-                    Support Chat Sitzung
+                  <CardTitle className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Brain className="h-5 w-5" />
+                      Support Chat Sitzung
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {messages.length > 0 && (
+                        <div className="flex items-center gap-1 text-sm opacity-90">
+                          <MessageCircle className="h-4 w-4" />
+                          <span>{messages.length} Nachrichten</span>
+                        </div>
+                      )}
+                      <Button
+                        onClick={startNewConversation}
+                        variant="ghost"
+                        size="sm"
+                        className="text-white hover:bg-white/20"
+                      >
+                        <Plus className="h-4 w-4 mr-1" />
+                        Neu
+                      </Button>
+                    </div>
                   </CardTitle>
                 </CardHeader>
                 <ChatInterface 
                   messages={messages} 
                   isLoading={sendMessageMutation.isPending} 
                 />
+                {/* Scroll anchor */}
+                <div ref={messagesEndRef} />
               </Card>
 
               <Card className="border-0 shadow-lg">
                 <CardContent className="p-4">
                   <form onSubmit={handleSendMessage} className="flex gap-2">
                     <Input
+                      ref={inputRef}
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Teilen Sie mit, was Sie beschäftigt..."
@@ -189,6 +271,9 @@ const MentalHealthChat = () => {
                   <div className="mt-4 text-xs text-gray-500 text-center">
                     <p>🔒 Dieses Gespräch ist vertraulich und anonymous</p>
                     <p>Für akute Krisen wenden Sie sich bitte an den Notdienst oder eine Krisenhotline</p>
+                    {messages.length > 0 && (
+                      <p className="mt-1">💡 Ihre Unterhaltung wird automatisch gespeichert</p>
+                    )}
                   </div>
                 </CardContent>
               </Card>

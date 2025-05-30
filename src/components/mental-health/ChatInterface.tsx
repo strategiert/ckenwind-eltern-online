@@ -47,9 +47,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, isLoading }) =>
                         : 'bg-gray-100 text-gray-800 rounded-bl-none border border-gray-200'
                     }`}
                   >
-                    <p className="whitespace-pre-wrap">{msg.content}</p>
+                    <p className="whitespace-pre-wrap leading-relaxed">{msg.content}</p>
                     <span className="text-xs opacity-70 mt-2 block">
-                      {new Date(msg.created_at).toLocaleTimeString()}
+                      {new Date(msg.created_at).toLocaleTimeString('de-DE', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
                     </span>
                   </div>
 
