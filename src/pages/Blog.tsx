@@ -264,7 +264,7 @@ const Blog = () => {
                   }
                 </p>
                 {selectedTag && (
-                  <Button onClick={() => handleTagFilter(null)}>
+                  <Button onClick={() => handleTagFilter('')}>
                     Alle Artikel anzeigen
                   </Button>
                 )}

@@ -9,6 +9,10 @@ interface BlogTagFilterProps {
 }
 
 const BlogTagFilter: React.FC<BlogTagFilterProps> = ({ tags, selectedTags, onTagToggle }) => {
+  if (tags.length === 0) {
+    return null;
+  }
+
   return (
     <div className="mb-6">
       <h3 className="text-lg font-medium mb-3">Tags</h3>
