@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,34 +18,49 @@ import NotFound from "./pages/NotFound";
 import Impressum from "./pages/Impressum";
 import MentalHealthChat from "./pages/MentalHealthChat";
 import ICD10DataSeeder from "./components/mental-health/ICD10DataSeeder";
+import FloatingChatButton from "./components/mental-health/FloatingChatButton";
+import ChatModal from "./components/mental-health/ChatModal";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <HelmetProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <ICD10DataSeeder />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/ueber-mich" element={<UeberMich />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/gratis-buch" element={<GratisBuch />} />
-            <Route path="/glossar" element={<Glossar />} />
-            <Route path="/glossar/:slug" element={<GlossaryDetail />} />
-            <Route path="/kontakt" element={<Kontakt />} />
-            <Route path="/mental-health-chat" element={<MentalHealthChat />} />
-            <Route path="/impressum" element={<Impressum />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </HelmetProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <HelmetProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <ICD10DataSeeder />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/ueber-mich" element={<UeberMich />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/gratis-buch" element={<GratisBuch />} />
+              <Route path="/glossar" element={<Glossar />} />
+              <Route path="/glossar/:slug" element={<GlossaryDetail />} />
+              <Route path="/kontakt" element={<Kontakt />} />
+              <Route path="/mental-health-chat" element={<MentalHealthChat />} />
+              <Route path="/impressum" element={<Impressum />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            
+            {/* Floating Chat Button - only show on non-chat pages */}
+            <FloatingChatButton onClick={() => setIsChatModalOpen(true)} />
+            
+            {/* Chat Modal */}
+            <ChatModal 
+              isOpen={isChatModalOpen} 
+              onClose={() => setIsChatModalOpen(false)} 
+            />
+          </BrowserRouter>
+        </TooltipProvider>
+      </HelmetProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
