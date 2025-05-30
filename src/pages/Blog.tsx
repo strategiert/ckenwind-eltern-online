@@ -9,8 +9,12 @@ import BlogPagination from '@/components/BlogPagination';
 import BlogBreadcrumb from '@/components/BlogBreadcrumb';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Helmet } from 'react-helmet-async';
 import { blogPostsListing } from '@/data/blogPosts';
+import { Link } from 'react-router-dom';
+import { Archive, Folder, TrendingUp } from 'lucide-react';
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -73,6 +77,12 @@ const Blog = () => {
     { value: 'beziehung', label: 'Familienbeziehungen' }
   ];
 
+  // Get category stats
+  const categoryStats = categories.slice(1).map(cat => ({
+    ...cat,
+    count: blogPostsListing.filter(post => post.category === cat.value).length
+  }));
+
   const handleTagToggle = (tag: string) => {
     setSelectedTags(prev => 
       prev.includes(tag) 
@@ -119,6 +129,84 @@ const Blog = () => {
               <p className="text-xl text-gray-700">
                 Tipps, Erkenntnisse und praktische Hilfe für Ihren Familienalltag
               </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Navigation Cards */}
+        <section className="py-8 bg-gray-50">
+          <div className="container-custom">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <Card className="hover:shadow-md transition-shadow">
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex items-center text-lg">
+                    <Folder className="w-5 h-5 mr-2 text-rueckenwind-purple" />
+                    Kategorien
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600 mb-3">Artikel nach Themen durchsuchen</p>
+                  <div className="space-y-2">
+                    {categoryStats.slice(0, 3).map(cat => (
+                      <div key={cat.value} className="flex justify-between items-center">
+                        <Link 
+                          to={`/blog/category/${cat.value}`}
+                          className="text-rueckenwind-purple hover:underline text-sm"
+                        >
+                          {cat.label}
+                        </Link>
+                        <Badge variant="secondary" className="text-xs">{cat.count}</Badge>
+                      </div>
+                    ))}
+                    <Button asChild variant="outline" size="sm" className="w-full mt-2">
+                      <Link to="/blog/category/burnout">Alle Kategorien →</Link>
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-md transition-shadow">
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex items-center text-lg">
+                    <Archive className="w-5 h-5 mr-2 text-rueckenwind-purple" />
+                    Archiv
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600 mb-3">Artikel chronologisch durchsuchen</p>
+                  <p className="text-2xl font-semibold text-rueckenwind-purple mb-2">
+                    {blogPostsListing.length}
+                  </p>
+                  <p className="text-sm text-gray-600 mb-3">Artikel verfügbar</p>
+                  <Button asChild variant="outline" size="sm" className="w-full">
+                    <Link to="/blog/archive">Zum Archiv →</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-md transition-shadow">
+                <CardHeader className="pb-2">
+                  <CardTitle className="flex items-center text-lg">
+                    <TrendingUp className="w-5 h-5 mr-2 text-rueckenwind-purple" />
+                    Beliebte Tags
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-600 mb-3">Häufig verwendete Schlagwörter</p>
+                  <div className="flex flex-wrap gap-1">
+                    {allTags.slice(0, 6).map(tag => (
+                      <Badge 
+                        key={tag} 
+                        variant="secondary" 
+                        className="text-xs cursor-pointer hover:bg-rueckenwind-light-purple"
+                        onClick={() => handleTagToggle(tag)}
+                      >
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>

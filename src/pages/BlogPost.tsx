@@ -7,6 +7,7 @@ import BlogReadingProgress from '@/components/BlogReadingProgress';
 import BlogBreadcrumb from '@/components/BlogBreadcrumb';
 import BlogSocialShare from '@/components/BlogSocialShare';
 import BlogNewsletter from '@/components/BlogNewsletter';
+import BlogPrintView from '@/components/BlogPrintView';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import BlogPreview from '@/components/BlogPreview';
@@ -77,7 +78,9 @@ const BlogPost = () => {
                 <div className="max-w-4xl">
                   <div className="flex flex-wrap items-center gap-4 mb-4">
                     <Badge className="bg-rueckenwind-purple">
-                      {post.categoryLabel}
+                      <Link to={`/blog/category/${post.category}`} className="hover:underline">
+                        {post.categoryLabel}
+                      </Link>
                     </Badge>
                     <div className="flex items-center gap-4 text-sm">
                       <div className="flex items-center">
@@ -119,8 +122,9 @@ const BlogPost = () => {
               <div className="lg:col-span-2">
                 <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: post.content }}></div>
                 
-                {/* Social Share */}
-                <div className="mt-8 pt-8 border-t">
+                {/* Article Actions */}
+                <div className="mt-8 pt-8 border-t flex flex-wrap gap-4">
+                  <BlogPrintView post={post} />
                   <BlogSocialShare title={post.title} slug={post.slug} excerpt={post.excerpt} />
                 </div>
                 

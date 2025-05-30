@@ -10,6 +10,8 @@ import Index from "./pages/Index";
 import UeberMich from "./pages/UeberMich";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import BlogCategory from "./pages/BlogCategory";
+import BlogArchive from "./pages/BlogArchive";
 import GratisBuch from "./pages/GratisBuch";
 import Glossar from "./pages/Glossar";
 import GlossaryDetail from "./pages/GlossaryDetail";
@@ -39,6 +41,8 @@ const App = () => {
               <Route path="/ueber-mich" element={<UeberMich />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/blog/category/:category" element={<BlogCategory />} />
+              <Route path="/blog/archive" element={<BlogArchive />} />
               <Route path="/gratis-buch" element={<GratisBuch />} />
               <Route path="/glossar" element={<Glossar />} />
               <Route path="/glossar/:slug" element={<GlossaryDetail />} />
