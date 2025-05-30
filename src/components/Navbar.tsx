@@ -27,7 +27,7 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center">
-              <span className="text-xl font-bold text-blue-600">MentalHealth Pro</span>
+              <span className="text-xl font-bold text-rueckenwind-purple">Rückenwind Eltern</span>
             </Link>
           </div>
 
@@ -39,8 +39,8 @@ const Navbar = () => {
                 to={item.href}
                 className={`flex items-center gap-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   isActive(item.href)
-                    ? 'text-blue-600 bg-blue-50'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                    ? 'text-rueckenwind-purple bg-rueckenwind-light-purple'
+                    : 'text-gray-700 hover:text-rueckenwind-purple hover:bg-rueckenwind-light-purple'
                 }`}
               >
                 {item.icon && <item.icon className="h-4 w-4" />}
@@ -66,8 +66,8 @@ const Navbar = () => {
                       onClick={() => setIsOpen(false)}
                       className={`flex items-center gap-2 px-3 py-2 rounded-md text-base font-medium transition-colors ${
                         isActive(item.href)
-                          ? 'text-blue-600 bg-blue-50'
-                          : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                          ? 'text-rueckenwind-purple bg-rueckenwind-light-purple'
+                          : 'text-gray-700 hover:text-rueckenwind-purple hover:bg-rueckenwind-light-purple'
                       }`}
                     >
                       {item.icon && <item.icon className="h-4 w-4" />}
