@@ -1,209 +1,240 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import BlogReadingProgress from '@/components/BlogReadingProgress';
 import BlogBreadcrumb from '@/components/BlogBreadcrumb';
 import BlogSocialShare from '@/components/BlogSocialShare';
-import BlogNewsletter from '@/components/BlogNewsletter';
+import BlogReadingProgress from '@/components/BlogReadingProgress';
 import BlogPrintView from '@/components/BlogPrintView';
-import { Button } from "@/components/ui/button";
+import BlogNewsletter from '@/components/BlogNewsletter';
 import { Badge } from "@/components/ui/badge";
-import BlogPreview from '@/components/BlogPreview';
-import { Helmet } from 'react-helmet-async';
-import { blogPostsData } from '@/data/blogPosts';
-import { Clock, User, Calendar } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useBlogPost } from '@/hooks/useBlogPosts';
+import { Calendar, Clock, User, ArrowLeft, Share2 } from 'lucide-react';
 
 const BlogPost = () => {
-  const { slug } = useParams();
-  const post = blogPostsData.find(post => post.slug === slug);
-  
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  const { slug } = useParams<{ slug: string }>();
+  const { data: post, isLoading, error } = useBlogPost(slug || '');
 
-  if (!post) {
+  if (isLoading) {
     return (
       <>
+        <Helmet>
+          <title>Loading... | Rückenwind Eltern</title>
+        </Helmet>
         <Navbar />
-        <main className="container-custom py-16 md:py-24">
-          <BlogBreadcrumb />
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-display font-semibold mb-6">Beitrag nicht gefunden</h1>
-            <p className="text-xl text-gray-700 mb-8">Der gesuchte Beitrag existiert leider nicht.</p>
-            <Button asChild>
-              <Link to="/blog">Zurück zur Blog-Übersicht</Link>
-            </Button>
-          </div>
+        <main>
+          <BlogReadingProgress />
+          <article className="py-8">
+            <div className="container-custom max-w-4xl mx-auto">
+              <BlogBreadcrumb />
+              <div className="mb-8">
+                <Skeleton className="h-8 w-32 mb-4" />
+                <Skeleton className="h-12 w-full mb-4" />
+                <Skeleton className="h-6 w-3/4 mb-6" />
+                <Skeleton className="h-64 w-full mb-8" />
+                <div className="space-y-4">
+                  {Array.from({ length: 10 }).map((_, i) => (
+                    <Skeleton key={i} className="h-4 w-full" />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </article>
         </main>
         <Footer />
       </>
     );
   }
 
-  const relatedPosts = blogPostsData
-    .filter(p => p.category === post.category && p.id !== post.id)
-    .slice(0, 3);
+  if (error || !post) {
+    return (
+      <>
+        <Helmet>
+          <title>Artikel nicht gefunden | Rückenwind Eltern</title>
+        </Helmet>
+        <Navbar />
+        <main>
+          <section className="py-16">
+            <div className="container-custom text-center">
+              <h1 className="text-2xl font-semibold mb-4">Artikel nicht gefunden</h1>
+              <p className="text-gray-600 mb-6">
+                Der gewünschte Artikel existiert nicht oder wurde entfernt.
+              </p>
+              <Button asChild>
+                <Link to="/blog">
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Zum Blog
+                </Link>
+              </Button>
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  const publishedDate = new Date(post.published_at || post.created_at).toLocaleDateString('de-DE', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
+  const getImageUrl = () => {
+    if (post.image_url && post.image_url.trim() !== '') {
+      return post.image_url;
+    }
+    return "https://images.unsplash.com/photo-1541199249251-f713e6145474?q=80&w=1974&auto=format&fit=crop";
+  };
+
+  const transformedPost = {
+    title: post.title,
+    content: post.content,
+    date: publishedDate,
+    author: post.author,
+    categoryLabel: post.category_label,
+    imageUrl: getImageUrl(),
+    excerpt: post.excerpt || ''
+  };
 
   return (
     <>
       <Helmet>
-        <title>{post.title} | Rückenwind Eltern</title>
-        <meta name="description" content={post.metaDescription || post.excerpt} />
+        <title>{post.meta_title || post.title} | Rückenwind Eltern</title>
+        <meta name="description" content={post.meta_description || post.excerpt || ''} />
+        <meta name="keywords" content={post.tags?.join(', ') || ''} />
+        <meta name="author" content={post.author || 'Janike Arent'} />
+        
+        {/* Open Graph tags */}
         <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={post.metaDescription || post.excerpt} />
-        <meta property="og:image" content={post.imageUrl} />
+        <meta property="og:description" content={post.excerpt || ''} />
+        <meta property="og:image" content={getImageUrl()} />
         <meta property="og:type" content="article" />
-        <meta property="article:published_time" content={post.publishedDate} />
-        <meta property="article:author" content="Janike Arent" />
-        <meta property="article:section" content={post.categoryLabel} />
+        <meta property="article:author" content={post.author || 'Janike Arent'} />
+        <meta property="article:published_time" content={post.published_at || post.created_at} />
+        <meta property="article:section" content={post.category_label} />
+        {post.tags?.map(tag => (
+          <meta key={tag} property="article:tag" content={tag} />
+        ))}
+        
+        {/* Twitter Card tags */}
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={post.excerpt || ''} />
+        <meta name="twitter:image" content={getImageUrl()} />
       </Helmet>
-      <BlogReadingProgress />
       <Navbar />
       <main>
-        {/* Blog Header */}
-        <section className="relative">
-          <div className="h-96 w-full relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-60"></div>
-            <img 
-              src={post.imageUrl} 
-              alt={post.title} 
-              className="w-full h-full object-cover" 
-            />
-            <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-              <div className="container-custom">
-                <BlogBreadcrumb title={post.title} category={post.category} categoryLabel={post.categoryLabel} />
-                <div className="max-w-4xl">
-                  <div className="flex flex-wrap items-center gap-4 mb-4">
-                    <Badge className="bg-rueckenwind-purple">
-                      <Link to={`/blog/category/${post.category}`} className="hover:underline">
-                        {post.categoryLabel}
-                      </Link>
-                    </Badge>
-                    <div className="flex items-center gap-4 text-sm">
-                      <div className="flex items-center">
-                        <Calendar className="w-4 h-4 mr-1" />
-                        {post.date}
-                      </div>
-                      <div className="flex items-center">
-                        <User className="w-4 h-4 mr-1" />
-                        {post.author || 'Janike Arent'}
-                      </div>
-                      {post.readingTime && (
-                        <div className="flex items-center">
-                          <Clock className="w-4 h-4 mr-1" />
-                          {post.readingTime} Min. Lesezeit
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <h1 className="text-3xl md:text-5xl font-display font-semibold mb-4">{post.title}</h1>
-                  {post.tags && post.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {post.tags.map(tag => (
-                        <Badge key={tag} variant="secondary" className="bg-white/20 text-white">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Blog Content */}
-        <section className="py-16">
-          <div className="container-custom">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-              <div className="lg:col-span-2">
-                <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: post.content }}></div>
-                
-                {/* Article Actions */}
-                <div className="mt-8 pt-8 border-t flex flex-wrap gap-4">
-                  <BlogPrintView post={post} />
-                  <BlogSocialShare title={post.title} slug={post.slug} excerpt={post.excerpt} />
-                </div>
-                
-                <div className="mt-12 pt-8 border-t">
-                  <h3 className="text-2xl font-display mb-4">Über die Autorin</h3>
-                  <div className="flex items-center">
-                    <img 
-                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2787" 
-                      alt="Janike Arent" 
-                      className="w-16 h-16 rounded-full mr-4 object-cover"
-                    />
-                    <div>
-                      <p className="font-medium">Janike Arent</p>
-                      <p className="text-gray-700">Therapeutin und dreifache Mutter mit über 20 Jahren Erfahrung in der Familienberatung.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="lg:col-span-1">
-                {post.tableOfContents && post.tableOfContents.length > 0 && (
-                  <div className="bg-gray-50 p-6 rounded-lg mb-8">
-                    <h3 className="text-xl font-display mb-4">Inhaltsverzeichnis</h3>
-                    <ul className="space-y-2">
-                      {post.tableOfContents.map((item, index) => (
-                        <li key={index}>
-                          <a href={`#${item.anchor}`} className="text-rueckenwind-purple hover:underline">{item.title}</a>
-                        </li>
-                      ))}
-                    </ul>
+        <BlogReadingProgress />
+        <article className="py-8">
+          <div className="container-custom max-w-4xl mx-auto">
+            <BlogBreadcrumb />
+            
+            {/* Article Header */}
+            <header className="mb-8">
+              <div className="flex items-center gap-2 mb-4">
+                <Badge variant="outline" className="text-rueckenwind-purple">
+                  <Link to={`/blog/category/${post.category}`} className="hover:underline">
+                    {post.category_label}
+                  </Link>
+                </Badge>
+                {post.reading_time && (
+                  <div className="flex items-center text-gray-500 text-sm">
+                    <Clock className="w-4 h-4 mr-1" />
+                    {post.reading_time} Min. Lesezeit
                   </div>
                 )}
-                
-                {/* Newsletter Subscription */}
-                <div className="mb-8">
-                  <BlogNewsletter />
+              </div>
+              
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-display font-semibold mb-6 leading-tight">
+                {post.title}
+              </h1>
+              
+              {post.excerpt && (
+                <p className="text-xl text-gray-700 mb-6 leading-relaxed">
+                  {post.excerpt}
+                </p>
+              )}
+              
+              <div className="flex flex-wrap items-center gap-4 mb-6 text-gray-600">
+                <div className="flex items-center">
+                  <User className="w-4 h-4 mr-2" />
+                  <span>{post.author || 'Janike Arent'}</span>
                 </div>
-                
-                <div className="sticky top-24">
-                  <h3 className="text-xl font-display mb-4">Das könnte Sie auch interessieren</h3>
-                  <div className="space-y-6">
-                    {relatedPosts.map(relatedPost => (
-                      <div key={relatedPost.id} className="flex items-start">
-                        <Link to={`/blog/${relatedPost.slug}`} className="w-24 h-16 mr-4 flex-shrink-0">
-                          <img 
-                            src={relatedPost.imageUrl} 
-                            alt={relatedPost.title} 
-                            className="w-full h-full object-cover rounded"
-                          />
-                        </Link>
-                        <div>
-                          <Link to={`/blog/${relatedPost.slug}`} className="font-medium hover:text-rueckenwind-purple transition-colors">
-                            {relatedPost.title}
-                          </Link>
-                          <p className="text-sm text-gray-500">{relatedPost.date}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                <div className="flex items-center">
+                  <Calendar className="w-4 h-4 mr-2" />
+                  <span>{publishedDate}</span>
                 </div>
               </div>
+
+              <div className="flex flex-wrap items-center gap-4">
+                <BlogSocialShare 
+                  title={post.title}
+                  url={window.location.href}
+                />
+                <BlogPrintView post={transformedPost} />
+              </div>
+            </header>
+
+            {/* Featured Image */}
+            <div className="mb-8">
+              <img 
+                src={getImageUrl()} 
+                alt={post.title} 
+                className="w-full h-64 md:h-96 object-cover rounded-lg"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1604134967494-8a9ed3adea0d?q=80&w=1974&auto=format&fit=crop";
+                }}
+              />
             </div>
+
+            {/* Article Content */}
+            <div 
+              className="prose prose-lg max-w-none prose-headings:font-display prose-headings:text-rueckenwind-dark-purple prose-a:text-rueckenwind-purple hover:prose-a:text-rueckenwind-dark-purple prose-strong:text-rueckenwind-dark-purple"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+            />
+
+            {/* Tags */}
+            {post.tags && post.tags.length > 0 && (
+              <div className="mt-8 pt-8 border-t">
+                <h3 className="text-lg font-semibold mb-4">Tags</h3>
+                <div className="flex flex-wrap gap-2">
+                  {post.tags.map(tag => (
+                    <Badge key={tag} variant="secondary">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Article Footer */}
+            <footer className="mt-12 pt-8 border-t">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-semibold mb-2">War dieser Artikel hilfreich?</h3>
+                  <p className="text-gray-600">
+                    Teilen Sie ihn mit anderen Eltern oder speichern Sie ihn für später.
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm">
+                    <Share2 className="w-4 h-4 mr-2" />
+                    Teilen
+                  </Button>
+                  <BlogPrintView post={transformedPost} />
+                </div>
+              </div>
+            </footer>
           </div>
-        </section>
+        </article>
         
-        {/* CTA Section */}
-        <section className="py-12 bg-rueckenwind-light-purple">
-          <div className="container-custom">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl font-display font-semibold mb-4">Mehr Unterstützung für Ihren Familienalltag?</h2>
-              <p className="text-lg mb-6">
-                Holen Sie sich jetzt mein kostenloses E-Book und entdecken Sie praktische Strategien für mehr Gelassenheit in Ihrem Familienalltag.
-              </p>
-              <Button asChild className="bg-white text-rueckenwind-purple hover:bg-gray-100">
-                <Link to="/gratis-buch">Gratis E-Book sichern</Link>
-              </Button>
-            </div>
-          </div>
-        </section>
+        {/* Newsletter Section */}
+        <BlogNewsletter />
       </main>
       <Footer />
     </>

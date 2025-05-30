@@ -1,128 +1,92 @@
 
-import React, { useState, useEffect } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import React from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BlogPreview from '@/components/BlogPreview';
-import BlogPagination from '@/components/BlogPagination';
 import BlogBreadcrumb from '@/components/BlogBreadcrumb';
-import BlogTagFilter from '@/components/BlogTagFilter';
-import { Input } from "@/components/ui/input";
+import BlogNewsletter from '@/components/BlogNewsletter';
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Helmet } from 'react-helmet-async';
-import { blogPostsListing } from '@/data/blogPosts';
+import { Skeleton } from "@/components/ui/skeleton";
+import { useBlogPostsByCategory } from '@/hooks/useBlogPosts';
+import { Folder, ArrowLeft } from 'lucide-react';
+
+// Helper function to transform Supabase post to component format
+const transformPost = (post: any) => ({
+  id: post.id,
+  title: post.title,
+  excerpt: post.excerpt || '',
+  date: new Date(post.published_at || post.created_at).toLocaleDateString('de-DE'),
+  imageUrl: post.image_url || '',
+  slug: post.slug,
+  category: post.category,
+  categoryLabel: post.category_label,
+  tags: post.tags || [],
+  readingTime: post.reading_time,
+  author: post.author,
+  featured: post.featured
+});
 
 const BlogCategory = () => {
-  const { category } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
-  const [selectedTags, setSelectedTags] = useState<string[]>(
-    searchParams.get('tags')?.split(',').filter(Boolean) || []
-  );
-  const [sortOrder, setSortOrder] = useState<'newest' | 'oldest' | 'popular'>(
-    (searchParams.get('sort') as 'newest' | 'oldest' | 'popular') || 'newest'
-  );
-  const [currentPage, setCurrentPage] = useState(
-    parseInt(searchParams.get('page') || '1')
-  );
-  const postsPerPage = 12;
+  const { category } = useParams<{ category: string }>();
+  const { data: posts, isLoading, error } = useBlogPostsByCategory(category || '');
 
-  // Find category info
-  const categoryInfo = {
-    'burnout': { label: 'Eltern-Burnout', description: 'Tipps und Strategien zur Burnout-Prävention und -bewältigung für Eltern' },
-    'adhs': { label: 'ADHS', description: 'Informationen und praktische Hilfe für Familien mit ADHS-betroffenen Kindern' },
-    'essstoerungen': { label: 'Essstörungen', description: 'Aufklärung und Unterstützung bei Essstörungen im Kindes- und Jugendalter' },
-    'familie': { label: 'Familienalltag', description: 'Praktische Tipps für einen harmonischen Familienalltag' },
-    'entwicklung': { label: 'Kindesentwicklung', description: 'Wissenswertes über die gesunde Entwicklung von Kindern' },
-    'beziehung': { label: 'Familienbeziehungen', description: 'Stärkung der Beziehungen innerhalb der Familie' }
-  };
+  const transformedPosts = posts ? posts.map(transformPost) : [];
+  const categoryLabel = transformedPosts.length > 0 ? transformedPosts[0].categoryLabel : category;
 
-  const currentCategory = category ? categoryInfo[category as keyof typeof categoryInfo] : null;
-
-  // Filter posts by category
-  const categoryPosts = blogPostsListing.filter(post => post.category === category);
-
-  // Extract tags for this category
-  const categoryTags = Array.from(
-    new Set(
-      categoryPosts
-        .flatMap(post => post.tags || [])
-        .filter(Boolean)
-    )
-  ).sort();
-
-  // Apply additional filters
-  const filteredPosts = categoryPosts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesTags = selectedTags.length === 0 || 
-                       selectedTags.some(tag => post.tags?.includes(tag));
-    return matchesSearch && matchesTags;
-  });
-
-  // Sort posts
-  const sortedPosts = [...filteredPosts].sort((a, b) => {
-    switch (sortOrder) {
-      case 'oldest':
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
-      case 'popular':
-        if (a.featured && !b.featured) return -1;
-        if (!a.featured && b.featured) return 1;
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      default:
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-    }
-  });
-
-  // Pagination
-  const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
-  const startIndex = (currentPage - 1) * postsPerPage;
-  const paginatedPosts = sortedPosts.slice(startIndex, startIndex + postsPerPage);
-
-  // Update URL params
-  useEffect(() => {
-    const params = new URLSearchParams();
-    if (searchTerm) params.set('search', searchTerm);
-    if (selectedTags.length > 0) params.set('tags', selectedTags.join(','));
-    if (sortOrder !== 'newest') params.set('sort', sortOrder);
-    if (currentPage > 1) params.set('page', currentPage.toString());
-    setSearchParams(params);
-  }, [searchTerm, selectedTags, sortOrder, currentPage, setSearchParams]);
-
-  const handleTagToggle = (tag: string) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
-        ? prev.filter(t => t !== tag)
-        : [...prev, tag]
-    );
-    setCurrentPage(1);
-  };
-
-  const clearAllFilters = () => {
-    setSearchTerm('');
-    setSelectedTags([]);
-    setSortOrder('newest');
-    setCurrentPage(1);
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  if (!currentCategory) {
+  if (isLoading) {
     return (
       <>
+        <Helmet>
+          <title>Loading... | Rückenwind Eltern</title>
+        </Helmet>
         <Navbar />
-        <main className="container-custom py-16">
-          <div className="text-center">
-            <h1 className="text-4xl font-display font-semibold mb-4">Kategorie nicht gefunden</h1>
-            <p className="text-gray-600 mb-8">Die gesuchte Kategorie existiert nicht.</p>
-            <Button asChild>
-              <a href="/blog">Zurück zum Blog</a>
-            </Button>
-          </div>
+        <main>
+          <section className="bg-gradient-to-b from-rueckenwind-light-purple to-white py-16">
+            <div className="container-custom">
+              <BlogBreadcrumb />
+              <div className="max-w-3xl mx-auto text-center">
+                <Skeleton className="w-16 h-16 mx-auto mb-4" />
+                <Skeleton className="h-12 w-64 mx-auto mb-6" />
+                <Skeleton className="h-6 w-96 mx-auto" />
+              </div>
+            </div>
+          </section>
+          <section className="py-12">
+            <div className="container-custom">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <Skeleton key={i} className="h-64 w-full" />
+                ))}
+              </div>
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Helmet>
+          <title>Fehler | Rückenwind Eltern</title>
+        </Helmet>
+        <Navbar />
+        <main>
+          <section className="py-16">
+            <div className="container-custom text-center">
+              <h1 className="text-2xl font-semibold mb-4">Fehler beim Laden</h1>
+              <p className="text-gray-600 mb-4">
+                Es gab ein Problem beim Laden der Artikel. Bitte versuchen Sie es später erneut.
+              </p>
+              <Button onClick={() => window.location.reload()}>
+                Seite neu laden
+              </Button>
+            </div>
+          </section>
         </main>
         <Footer />
       </>
@@ -132,116 +96,70 @@ const BlogCategory = () => {
   return (
     <>
       <Helmet>
-        <title>{currentCategory.label} | Rückenwind Eltern Blog</title>
-        <meta name="description" content={currentCategory.description} />
+        <title>{categoryLabel} | Blog | Rückenwind Eltern</title>
+        <meta name="description" content={`Alle Artikel aus der Kategorie ${categoryLabel} - hilfreiche Tipps und Informationen für Eltern.`} />
       </Helmet>
       <Navbar />
       <main>
-        {/* Category Header */}
+        {/* Header */}
         <section className="bg-gradient-to-b from-rueckenwind-light-purple to-white py-16">
           <div className="container-custom">
-            <BlogBreadcrumb category={category} categoryLabel={currentCategory.label} />
+            <BlogBreadcrumb />
             <div className="max-w-3xl mx-auto text-center">
-              <Badge className="mb-4 bg-rueckenwind-purple">{currentCategory.label}</Badge>
+              <Folder className="w-12 h-12 mx-auto mb-4 text-rueckenwind-purple" />
               <h1 className="text-4xl md:text-5xl font-display font-semibold mb-6">
-                {currentCategory.label}
+                {categoryLabel}
               </h1>
-              <p className="text-xl text-gray-700 mb-4">{currentCategory.description}</p>
-              <p className="text-gray-600">
-                {categoryPosts.length} Artikel in dieser Kategorie
+              <p className="text-xl text-gray-700">
+                Alle Artikel aus dieser Kategorie
               </p>
             </div>
           </div>
         </section>
 
-        {/* Filters */}
-        <section className="py-8 bg-gray-50">
-          <div className="container-custom">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-              <div className="lg:col-span-2">
-                <Input
-                  type="text"
-                  placeholder="Artikel durchsuchen..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-              <div>
-                <select
-                  value={sortOrder}
-                  onChange={(e) => setSortOrder(e.target.value as 'newest' | 'oldest' | 'popular')}
-                  className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rueckenwind-purple"
-                >
-                  <option value="newest">Neueste zuerst</option>
-                  <option value="oldest">Älteste zuerst</option>
-                  <option value="popular">Beliebteste</option>
-                </select>
-              </div>
-            </div>
-
-            {categoryTags.length > 0 && (
-              <div className="mb-4">
-                <BlogTagFilter 
-                  tags={categoryTags}
-                  selectedTags={selectedTags}
-                  onTagToggle={handleTagToggle}
-                />
-              </div>
-            )}
-
-            {(searchTerm || selectedTags.length > 0 || sortOrder !== 'newest') && (
-              <Button 
-                variant="outline" 
-                onClick={clearAllFilters}
-                className="text-rueckenwind-purple border-rueckenwind-purple hover:bg-rueckenwind-light-purple"
-              >
-                Filter zurücksetzen
-              </Button>
-            )}
-          </div>
-        </section>
-
-        {/* Posts */}
         <section className="py-12">
           <div className="container-custom">
             <div className="mb-6">
-              <p className="text-gray-600">
-                {sortedPosts.length} Artikel gefunden
-                {totalPages > 1 && ` (Seite ${currentPage} von ${totalPages})`}
-              </p>
+              <Button variant="outline" asChild>
+                <Link to="/blog">
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Zurück zum Blog
+                </Link>
+              </Button>
             </div>
 
-            {paginatedPosts.length > 0 ? (
+            {transformedPosts.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {paginatedPosts.map(post => (
+                <div className="mb-6">
+                  <p className="text-gray-600">
+                    {transformedPosts.length} Artikel gefunden
+                  </p>
+                </div>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {transformedPosts.map(post => (
                     <BlogPreview key={post.id} post={post} />
                   ))}
                 </div>
-                
-                <BlogPagination 
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={handlePageChange}
-                />
               </>
             ) : (
               <div className="text-center py-16">
+                <Folder className="w-16 h-16 mx-auto mb-4 text-gray-400" />
                 <h3 className="text-xl font-medium mb-2">Keine Artikel gefunden</h3>
                 <p className="text-gray-600 mb-4">
-                  Versuchen Sie andere Suchbegriffe oder Tags.
+                  In dieser Kategorie sind derzeit keine Artikel verfügbar.
                 </p>
-                <Button 
-                  variant="outline" 
-                  onClick={clearAllFilters}
-                  className="text-rueckenwind-purple border-rueckenwind-purple hover:bg-rueckenwind-light-purple"
-                >
-                  Filter zurücksetzen
+                <Button asChild>
+                  <Link to="/blog">
+                    Alle Artikel anzeigen
+                  </Link>
                 </Button>
               </div>
             )}
           </div>
         </section>
+
+        {/* Newsletter Section */}
+        <BlogNewsletter />
       </main>
       <Footer />
     </>

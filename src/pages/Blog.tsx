@@ -1,5 +1,7 @@
 
 import React, { useState } from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BlogPreview from '@/components/BlogPreview';
@@ -7,337 +9,273 @@ import BlogFeaturedPost from '@/components/BlogFeaturedPost';
 import BlogTagFilter from '@/components/BlogTagFilter';
 import BlogPagination from '@/components/BlogPagination';
 import BlogBreadcrumb from '@/components/BlogBreadcrumb';
-import { Input } from "@/components/ui/input";
+import BlogNewsletter from '@/components/BlogNewsletter';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Helmet } from 'react-helmet-async';
-import { blogPostsListing } from '@/data/blogPosts';
-import { Link } from 'react-router-dom';
-import { Archive, Folder, TrendingUp } from 'lucide-react';
+import { Skeleton } from "@/components/ui/skeleton";
+import { useBlogPosts, useFeaturedPosts } from '@/hooks/useBlogPosts';
+import { BookOpen, Users, Calendar, TrendingUp } from 'lucide-react';
+
+const POSTS_PER_PAGE = 6;
+
+// Helper function to transform Supabase post to component format
+const transformPost = (post: any) => ({
+  id: post.id,
+  title: post.title,
+  excerpt: post.excerpt || '',
+  date: new Date(post.published_at || post.created_at).toLocaleDateString('de-DE'),
+  imageUrl: post.image_url || '',
+  slug: post.slug,
+  category: post.category,
+  categoryLabel: post.category_label,
+  tags: post.tags || [],
+  readingTime: post.reading_time,
+  author: post.author,
+  featured: post.featured
+});
 
 const Blog = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [sortOrder, setSortOrder] = useState<'newest' | 'oldest' | 'popular'>('newest');
-  const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 9;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedTag = searchParams.get('tag');
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
 
-  // Extract featured post (first post or one marked as featured)
-  const featuredPost = blogPostsListing.find(post => post.featured) || blogPostsListing[0];
-  const regularPosts = blogPostsListing.filter(post => post.id !== featuredPost?.id);
+  const { data: blogPosts, isLoading: postsLoading, error: postsError } = useBlogPosts();
+  const { data: featuredPosts, isLoading: featuredLoading } = useFeaturedPosts();
 
-  // Extract all unique tags
-  const allTags = Array.from(
-    new Set(
-      blogPostsListing
-        .flatMap(post => post.tags || [])
-        .filter(Boolean)
-    )
-  ).sort();
+  // Transform and filter posts
+  const transformedPosts = blogPosts ? blogPosts.map(transformPost) : [];
+  const transformedFeaturedPosts = featuredPosts ? featuredPosts.map(transformPost) : [];
 
-  // Filter posts
-  const filteredPosts = regularPosts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === '' || post.category === selectedCategory;
-    const matchesTags = selectedTags.length === 0 || 
-                       selectedTags.some(tag => post.tags?.includes(tag));
-    return matchesSearch && matchesCategory && matchesTags;
-  });
+  // Get all unique tags
+  const allTags = React.useMemo(() => {
+    const tagSet = new Set<string>();
+    transformedPosts.forEach(post => {
+      post.tags?.forEach(tag => tagSet.add(tag));
+    });
+    return Array.from(tagSet).sort();
+  }, [transformedPosts]);
 
-  // Sort posts
-  const sortedPosts = [...filteredPosts].sort((a, b) => {
-    switch (sortOrder) {
-      case 'oldest':
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
-      case 'popular':
-        // For now, sort by featured status then by date
-        if (a.featured && !b.featured) return -1;
-        if (!a.featured && b.featured) return 1;
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      default: // newest
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
+  // Filter posts by selected tag
+  const filteredPosts = selectedTag 
+    ? transformedPosts.filter(post => post.tags?.includes(selectedTag))
+    : transformedPosts;
+
+  // Pagination
+  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
+  const paginatedPosts = filteredPosts.slice(startIndex, startIndex + POSTS_PER_PAGE);
+
+  const handleTagFilter = (tag: string | null) => {
+    const params = new URLSearchParams(searchParams);
+    if (tag) {
+      params.set('tag', tag);
+    } else {
+      params.delete('tag');
     }
-  });
-
-  // Pagination logic
-  const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
-  const startIndex = (currentPage - 1) * postsPerPage;
-  const paginatedPosts = sortedPosts.slice(startIndex, startIndex + postsPerPage);
-
-  const categories = [
-    { value: '', label: 'Alle Kategorien' },
-    { value: 'burnout', label: 'Eltern-Burnout' },
-    { value: 'adhs', label: 'ADHS' },
-    { value: 'essstoerungen', label: 'Essstörungen' },
-    { value: 'familie', label: 'Familienalltag' },
-    { value: 'entwicklung', label: 'Kindesentwicklung' },
-    { value: 'beziehung', label: 'Familienbeziehungen' }
-  ];
-
-  // Get category stats
-  const categoryStats = categories.slice(1).map(cat => ({
-    ...cat,
-    count: blogPostsListing.filter(post => post.category === cat.value).length
-  }));
-
-  const handleTagToggle = (tag: string) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
-        ? prev.filter(t => t !== tag)
-        : [...prev, tag]
-    );
-    setCurrentPage(1); // Reset to first page when filtering
-  };
-
-  const clearAllFilters = () => {
-    setSearchTerm('');
-    setSelectedCategory('');
-    setSelectedTags([]);
-    setSortOrder('newest');
-    setCurrentPage(1);
+    params.delete('page'); // Reset to first page when filtering
+    setSearchParams(params);
   };
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const params = new URLSearchParams(searchParams);
+    if (page > 1) {
+      params.set('page', page.toString());
+    } else {
+      params.delete('page');
+    }
+    setSearchParams(params);
   };
 
-  // Reset page when filters change
-  React.useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, selectedCategory, selectedTags, sortOrder]);
+  // Loading skeleton
+  if (postsLoading) {
+    return (
+      <>
+        <Helmet>
+          <title>Blog | Rückenwind Eltern</title>
+          <meta name="description" content="Hilfreiche Artikel und Tipps für Eltern" />
+        </Helmet>
+        <Navbar />
+        <main>
+          <section className="bg-gradient-to-b from-rueckenwind-light-purple to-white py-16">
+            <div className="container-custom">
+              <BlogBreadcrumb />
+              <div className="max-w-3xl mx-auto text-center">
+                <Skeleton className="w-16 h-16 mx-auto mb-4" />
+                <Skeleton className="h-12 w-64 mx-auto mb-6" />
+                <Skeleton className="h-6 w-96 mx-auto" />
+              </div>
+            </div>
+          </section>
+          <section className="py-12">
+            <div className="container-custom">
+              <div className="grid gap-8">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <Skeleton key={i} className="h-64 w-full" />
+                ))}
+              </div>
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  // Error state
+  if (postsError) {
+    return (
+      <>
+        <Helmet>
+          <title>Blog | Rückenwind Eltern</title>
+        </Helmet>
+        <Navbar />
+        <main>
+          <section className="py-16">
+            <div className="container-custom text-center">
+              <h1 className="text-2xl font-semibold mb-4">Fehler beim Laden</h1>
+              <p className="text-gray-600 mb-4">
+                Es gab ein Problem beim Laden der Blog-Artikel. Bitte versuchen Sie es später erneut.
+              </p>
+              <Button onClick={() => window.location.reload()}>
+                Seite neu laden
+              </Button>
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  const featuredPost = transformedFeaturedPosts[0];
 
   return (
     <>
       <Helmet>
         <title>Blog | Rückenwind Eltern</title>
-        <meta name="description" content="Informative Artikel und praktische Tipps für Eltern zu Themen wie Eltern-Burnout, ADHS bei Kindern und Essstörungen." />
-        <meta property="og:title" content="Blog | Rückenwind Eltern" />
-        <meta property="og:description" content="Informative Artikel und praktische Tipps für Eltern zu Themen wie Eltern-Burnout, ADHS bei Kindern und Essstörungen." />
+        <meta name="description" content="Hilfreiche Artikel und Tipps für Eltern zu Themen wie Entwicklung, Gesundheit und Erziehung." />
+        <meta name="keywords" content="Eltern Blog, Kindererziehung, Entwicklung, Gesundheit, Familie" />
       </Helmet>
       <Navbar />
       <main>
-        {/* Blog Header */}
-        <section className="bg-gradient-to-b from-rueckenwind-light-purple to-white py-16 md:py-24">
+        {/* Hero Section */}
+        <section className="bg-gradient-to-b from-rueckenwind-light-purple to-white py-16">
           <div className="container-custom">
             <BlogBreadcrumb />
             <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-display font-semibold mb-6">Blog</h1>
+              <BookOpen className="w-16 h-16 mx-auto mb-4 text-rueckenwind-purple" />
+              <h1 className="text-4xl md:text-5xl font-display font-semibold mb-6">
+                Unser Blog
+              </h1>
               <p className="text-xl text-gray-700">
-                Tipps, Erkenntnisse und praktische Hilfe für Ihren Familienalltag
+                Hilfreiche Artikel und Tipps für Eltern zu Themen wie Entwicklung, Gesundheit und Erziehung.
               </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Navigation Cards */}
-        <section className="py-8 bg-gray-50">
-          <div className="container-custom">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <Card className="hover:shadow-md transition-shadow">
-                <CardHeader className="pb-2">
-                  <CardTitle className="flex items-center text-lg">
-                    <Folder className="w-5 h-5 mr-2 text-rueckenwind-purple" />
-                    Kategorien
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-600 mb-3">Artikel nach Themen durchsuchen</p>
-                  <div className="space-y-2">
-                    {categoryStats.slice(0, 3).map(cat => (
-                      <div key={cat.value} className="flex justify-between items-center">
-                        <Link 
-                          to={`/blog/category/${cat.value}`}
-                          className="text-rueckenwind-purple hover:underline text-sm"
-                        >
-                          {cat.label}
-                        </Link>
-                        <Badge variant="secondary" className="text-xs">{cat.count}</Badge>
-                      </div>
-                    ))}
-                    <Button asChild variant="outline" size="sm" className="w-full mt-2">
-                      <Link to="/blog/category/burnout">Alle Kategorien →</Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-md transition-shadow">
-                <CardHeader className="pb-2">
-                  <CardTitle className="flex items-center text-lg">
-                    <Archive className="w-5 h-5 mr-2 text-rueckenwind-purple" />
-                    Archiv
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-600 mb-3">Artikel chronologisch durchsuchen</p>
-                  <p className="text-2xl font-semibold text-rueckenwind-purple mb-2">
-                    {blogPostsListing.length}
-                  </p>
-                  <p className="text-sm text-gray-600 mb-3">Artikel verfügbar</p>
-                  <Button asChild variant="outline" size="sm" className="w-full">
-                    <Link to="/blog/archive">Zum Archiv →</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="hover:shadow-md transition-shadow">
-                <CardHeader className="pb-2">
-                  <CardTitle className="flex items-center text-lg">
-                    <TrendingUp className="w-5 h-5 mr-2 text-rueckenwind-purple" />
-                    Beliebte Tags
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-gray-600 mb-3">Häufig verwendete Schlagwörter</p>
-                  <div className="flex flex-wrap gap-1">
-                    {allTags.slice(0, 6).map(tag => (
-                      <Badge 
-                        key={tag} 
-                        variant="secondary" 
-                        className="text-xs cursor-pointer hover:bg-rueckenwind-light-purple"
-                        onClick={() => handleTagToggle(tag)}
-                      >
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
             </div>
           </div>
         </section>
 
         {/* Featured Post */}
-        {featuredPost && (
-          <section className="py-12 bg-white">
+        {featuredPost && !featuredLoading && (
+          <section className="py-12 bg-gray-50">
             <div className="container-custom">
-              <h2 className="text-2xl font-display font-semibold mb-6">Empfohlener Artikel</h2>
+              <h2 className="text-2xl font-display font-semibold mb-8 text-center">
+                Empfohlener Artikel
+              </h2>
               <BlogFeaturedPost post={featuredPost} />
             </div>
           </section>
         )}
 
-        {/* Search and Filter */}
-        <section className="py-8 bg-gray-50">
+        {/* Stats Section */}
+        <section className="py-12">
           <div className="container-custom">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-              {/* Search */}
-              <div className="lg:col-span-2">
-                <Input
-                  type="text"
-                  placeholder="Suche nach Beiträgen..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full"
-                />
-              </div>
-
-              {/* Category Filter */}
-              <div>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rueckenwind-purple"
-                >
-                  {categories.map(category => (
-                    <option key={category.value} value={category.value}>
-                      {category.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Sort Filter */}
-              <div>
-                <select
-                  value={sortOrder}
-                  onChange={(e) => setSortOrder(e.target.value as 'newest' | 'oldest' | 'popular')}
-                  className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-rueckenwind-purple"
-                >
-                  <option value="newest">Neueste zuerst</option>
-                  <option value="oldest">Älteste zuerst</option>
-                  <option value="popular">Beliebteste</option>
-                </select>
-              </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+              <Card className="text-center">
+                <CardContent className="pt-6">
+                  <BookOpen className="w-8 h-8 mx-auto mb-2 text-rueckenwind-purple" />
+                  <div className="text-2xl font-bold">{transformedPosts.length}</div>
+                  <div className="text-sm text-gray-600">Artikel</div>
+                </CardContent>
+              </Card>
+              <Card className="text-center">
+                <CardContent className="pt-6">
+                  <Users className="w-8 h-8 mx-auto mb-2 text-rueckenwind-purple" />
+                  <div className="text-2xl font-bold">1K+</div>
+                  <div className="text-sm text-gray-600">Leser</div>
+                </CardContent>
+              </Card>
+              <Card className="text-center">
+                <CardContent className="pt-6">
+                  <Calendar className="w-8 h-8 mx-auto mb-2 text-rueckenwind-purple" />
+                  <div className="text-2xl font-bold">Wöchentlich</div>
+                  <div className="text-sm text-gray-600">Neue Artikel</div>
+                </CardContent>
+              </Card>
+              <Card className="text-center">
+                <CardContent className="pt-6">
+                  <TrendingUp className="w-8 h-8 mx-auto mb-2 text-rueckenwind-purple" />
+                  <div className="text-2xl font-bold">{allTags.length}</div>
+                  <div className="text-sm text-gray-600">Themen</div>
+                </CardContent>
+              </Card>
             </div>
 
             {/* Tag Filter */}
-            {allTags.length > 0 && (
-              <div className="mt-6">
-                <BlogTagFilter 
-                  tags={allTags}
-                  selectedTags={selectedTags}
-                  onTagToggle={handleTagToggle}
-                />
-              </div>
-            )}
+            <BlogTagFilter 
+              tags={allTags}
+              selectedTag={selectedTag}
+              onTagSelect={handleTagFilter}
+            />
 
-            {/* Clear Filters */}
-            {(searchTerm || selectedCategory || selectedTags.length > 0 || sortOrder !== 'newest') && (
-              <div className="mt-4">
-                <Button 
-                  variant="outline" 
-                  onClick={clearAllFilters}
-                  className="text-rueckenwind-purple border-rueckenwind-purple hover:bg-rueckenwind-light-purple"
-                >
-                  Alle Filter zurücksetzen
+            {/* Admin Link - only show in development or for admins */}
+            {process.env.NODE_ENV === 'development' && (
+              <div className="mb-6">
+                <Button asChild variant="outline">
+                  <Link to="/admin/blog">Blog Admin</Link>
                 </Button>
               </div>
             )}
-          </div>
-        </section>
 
-        {/* Blog Posts */}
-        <section className="py-12 md:py-16">
-          <div className="container-custom">
-            {/* Results Info */}
-            <div className="mb-8">
-              <p className="text-gray-600">
-                {sortedPosts.length} Artikel gefunden
-                {(searchTerm || selectedCategory || selectedTags.length > 0) && 
-                  ` für Ihre Filterkriterien`
-                }
-                {totalPages > 1 && (
-                  <span> (Seite {currentPage} von {totalPages})</span>
-                )}
-              </p>
-            </div>
-
+            {/* Blog Posts Grid */}
             {paginatedPosts.length > 0 ? (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                   {paginatedPosts.map(post => (
                     <BlogPreview key={post.id} post={post} />
                   ))}
                 </div>
-                
-                <BlogPagination 
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={handlePageChange}
-                />
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <BlogPagination 
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                )}
               </>
             ) : (
               <div className="text-center py-16">
-                <h3 className="text-xl font-medium mb-2">Keine Beiträge gefunden</h3>
+                <BookOpen className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+                <h3 className="text-xl font-medium mb-2">Keine Artikel gefunden</h3>
                 <p className="text-gray-600 mb-4">
-                  Bitte versuchen Sie es mit anderen Suchbegriffen oder Kategorien.
+                  {selectedTag 
+                    ? `Keine Artikel mit dem Tag "${selectedTag}" gefunden.`
+                    : 'Derzeit sind keine Blog-Artikel verfügbar.'
+                  }
                 </p>
-                <Button 
-                  variant="outline" 
-                  onClick={clearAllFilters}
-                  className="text-rueckenwind-purple border-rueckenwind-purple hover:bg-rueckenwind-light-purple"
-                >
-                  Filter zurücksetzen
-                </Button>
+                {selectedTag && (
+                  <Button onClick={() => handleTagFilter(null)}>
+                    Alle Artikel anzeigen
+                  </Button>
+                )}
               </div>
             )}
           </div>
         </section>
+
+        {/* Newsletter Section */}
+        <BlogNewsletter />
       </main>
       <Footer />
     </>

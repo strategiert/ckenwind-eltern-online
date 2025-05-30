@@ -12,6 +12,7 @@ import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import BlogCategory from "./pages/BlogCategory";
 import BlogArchive from "./pages/BlogArchive";
+import BlogAdmin from "./pages/BlogAdmin";
 import GratisBuch from "./pages/GratisBuch";
 import Glossar from "./pages/Glossar";
 import GlossaryDetail from "./pages/GlossaryDetail";
@@ -43,6 +44,7 @@ const App = () => {
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/blog/category/:category" element={<BlogCategory />} />
               <Route path="/blog/archive" element={<BlogArchive />} />
+              <Route path="/admin/blog" element={<BlogAdmin />} />
               <Route path="/gratis-buch" element={<GratisBuch />} />
               <Route path="/glossar" element={<Glossar />} />
               <Route path="/glossar/:slug" element={<GlossaryDetail />} />
