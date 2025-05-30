@@ -11,6 +11,10 @@ export const blogPostsData = [
     slug: "anzeichen-elterliches-burnout",
     category: "burnout",
     categoryLabel: "Eltern-Burnout",
+    tags: ["Burnout", "Selbstfürsorge", "Stressmanagement", "Elterngesundheit"],
+    readingTime: 15,
+    author: "Janike Arent",
+    featured: true,
     tableOfContents: [
       { title: "Einführung: Wenn Eltern am Limit sind", anchor: "einführung" },
       { title: "Die 7 Warnzeichen für elterliches Burnout", anchor: "warnzeichen" },
@@ -192,6 +196,10 @@ export const blogPostsData = [
     slug: "adhs-bei-kindern-begleiten",
     category: "adhs",
     categoryLabel: "ADHS",
+    tags: ["ADHS", "Kindesentwicklung", "Aufmerksamkeit", "Hyperaktivität", "Schulprobleme"],
+    readingTime: 12,
+    author: "Janike Arent",
+    featured: false,
     tableOfContents: [
       { title: "ADHS verstehen: Mehr als nur Zappelphilipp", anchor: "verstehen" },
       { title: "Die Stärken von ADHS-Kindern erkennen", anchor: "staerken" },
@@ -392,6 +400,10 @@ export const blogPostsData = [
     slug: "essstoerungen-fruehzeitig-erkennen",
     category: "essstoerungen",
     categoryLabel: "Essstörungen",
+    tags: ["Essstörungen", "Anorexie", "Bulimie", "Prävention", "Körperbild"],
+    readingTime: 18,
+    author: "Janike Arent",
+    featured: false,
     tableOfContents: [
       { title: "Warum Essstörungen immer früher beginnen", anchor: "warum" },
       { title: "Die verschiedenen Formen von Essstörungen", anchor: "formen" },
@@ -641,6 +653,10 @@ export const blogPostsData = [
     slug: "selbstfuersorge-erschoepfte-eltern",
     category: "burnout",
     categoryLabel: "Eltern-Burnout",
+    tags: ["Selbstfürsorge", "Entspannung", "Stressmanagement", "Elterngesundheit", "Work-Life-Balance"],
+    readingTime: 8,
+    author: "Janike Arent",
+    featured: false,
     content: `
       <h2>Warum Selbstfürsorge keine Selbstsucht ist</h2>
       <p>Als Mutter von drei Kindern und Therapeutin kenne ich die widersprüchlichen Gefühle, wenn es um Selbstfürsorge geht: Wir wissen, dass wir sie brauchen, fühlen uns aber gleichzeitig egoistisch, wenn wir Zeit für uns selbst beanspruchen. Dabei ist Selbstfürsorge kein Luxus, sondern eine Notwendigkeit – besonders für Eltern.</p>
@@ -729,14 +745,7 @@ export const blogPostsData = [
   }
 ];
 
-// Export a simpler version with just the listing fields for components that don't need the full content
-export const blogPostsListing = blogPostsData.map(({ id, title, excerpt, date, imageUrl, slug, category, categoryLabel }) => ({
-  id,
-  title,
-  excerpt,
-  date,
-  imageUrl,
-  slug,
-  category,
-  categoryLabel
+// Export a version that includes all the properties needed by the components
+export const blogPostsListing = blogPostsData.map(({ content, tableOfContents, ...post }) => ({
+  ...post
 }));
