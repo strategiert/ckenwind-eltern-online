@@ -83,15 +83,15 @@ const MentalHealthChat = () => {
       queryClient.invalidateQueries({ queryKey: ['symptom-assessments', sessionId] });
       setMessage('');
       toast({
-        title: "Message sent",
-        description: "I'm here to listen and support you.",
+        title: "Nachricht gesendet",
+        description: "Ich bin hier, um Ihnen zuzuhören und Sie zu unterstützen.",
       });
     },
     onError: (error) => {
       console.error('Error sending message:', error);
       toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
+        title: "Fehler",
+        description: "Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
         variant: "destructive",
       });
     },
@@ -116,7 +116,7 @@ const MentalHealthChat = () => {
         <div className="flex justify-center items-center min-h-screen">
           <div className="text-center">
             <Brain className="h-8 w-8 animate-spin mx-auto mb-4" />
-            <p>Initializing your support session...</p>
+            <p>Ihr Support-Chat wird vorbereitet...</p>
           </div>
         </div>
         <Footer />
@@ -128,7 +128,7 @@ const MentalHealthChat = () => {
     <>
       <Helmet>
         <title>Mental Health Support Chat - Rückenwind Eltern</title>
-        <meta name="description" content="Anonymous, confidential mental health support chat with AI assistant" />
+        <meta name="description" content="Anonymer, vertraulicher Mental Health Support Chat mit KI-Assistent" />
       </Helmet>
       
       <Navbar />
@@ -141,9 +141,9 @@ const MentalHealthChat = () => {
               <h1 className="text-3xl font-bold text-gray-800">Mental Health Support</h1>
             </div>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              This is a safe, anonymous space for mental health support. I'm here to listen, 
-              understand, and provide compassionate guidance. Remember, this is not a replacement 
-              for professional mental health care.
+              Dies ist ein sicherer, anonymer Raum für mentale Gesundheitsunterstützung. Ich bin hier, um 
+              zuzuhören, zu verstehen und einfühlsame Beratung zu bieten. Denken Sie daran, dass dies kein 
+              Ersatz für professionelle psychische Gesundheitsversorgung ist.
             </p>
           </div>
 
@@ -154,7 +154,7 @@ const MentalHealthChat = () => {
                 <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-t-lg">
                   <CardTitle className="flex items-center gap-2">
                     <Brain className="h-5 w-5" />
-                    Support Chat Session
+                    Support Chat Sitzung
                   </CardTitle>
                 </CardHeader>
                 <ChatInterface 
@@ -169,7 +169,7 @@ const MentalHealthChat = () => {
                     <Input
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Share what's on your mind..."
+                      placeholder="Teilen Sie mit, was Sie beschäftigt..."
                       disabled={sendMessageMutation.isPending}
                       className="flex-1"
                     />
@@ -187,8 +187,8 @@ const MentalHealthChat = () => {
                   </form>
                   
                   <div className="mt-4 text-xs text-gray-500 text-center">
-                    <p>🔒 This conversation is confidential and anonymous</p>
-                    <p>For immediate crisis support, please contact emergency services or a crisis hotline</p>
+                    <p>🔒 Dieses Gespräch ist vertraulich und anonymous</p>
+                    <p>Für akute Krisen wenden Sie sich bitte an den Notdienst oder eine Krisenhotline</p>
                   </div>
                 </CardContent>
               </Card>

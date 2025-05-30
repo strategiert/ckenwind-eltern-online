@@ -53,7 +53,7 @@ const SymptomInsights: React.FC<SymptomInsightsProps> = ({ sessionId }) => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-sm">
               <Brain className="h-4 w-4" />
-              Identified Concerns
+              Identifizierte Anliegen
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -73,7 +73,7 @@ const SymptomInsights: React.FC<SymptomInsightsProps> = ({ sessionId }) => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-sm">
               <TrendingUp className="h-4 w-4" />
-              Related Information (ICD-10)
+              Verwandte Informationen (ICD-10)
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -88,7 +88,7 @@ const SymptomInsights: React.FC<SymptomInsightsProps> = ({ sessionId }) => {
             <div className="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded">
               <div className="flex items-center gap-2 text-xs text-yellow-800">
                 <AlertCircle className="h-3 w-3" />
-                This is for informational purposes only. Please consult a healthcare professional.
+                Dies dient nur zu Informationszwecken. Bitte konsultieren Sie einen Gesundheitsexperten.
               </div>
             </div>
           </CardContent>

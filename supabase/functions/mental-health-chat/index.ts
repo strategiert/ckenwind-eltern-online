@@ -37,25 +37,30 @@ serve(async (req) => {
       .select('code, title, symptoms, description, category')
       .limit(50);
 
-    const systemPrompt = `You are a compassionate mental health assistant. Your role is to:
+    const systemPrompt = `Du bist ein einfühlsamer und verständnisvoller Mental Health Assistent für deutsche Eltern. Deine Aufgabe ist es:
 
-1. Listen empathetically and provide emotional support
-2. Help identify potential symptoms and concerns
-3. Reference ICD-10 conditions when relevant (but never diagnose)
-4. Encourage professional help when appropriate
-5. Maintain a warm, non-judgmental tone
+1. Empathisch zuzuhören und emotionale Unterstützung zu bieten
+2. Bei der Identifizierung möglicher Symptome und Anliegen zu helfen
+3. Relevante ICD-10 Diagnosen zu erwähnen (aber niemals zu diagnostizieren)
+4. Professionelle Hilfe zu empfehlen, wenn angemessen
+5. Einen warmen, nicht-urteilenden Ton zu bewahren
 
-Available ICD-10 conditions for reference:
-${conditions?.map(c => `${c.code}: ${c.title} - Symptoms: ${c.symptoms?.join(', ')}`).join('\n')}
+Verfügbare ICD-10 Diagnosen als Referenz:
+${conditions?.map(c => `${c.code}: ${c.title} - Symptome: ${c.symptoms?.join(', ')}`).join('\n')}
 
-Guidelines:
-- Always be empathetic and supportive
-- Never provide medical diagnoses
-- Encourage professional consultation for serious concerns
-- Focus on understanding and validation
-- Ask clarifying questions to better understand the user's situation
+Wichtige Richtlinien:
+- Sei immer empathisch und unterstützend
+- Stelle niemals medizinische Diagnosen
+- Ermutige zur professionellen Beratung bei ernsteren Anliegen
+- Konzentriere dich auf Verständnis und Bestätigung
+- Stelle klärende Fragen, um die Situation des Nutzers besser zu verstehen
+- Antworte IMMER auf Deutsch
+- Verwende eine warme, verständnisvolle Sprache
+- Berücksichtige den deutschen kulturellen Kontext
 
-Remember: You are here to support, not to diagnose or replace professional mental health care.`;
+Du bist für Eltern in Deutschland da, die Unterstützung bei psychischen Belastungen suchen. Bedenke auch typische Herausforderungen des Elternseins wie Erschöpfung, Überforderung, Sorgen um die Kinder, etc.
+
+Denke daran: Du bist hier, um zu unterstützen, nicht um zu diagnostizieren oder professionelle psychische Gesundheitsversorgung zu ersetzen.`;
 
     const messages = [
       { role: 'system', content: systemPrompt },
@@ -94,15 +99,17 @@ Remember: You are here to support, not to diagnose or replace professional menta
       content: aiResponse,
     });
 
-    // Simple symptom detection (basic keyword matching)
+    // German symptom detection (German keyword matching)
     const symptoms = [];
     const symptomKeywords = [
-      'anxious', 'anxiety', 'worried', 'panic', 'fear',
-      'sad', 'depressed', 'depression', 'hopeless', 'down',
-      'tired', 'exhausted', 'fatigue', 'energy',
-      'sleep', 'insomnia', 'nightmares',
-      'angry', 'irritable', 'mood swings',
-      'concentrate', 'focus', 'memory', 'confusion'
+      'ängstlich', 'angst', 'sorgen', 'panik', 'furcht', 'nervös',
+      'traurig', 'deprimiert', 'depression', 'hoffnungslos', 'niedergeschlagen', 'bedrückt',
+      'müde', 'erschöpft', 'erschöpfung', 'energie', 'kraftlos', 'schlapp',
+      'schlaf', 'schlaflos', 'schlafstörungen', 'albträume', 'einschlafen', 'durchschlafen',
+      'wütend', 'gereizt', 'stimmungsschwankungen', 'aggressiv', 'reizbar',
+      'konzentrieren', 'konzentration', 'fokus', 'gedächtnis', 'verwirrung', 'vergesslich',
+      'überfordert', 'überforderung', 'stress', 'burnout', 'belastet',
+      'einsam', 'einsamkeit', 'isoliert', 'allein'
     ];
 
     const userText = message.toLowerCase();
@@ -159,7 +166,7 @@ Remember: You are here to support, not to diagnose or replace professional menta
   } catch (error) {
     console.error('Error in mental-health-chat function:', error);
     return new Response(JSON.stringify({ 
-      error: 'Something went wrong. Please try again.',
+      error: 'Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.',
       details: error.message 
     }), {
       status: 500,

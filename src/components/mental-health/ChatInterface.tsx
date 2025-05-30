@@ -24,8 +24,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ messages, isLoading }) =>
           {messages.length === 0 ? (
             <div className="text-center text-gray-500 py-8">
               <Heart className="h-12 w-12 mx-auto mb-4 text-pink-300" />
-              <p className="text-lg font-medium mb-2">Welcome to your safe space</p>
-              <p>Feel free to share what's on your mind. I'm here to listen and support you.</p>
+              <p className="text-lg font-medium mb-2">Willkommen in Ihrem sicheren Raum</p>
+              <p>Teilen Sie gerne mit, was Sie beschäftigt. Ich bin hier, um Ihnen zuzuhören und Sie zu unterstützen.</p>
             </div>
           ) : (
             <div className="space-y-4">
