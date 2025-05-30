@@ -9,7 +9,169 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      assessment_conditions: {
+        Row: {
+          assessment_id: string
+          condition_id: string
+          confidence_score: number | null
+          created_at: string | null
+          id: string
+        }
+        Insert: {
+          assessment_id: string
+          condition_id: string
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+        }
+        Update: {
+          assessment_id?: string
+          condition_id?: string
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_conditions_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "symptom_assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_conditions_condition_id_fkey"
+            columns: ["condition_id"]
+            isOneToOne: false
+            referencedRelation: "icd10_conditions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          role: string
+          session_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          role: string
+          session_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          role?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "chat_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_sessions: {
+        Row: {
+          created_at: string | null
+          id: string
+          title: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      icd10_conditions: {
+        Row: {
+          category: string | null
+          code: string
+          created_at: string | null
+          description: string | null
+          id: string
+          severity: Database["public"]["Enums"]["severity_level"] | null
+          symptoms: string[] | null
+          title: string
+        }
+        Insert: {
+          category?: string | null
+          code: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          severity?: Database["public"]["Enums"]["severity_level"] | null
+          symptoms?: string[] | null
+          title: string
+        }
+        Update: {
+          category?: string | null
+          code?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          severity?: Database["public"]["Enums"]["severity_level"] | null
+          symptoms?: string[] | null
+          title?: string
+        }
+        Relationships: []
+      }
+      symptom_assessments: {
+        Row: {
+          assessment_data: Json | null
+          created_at: string | null
+          id: string
+          identified_symptoms: string[] | null
+          session_id: string
+        }
+        Insert: {
+          assessment_data?: Json | null
+          created_at?: string | null
+          id?: string
+          identified_symptoms?: string[] | null
+          session_id: string
+        }
+        Update: {
+          assessment_data?: Json | null
+          created_at?: string | null
+          id?: string
+          identified_symptoms?: string[] | null
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "symptom_assessments_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "chat_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +180,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      severity_level: "mild" | "moderate" | "severe"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +295,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      severity_level: ["mild", "moderate", "severe"],
+    },
   },
 } as const

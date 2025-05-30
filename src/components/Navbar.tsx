@@ -1,99 +1,82 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
-import { cn } from '@/lib/utils';
+import { Link, useLocation } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Menu, X, Heart } from 'lucide-react';
 
-const Navbar: React.FC = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const isActive = (path: string) => location.pathname === path;
+
+  const navItems = [
+    { href: '/', label: 'Start' },
+    { href: '/ueber-mich', label: 'Über mich' },
+    { href: '/blog', label: 'Blog' },
+    { href: '/glossar', label: 'Glossar' },
+    { href: '/mental-health-chat', label: 'Support Chat', icon: Heart },
+    { href: '/gratis-buch', label: 'Gratis Buch' },
+    { href: '/kontakt', label: 'Kontakt' },
+  ];
 
   return (
-    <nav className="bg-white py-4 shadow-sm sticky top-0 z-50">
-      <div className="container-custom">
-        <div className="flex justify-between items-center">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <span className="text-xl font-display font-semibold text-rueckenwind-purple">Rückenwind Eltern</span>
-          </Link>
+    <nav className="bg-white shadow-sm border-b sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex items-center">
+            <Link to="/" className="flex-shrink-0 flex items-center">
+              <span className="text-xl font-bold text-blue-600">MentalHealth Pro</span>
+            </Link>
+          </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-gray-700 hover:text-rueckenwind-purple transition-colors">Home</Link>
-            <Link to="/ueber-mich" className="text-gray-700 hover:text-rueckenwind-purple transition-colors">Über Mich</Link>
-            <Link to="/blog" className="text-gray-700 hover:text-rueckenwind-purple transition-colors">Blog</Link>
-            <Link to="/kontakt" className="text-gray-700 hover:text-rueckenwind-purple transition-colors">Kontakt</Link>
-            <Button asChild className="bg-rueckenwind-purple hover:bg-rueckenwind-dark-purple">
-              <Link to="/gratis-buch">Gratis E-Book</Link>
-            </Button>
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                to={item.href}
+                className={`flex items-center gap-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive(item.href)
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                }`}
+              >
+                {item.icon && <item.icon className="h-4 w-4" />}
+                {item.label}
+              </Link>
+            ))}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden text-gray-700 focus:outline-none"
-            onClick={toggleMenu}
-          >
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              className="h-6 w-6" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              {isMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
-        </div>
-
-        {/* Mobile Menu */}
-        <div className={cn(
-          "md:hidden fixed inset-x-0 bg-white shadow-md transition-all duration-300 ease-in-out overflow-hidden",
-          isMenuOpen ? "max-h-60 opacity-100 py-4" : "max-h-0 opacity-0"
-        )}>
-          <div className="container-custom flex flex-col space-y-4">
-            <Link 
-              to="/" 
-              className="text-gray-700 hover:text-rueckenwind-purple transition-colors py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <Link 
-              to="/ueber-mich" 
-              className="text-gray-700 hover:text-rueckenwind-purple transition-colors py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Über Mich
-            </Link>
-            <Link 
-              to="/blog" 
-              className="text-gray-700 hover:text-rueckenwind-purple transition-colors py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Blog
-            </Link>
-            <Link 
-              to="/kontakt" 
-              className="text-gray-700 hover:text-rueckenwind-purple transition-colors py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Kontakt
-            </Link>
-            <Button asChild className="bg-rueckenwind-purple hover:bg-rueckenwind-dark-purple w-full">
-              <Link 
-                to="/gratis-buch"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Gratis E-Book
-              </Link>
-            </Button>
+          {/* Mobile Navigation */}
+          <div className="md:hidden">
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent>
+                <div className="flex flex-col space-y-4 mt-8">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      to={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`flex items-center gap-2 px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                        isActive(item.href)
+                          ? 'text-blue-600 bg-blue-50'
+                          : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                      }`}
+                    >
+                      {item.icon && <item.icon className="h-4 w-4" />}
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </div>

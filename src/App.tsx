@@ -15,6 +15,7 @@ import GlossaryDetail from "./pages/GlossaryDetail";
 import Kontakt from "./pages/Kontakt";
 import NotFound from "./pages/NotFound";
 import Impressum from "./pages/Impressum";
+import MentalHealthChat from "./pages/MentalHealthChat";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/glossar" element={<Glossar />} />
             <Route path="/glossar/:slug" element={<GlossaryDetail />} />
             <Route path="/kontakt" element={<Kontakt />} />
+            <Route path="/mental-health-chat" element={<MentalHealthChat />} />
             <Route path="/impressum" element={<Impressum />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
