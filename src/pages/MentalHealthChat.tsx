@@ -5,10 +5,13 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Send, Heart, Brain } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Helmet } from 'react-helmet-async';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import ChatInterface from '@/components/mental-health/ChatInterface';
+import SymptomInsights from '@/components/mental-health/SymptomInsights';
 
 interface ChatMessage {
   id: string;
@@ -45,7 +48,7 @@ const MentalHealthChat = () => {
   }, []);
 
   // Fetch chat messages
-  const { data: messages = [] } = useQuery({
+  const { data: messages = [], isLoading: messagesLoading } = useQuery({
     queryKey: ['chat-messages', sessionId],
     queryFn: async () => {
       if (!sessionId) return [];
@@ -77,6 +80,7 @@ const MentalHealthChat = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['chat-messages', sessionId] });
+      queryClient.invalidateQueries({ queryKey: ['symptom-assessments', sessionId] });
       setMessage('');
       toast({
         title: "Message sent",
@@ -107,24 +111,30 @@ const MentalHealthChat = () => {
 
   if (!sessionId) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-center">
-          <Brain className="h-8 w-8 animate-spin mx-auto mb-4" />
-          <p>Initializing your support session...</p>
+      <>
+        <Navbar />
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="text-center">
+            <Brain className="h-8 w-8 animate-spin mx-auto mb-4" />
+            <p>Initializing your support session...</p>
+          </div>
         </div>
-      </div>
+        <Footer />
+      </>
     );
   }
 
   return (
     <>
       <Helmet>
-        <title>Mental Health Support Chat - Compassionate AI Assistant</title>
+        <title>Mental Health Support Chat - Rückenwind Eltern</title>
         <meta name="description" content="Anonymous, confidential mental health support chat with AI assistant" />
       </Helmet>
       
+      <Navbar />
+      
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
-        <div className="container mx-auto px-4 max-w-4xl">
+        <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-4">
               <Heart className="h-8 w-8 text-pink-500" />
@@ -137,80 +147,62 @@ const MentalHealthChat = () => {
             </p>
           </div>
 
-          <Card className="mb-6 border-0 shadow-lg">
-            <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-t-lg">
-              <CardTitle className="flex items-center gap-2">
-                <Brain className="h-5 w-5" />
-                Support Chat Session
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <ScrollArea className="h-96 p-6">
-                {messages.length === 0 ? (
-                  <div className="text-center text-gray-500 py-8">
-                    <Heart className="h-12 w-12 mx-auto mb-4 text-pink-300" />
-                    <p className="text-lg font-medium mb-2">Welcome to your safe space</p>
-                    <p>Feel free to share what's on your mind. I'm here to listen and support you.</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {messages.map((msg) => (
-                      <div
-                        key={msg.id}
-                        className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                      >
-                        <div
-                          className={`max-w-[70%] p-4 rounded-lg ${
-                            msg.role === 'user'
-                              ? 'bg-blue-500 text-white rounded-br-none'
-                              : 'bg-gray-100 text-gray-800 rounded-bl-none border border-gray-200'
-                          }`}
-                        >
-                          <p className="whitespace-pre-wrap">{msg.content}</p>
-                          <span className="text-xs opacity-70 mt-2 block">
-                            {new Date(msg.created_at).toLocaleTimeString()}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                    <div ref={messagesEndRef} />
-                  </div>
-                )}
-              </ScrollArea>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-lg">
-            <CardContent className="p-4">
-              <form onSubmit={handleSendMessage} className="flex gap-2">
-                <Input
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Share what's on your mind..."
-                  disabled={sendMessageMutation.isPending}
-                  className="flex-1"
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Chat Interface */}
+            <div className="lg:col-span-2">
+              <Card className="mb-6 border-0 shadow-lg">
+                <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-t-lg">
+                  <CardTitle className="flex items-center gap-2">
+                    <Brain className="h-5 w-5" />
+                    Support Chat Session
+                  </CardTitle>
+                </CardHeader>
+                <ChatInterface 
+                  messages={messages} 
+                  isLoading={sendMessageMutation.isPending} 
                 />
-                <Button 
-                  type="submit" 
-                  disabled={!message.trim() || sendMessageMutation.isPending}
-                  className="bg-blue-500 hover:bg-blue-600"
-                >
-                  {sendMessageMutation.isPending ? (
-                    <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
-                  ) : (
-                    <Send className="h-4 w-4" />
-                  )}
-                </Button>
-              </form>
-              
-              <div className="mt-4 text-xs text-gray-500 text-center">
-                <p>🔒 This conversation is confidential and anonymous</p>
-                <p>For immediate crisis support, please contact emergency services or a crisis hotline</p>
-              </div>
-            </CardContent>
-          </Card>
+              </Card>
+
+              <Card className="border-0 shadow-lg">
+                <CardContent className="p-4">
+                  <form onSubmit={handleSendMessage} className="flex gap-2">
+                    <Input
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      placeholder="Share what's on your mind..."
+                      disabled={sendMessageMutation.isPending}
+                      className="flex-1"
+                    />
+                    <Button 
+                      type="submit" 
+                      disabled={!message.trim() || sendMessageMutation.isPending}
+                      className="bg-blue-500 hover:bg-blue-600"
+                    >
+                      {sendMessageMutation.isPending ? (
+                        <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
+                      ) : (
+                        <Send className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </form>
+                  
+                  <div className="mt-4 text-xs text-gray-500 text-center">
+                    <p>🔒 This conversation is confidential and anonymous</p>
+                    <p>For immediate crisis support, please contact emergency services or a crisis hotline</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Symptom Insights Sidebar */}
+            <div className="lg:col-span-1">
+              <SymptomInsights sessionId={sessionId} />
+            </div>
+          </div>
         </div>
       </div>
+      
+      <Footer />
     </>
   );
 };

@@ -16,6 +16,7 @@ import Kontakt from "./pages/Kontakt";
 import NotFound from "./pages/NotFound";
 import Impressum from "./pages/Impressum";
 import MentalHealthChat from "./pages/MentalHealthChat";
+import ICD10DataSeeder from "./components/mental-health/ICD10DataSeeder";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <ICD10DataSeeder />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
