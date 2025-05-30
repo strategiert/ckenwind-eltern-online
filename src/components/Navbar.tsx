@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, X, Heart } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +16,6 @@ const Navbar = () => {
     { href: '/ueber-mich', label: 'Über mich' },
     { href: '/blog', label: 'Blog' },
     { href: '/glossar', label: 'Glossar' },
-    { href: '/mental-health-chat', label: 'Support Chat', icon: Heart },
     { href: '/gratis-buch', label: 'Gratis Buch' },
     { href: '/kontakt', label: 'Kontakt' },
   ];
@@ -43,7 +42,6 @@ const Navbar = () => {
                     : 'text-gray-700 hover:text-rueckenwind-purple hover:bg-rueckenwind-light-purple'
                 }`}
               >
-                {item.icon && <item.icon className="h-4 w-4" />}
                 {item.label}
               </Link>
             ))}
@@ -70,7 +68,6 @@ const Navbar = () => {
                           : 'text-gray-700 hover:text-rueckenwind-purple hover:bg-rueckenwind-light-purple'
                       }`}
                     >
-                      {item.icon && <item.icon className="h-4 w-4" />}
                       {item.label}
                     </Link>
                   ))}
