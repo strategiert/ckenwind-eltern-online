@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { toast } from "@/components/ui/use-toast";
+import { useEbookDownload } from '@/hooks/useEbookDownload';
 
 const GratisBuch = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +14,8 @@ const GratisBuch = () => {
     email: '',
     dataConsent: false
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { downloadEbook, isLoading } = useEbookDownload();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,31 +29,54 @@ const GratisBuch = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.firstName || !formData.email || !formData.dataConsent) {
-      toast({
-        title: "Bitte alle Felder ausfüllen",
-        description: "Bitte füllen Sie alle Pflichtfelder aus und stimmen Sie der Datenschutzerklärung zu.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      toast({
-        title: "E-Book erfolgreich angefordert!",
-        description: "Ihr E-Book wurde an Ihre E-Mail-Adresse gesendet.",
-      });
-      setIsSubmitting(false);
+    const success = await downloadEbook(formData);
+    if (success) {
+      setIsSubmitted(true);
       setFormData({
         firstName: '',
         email: '',
         dataConsent: false
       });
-    }, 1500);
+    }
   };
+
+  if (isSubmitted) {
+    return (
+      <>
+        <Navbar />
+        <main className="min-h-screen">
+          <section className="bg-gradient-to-b from-rueckenwind-light-purple to-white py-16 md:py-20">
+            <div className="container-custom">
+              <div className="max-w-2xl mx-auto text-center">
+                <div className="bg-white p-8 rounded-lg shadow-md">
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <h1 className="text-2xl md:text-3xl font-display font-semibold mb-4">
+                    Vielen Dank!
+                  </h1>
+                  <p className="text-gray-700 mb-6">
+                    Ihr E-Book wurde erfolgreich an Ihre E-Mail-Adresse gesendet. 
+                    Bitte überprüfen Sie auch Ihren Spam-Ordner, falls Sie die E-Mail nicht sofort erhalten.
+                  </p>
+                  <p className="text-sm text-gray-600 mb-8">
+                    Sie haben sich automatisch für unseren Newsletter angemeldet und erhalten 
+                    regelmäßig weitere wertvolle Tipps für den Familienalltag.
+                  </p>
+                  <Button asChild className="bg-rueckenwind-purple hover:bg-rueckenwind-dark-purple">
+                    <a href="/">Zurück zur Startseite</a>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -139,6 +163,7 @@ const GratisBuch = () => {
                       onChange={handleChange}
                       placeholder="Ihr Vorname"
                       className="mt-1"
+                      disabled={isLoading}
                     />
                   </div>
                   
@@ -152,6 +177,7 @@ const GratisBuch = () => {
                       onChange={handleChange}
                       placeholder="ihre-email@beispiel.de"
                       className="mt-1"
+                      disabled={isLoading}
                     />
                   </div>
                   
@@ -160,6 +186,7 @@ const GratisBuch = () => {
                       id="dataConsent" 
                       checked={formData.dataConsent} 
                       onCheckedChange={handleCheckboxChange}
+                      disabled={isLoading}
                     />
                     <Label htmlFor="dataConsent" className="text-sm text-gray-600 cursor-pointer">
                       Ich stimme der Verarbeitung meiner Daten gemäß der Datenschutzerklärung zu. 
@@ -170,9 +197,9 @@ const GratisBuch = () => {
                   <Button 
                     type="submit" 
                     className="w-full bg-rueckenwind-purple hover:bg-rueckenwind-dark-purple"
-                    disabled={isSubmitting}
+                    disabled={isLoading}
                   >
-                    {isSubmitting ? "Wird gesendet..." : "Gratis E-Book anfordern"}
+                    {isLoading ? "Wird gesendet..." : "Gratis E-Book anfordern"}
                   </Button>
                 </div>
               </form>
