@@ -2,12 +2,14 @@
 import { useState } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 export const useNewsletter = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { trackNewsletterSignup } = useAnalytics();
 
-  const subscribe = async (email: string): Promise<boolean> => {
+  const subscribe = async (email: string, source?: string): Promise<boolean> => {
     if (!email) {
       toast({
         title: "E-Mail erforderlich",
@@ -41,6 +43,9 @@ export const useNewsletter = () => {
       }
 
       if (data?.success) {
+        // Track conversion
+        trackNewsletterSignup(email, source);
+        
         toast({
           title: "Erfolgreich angemeldet!",
           description: data.message || "Sie erhalten bald unseren Newsletter mit wertvollen Tipps.",

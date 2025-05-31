@@ -2,8 +2,9 @@
 import { useState } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
-interface EbookDownloadData {
+interface EbookFormData {
   firstName: string;
   email: string;
   dataConsent: boolean;
@@ -12,23 +13,13 @@ interface EbookDownloadData {
 export const useEbookDownload = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { trackEbookDownload } = useAnalytics();
 
-  const downloadEbook = async (data: EbookDownloadData): Promise<boolean> => {
-    if (!data.firstName || !data.email || !data.dataConsent) {
+  const downloadEbook = async (formData: EbookFormData): Promise<boolean> => {
+    if (!formData.email || !formData.firstName || !formData.dataConsent) {
       toast({
-        title: "Fehlende Angaben",
-        description: "Bitte füllen Sie alle Felder aus und stimmen Sie der Datenschutzerklärung zu.",
-        variant: "destructive",
-      });
-      return false;
-    }
-
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data.email)) {
-      toast({
-        title: "Ungültige E-Mail",
-        description: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+        title: "Unvollständige Daten",
+        description: "Bitte füllen Sie alle Felder aus und stimmen Sie der Datenverarbeitung zu.",
         variant: "destructive",
       });
       return false;
@@ -37,8 +28,8 @@ export const useEbookDownload = () => {
     setIsLoading(true);
     
     try {
-      const { data: response, error } = await supabase.functions.invoke('ebook-download', {
-        body: data
+      const { data, error } = await supabase.functions.invoke('ebook-download', {
+        body: formData
       });
 
       if (error) {
@@ -46,19 +37,22 @@ export const useEbookDownload = () => {
         throw error;
       }
 
-      if (response?.success) {
+      if (data?.success) {
+        // Track conversion
+        trackEbookDownload(formData.firstName, formData.email);
+        
         toast({
-          title: "E-Book erfolgreich angefordert!",
-          description: response.message || "Ihr E-Book wurde an Ihre E-Mail-Adresse gesendet.",
+          title: "E-Book wird gesendet!",
+          description: data.message || "Sie erhalten Ihr E-Book in wenigen Minuten per E-Mail.",
         });
         return true;
       } else {
-        throw new Error(response?.error || 'Unbekannter Fehler');
+        throw new Error(data?.error || 'Unbekannter Fehler');
       }
     } catch (error: any) {
       console.error('E-Book download failed:', error);
       toast({
-        title: "Anfrage fehlgeschlagen",
+        title: "Download fehlgeschlagen",
         description: error.message || "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
         variant: "destructive",
       });
