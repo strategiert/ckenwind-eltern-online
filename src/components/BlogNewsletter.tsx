@@ -4,69 +4,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, CheckCircle, Loader2 } from 'lucide-react';
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { useNewsletter } from "@/hooks/useNewsletter";
 
 const BlogNewsletter: React.FC = () => {
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+  const { subscribe, isLoading } = useNewsletter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email) {
-      toast({
-        title: "E-Mail erforderlich",
-        description: "Bitte geben Sie Ihre E-Mail-Adresse ein.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      toast({
-        title: "Ungültige E-Mail",
-        description: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsLoading(true);
-    
-    try {
-      // Call our edge function
-      const { data, error } = await supabase.functions.invoke('newsletter-subscribe', {
-        body: { email }
-      });
-
-      if (error) {
-        console.error('Newsletter subscription error:', error);
-        throw error;
-      }
-
-      if (data?.success) {
-        setIsSubscribed(true);
-        toast({
-          title: "Erfolgreich angemeldet!",
-          description: data.message || "Sie erhalten bald unseren Newsletter mit wertvollen Tipps.",
-        });
-      } else {
-        throw new Error(data?.error || 'Unbekannter Fehler');
-      }
-    } catch (error: any) {
-      console.error('Newsletter subscription failed:', error);
-      toast({
-        title: "Anmeldung fehlgeschlagen",
-        description: error.message || "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
+    const success = await subscribe(email);
+    if (success) {
+      setIsSubscribed(true);
+      setEmail('');
     }
   };
 
@@ -78,9 +29,11 @@ const BlogNewsletter: React.FC = () => {
             <CheckCircle className="w-8 h-8 text-green-600 mr-2" />
             <div>
               <h3 className="font-medium text-green-800">Vielen Dank!</h3>
-              <p className="text-sm text-green-700">Sie sind jetzt für unseren Newsletter angemeldet.</p>
+              <p className="text-sm text-green-700">
+                Wir haben Ihnen eine Bestätigungs-E-Mail gesendet.
+              </p>
               <p className="text-xs text-green-600 mt-1">
-                Prüfen Sie auch Ihren Spam-Ordner für die Bestätigungs-E-Mail.
+                Bitte klicken Sie auf den Link in der E-Mail, um Ihre Anmeldung zu bestätigen.
               </p>
             </div>
           </div>
@@ -126,7 +79,8 @@ const BlogNewsletter: React.FC = () => {
           </Button>
         </form>
         <p className="text-xs text-gray-600 mt-2">
-          Keine Sorge, wir spammen nicht. Sie können sich jederzeit abmelden.
+          Mit der Anmeldung stimmen Sie unserer Datenschutzerklärung zu. 
+          Sie erhalten eine Bestätigungs-E-Mail und können sich jederzeit abmelden.
         </p>
       </CardContent>
     </Card>
