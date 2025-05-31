@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, CheckCircle } from 'lucide-react';
+import { Mail, CheckCircle, Loader2 } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const BlogNewsletter: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -24,17 +25,49 @@ const BlogNewsletter: React.FC = () => {
       return;
     }
 
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        title: "Ungültige E-Mail",
+        description: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     
-    // Simulate newsletter subscription
-    setTimeout(() => {
-      setIsSubscribed(true);
-      setIsLoading(false);
-      toast({
-        title: "Erfolgreich angemeldet!",
-        description: "Sie erhalten bald unseren Newsletter mit wertvollen Tipps.",
+    try {
+      // Call our edge function
+      const { data, error } = await supabase.functions.invoke('newsletter-subscribe', {
+        body: { email }
       });
-    }, 1000);
+
+      if (error) {
+        console.error('Newsletter subscription error:', error);
+        throw error;
+      }
+
+      if (data?.success) {
+        setIsSubscribed(true);
+        toast({
+          title: "Erfolgreich angemeldet!",
+          description: data.message || "Sie erhalten bald unseren Newsletter mit wertvollen Tipps.",
+        });
+      } else {
+        throw new Error(data?.error || 'Unbekannter Fehler');
+      }
+    } catch (error: any) {
+      console.error('Newsletter subscription failed:', error);
+      toast({
+        title: "Anmeldung fehlgeschlagen",
+        description: error.message || "Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (isSubscribed) {
@@ -46,6 +79,9 @@ const BlogNewsletter: React.FC = () => {
             <div>
               <h3 className="font-medium text-green-800">Vielen Dank!</h3>
               <p className="text-sm text-green-700">Sie sind jetzt für unseren Newsletter angemeldet.</p>
+              <p className="text-xs text-green-600 mt-1">
+                Prüfen Sie auch Ihren Spam-Ordner für die Bestätigungs-E-Mail.
+              </p>
             </div>
           </div>
         </CardContent>
@@ -72,13 +108,21 @@ const BlogNewsletter: React.FC = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            disabled={isLoading}
           />
           <Button 
             type="submit" 
             className="w-full bg-rueckenwind-purple hover:bg-rueckenwind-dark-purple"
             disabled={isLoading}
           >
-            {isLoading ? 'Wird angemeldet...' : 'Jetzt anmelden'}
+            {isLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Wird angemeldet...
+              </>
+            ) : (
+              'Jetzt anmelden'
+            )}
           </Button>
         </form>
         <p className="text-xs text-gray-600 mt-2">
