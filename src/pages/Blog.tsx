@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BlogPreview from '@/components/BlogPreview';
@@ -10,10 +9,13 @@ import BlogTagFilter from '@/components/BlogTagFilter';
 import BlogPagination from '@/components/BlogPagination';
 import BlogBreadcrumb from '@/components/BlogBreadcrumb';
 import BlogNewsletter from '@/components/BlogNewsletter';
+import SEOHead from '@/components/seo/SEOHead';
+import SchemaMarkup from '@/components/seo/SchemaMarkup';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useBlogPosts, useFeaturedPosts } from '@/hooks/useBlogPosts';
+import { useBreadcrumbs } from '@/hooks/useBreadcrumbs';
 import { useAuth } from '@/contexts/AuthContext';
 import { BookOpen, Users, Calendar, TrendingUp, Shield } from 'lucide-react';
 
@@ -43,6 +45,7 @@ const Blog = () => {
   const { data: blogPosts, isLoading: postsLoading, error: postsError } = useBlogPosts();
   const { data: featuredPosts, isLoading: featuredLoading } = useFeaturedPosts();
   const { user, isAdmin } = useAuth();
+  const breadcrumbs = useBreadcrumbs();
 
   // Transform and filter posts
   const transformedPosts = blogPosts ? blogPosts.map(transformPost) : [];
@@ -88,14 +91,43 @@ const Blog = () => {
     setSearchParams(params);
   };
 
+  // Schema data
+  const websiteSchema = {
+    name: "Rückenwind Eltern Blog",
+    url: "https://rueckenwind-eltern.de/blog",
+    description: "Hilfreiche Artikel und Tipps für Eltern zu Themen wie Entwicklung, Gesundheit und Erziehung."
+  };
+
+  const breadcrumbSchema = {
+    items: breadcrumbs
+  };
+
+  // Build page title and description based on filters
+  const getPageTitle = () => {
+    if (selectedTag) {
+      return `Blog: ${selectedTag} | Rückenwind Eltern`;
+    }
+    if (currentPage > 1) {
+      return `Blog - Seite ${currentPage} | Rückenwind Eltern`;
+    }
+    return "Blog | Rückenwind Eltern";
+  };
+
+  const getPageDescription = () => {
+    if (selectedTag) {
+      return `Alle Artikel zum Thema "${selectedTag}" - Hilfreiche Tipps und Erkenntnisse für Eltern.`;
+    }
+    return "Hilfreiche Artikel und Tipps für Eltern zu Themen wie Entwicklung, Gesundheit und Erziehung.";
+  };
+
   // Loading skeleton
   if (postsLoading) {
     return (
       <>
-        <Helmet>
-          <title>Blog | Rückenwind Eltern</title>
-          <meta name="description" content="Hilfreiche Artikel und Tipps für Eltern" />
-        </Helmet>
+        <SEOHead
+          title="Blog | Rückenwind Eltern"
+          description="Hilfreiche Artikel und Tipps für Eltern"
+        />
         <Navbar />
         <main>
           <section className="bg-gradient-to-b from-rueckenwind-light-purple to-white py-16">
@@ -127,9 +159,11 @@ const Blog = () => {
   if (postsError) {
     return (
       <>
-        <Helmet>
-          <title>Blog | Rückenwind Eltern</title>
-        </Helmet>
+        <SEOHead
+          title="Blog | Rückenwind Eltern"
+          description="Fehler beim Laden der Blog-Artikel"
+          noindex={true}
+        />
         <Navbar />
         <main>
           <section className="py-16">
@@ -153,11 +187,17 @@ const Blog = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Blog | Rückenwind Eltern</title>
-        <meta name="description" content="Hilfreiche Artikel und Tipps für Eltern zu Themen wie Entwicklung, Gesundheit und Erziehung." />
-        <meta name="keywords" content="Eltern Blog, Kindererziehung, Entwicklung, Gesundheit, Familie" />
-      </Helmet>
+      <SEOHead
+        title={getPageTitle()}
+        description={getPageDescription()}
+        keywords="Eltern Blog, Kindererziehung, Entwicklung, Gesundheit, Familie, ADHS, Burnout, Essstörungen"
+        url="https://rueckenwind-eltern.de/blog"
+        canonical="https://rueckenwind-eltern.de/blog"
+      />
+      
+      <SchemaMarkup type="website" data={websiteSchema} />
+      <SchemaMarkup type="breadcrumb" data={breadcrumbSchema} />
+      
       <Navbar />
       <main>
         {/* Hero Section */}
@@ -167,17 +207,17 @@ const Blog = () => {
             <div className="max-w-3xl mx-auto text-center">
               <BookOpen className="w-16 h-16 mx-auto mb-4 text-rueckenwind-purple" />
               <h1 className="text-4xl md:text-5xl font-display font-semibold mb-6">
-                Unser Blog
+                {selectedTag ? `Blog: ${selectedTag}` : 'Unser Blog'}
               </h1>
               <p className="text-xl text-gray-700">
-                Hilfreiche Artikel und Tipps für Eltern zu Themen wie Entwicklung, Gesundheit und Erziehung.
+                {getPageDescription()}
               </p>
             </div>
           </div>
         </section>
 
         {/* Featured Post */}
-        {featuredPost && !featuredLoading && (
+        {featuredPost && !featuredLoading && !selectedTag && (
           <section className="py-12 bg-gray-50">
             <div className="container-custom">
               <h2 className="text-2xl font-display font-semibold mb-8 text-center">

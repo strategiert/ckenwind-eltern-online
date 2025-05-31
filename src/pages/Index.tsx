@@ -1,4 +1,3 @@
-
 import React from 'react';
 import HeroSection from '@/components/HeroSection';
 import FeatureCard from '@/components/FeatureCard';
@@ -8,22 +7,67 @@ import GlossarPreview from '@/components/GlossarPreview';
 import CTASection from '@/components/CTASection';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SEOHead from '@/components/seo/SEOHead';
+import SchemaMarkup from '@/components/seo/SchemaMarkup';
+import RichSnippets from '@/components/seo/RichSnippets';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Helmet } from 'react-helmet-async';
 import { blogPostsListing } from '@/data/blogPosts';
 
 const Index = () => {
   // Get the first 3 blog posts for the homepage
   const recentBlogPosts = blogPostsListing.slice(0, 3);
 
+  // Schema.org data for the website
+  const websiteSchema = {
+    name: "Rückenwind Eltern",
+    url: "https://rueckenwind-eltern.de",
+    description: "Wissenschaftlich fundierte und empathische Unterstützung für Eltern bei Burnout, ADHS und Essstörungen. Entdecken Sie Strategien für mehr Leichtigkeit im Familienalltag."
+  };
+
+  // Organization schema
+  const organizationSchema = {
+    name: "Rückenwind Eltern",
+    description: "Digitale Plattform für Eltern-Unterstützung bei Burnout, ADHS und Essstörungen",
+    url: "https://rueckenwind-eltern.de",
+    logo: "https://rueckenwind-eltern.de/lovable-uploads/5a353323-d780-4159-976a-7e93624fb784.png",
+    email: "kontakt@rueckenwind-eltern.de"
+  };
+
+  // Service schema for rich snippets
+  const serviceSchema = {
+    name: "Eltern-Unterstützung Services",
+    description: "Umfassende Unterstützung für Familien bei verschiedenen Herausforderungen",
+    services: [
+      {
+        name: "Eltern-Burnout Beratung",
+        description: "Gezielte Unterstützung für erschöpfte Eltern mit praktischen Strategien"
+      },
+      {
+        name: "ADHS-Beratung für Familien",
+        description: "Verstehen und Umgang mit ADHS bei Kindern - Strategien für den Alltag"
+      },
+      {
+        name: "Essstörungen Prävention",
+        description: "Früherkennung und präventive Maßnahmen bei Essstörungen"
+      }
+    ]
+  };
+
   return (
     <>
-      <Helmet>
-        <title>Rückenwind Eltern | Unterstützung für Ihren Familienalltag</title>
-        <meta name="description" content="Wissenschaftlich fundierte und empathische Unterstützung für Eltern bei Burnout, ADHS und Essstörungen. Entdecken Sie Strategien für mehr Leichtigkeit im Familienalltag." />
-        <meta name="keywords" content="Eltern-Burnout, ADHS, Essstörungen, Familienunterstützung, Erziehung" />
-      </Helmet>
+      <SEOHead
+        title="Rückenwind Eltern | Unterstützung für Ihren Familienalltag"
+        description="Wissenschaftlich fundierte und empathische Unterstützung für Eltern bei Burnout, ADHS und Essstörungen. Entdecken Sie Strategien für mehr Leichtigkeit im Familienalltag."
+        keywords="Eltern-Burnout, ADHS, Essstörungen, Familienunterstützung, Erziehung, Janike Arent, Therapie, Elternberatung"
+        url="https://rueckenwind-eltern.de"
+        image="https://rueckenwind-eltern.de/lovable-uploads/5a353323-d780-4159-976a-7e93624fb784.png"
+      />
+      
+      <SchemaMarkup type="website" data={websiteSchema} />
+      <SchemaMarkup type="organization" data={organizationSchema} />
+      <RichSnippets type="service" data={serviceSchema} />
+      
       <Navbar />
       <main>
         <HeroSection />

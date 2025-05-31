@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BlogBreadcrumb from '@/components/BlogBreadcrumb';
@@ -9,22 +8,27 @@ import BlogSocialShare from '@/components/BlogSocialShare';
 import BlogReadingProgress from '@/components/BlogReadingProgress';
 import BlogPrintView from '@/components/BlogPrintView';
 import BlogNewsletter from '@/components/BlogNewsletter';
+import SEOHead from '@/components/seo/SEOHead';
+import SchemaMarkup from '@/components/seo/SchemaMarkup';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useBlogPost } from '@/hooks/useBlogPosts';
+import { useBreadcrumbs } from '@/hooks/useBreadcrumbs';
 import { Calendar, Clock, User, ArrowLeft, Share2 } from 'lucide-react';
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: post, isLoading, error } = useBlogPost(slug || '');
+  const breadcrumbs = useBreadcrumbs();
 
   if (isLoading) {
     return (
       <>
-        <Helmet>
-          <title>Loading... | Rückenwind Eltern</title>
-        </Helmet>
+        <SEOHead
+          title="Loading... | Rückenwind Eltern"
+          description="Artikel wird geladen..."
+        />
         <Navbar />
         <main>
           <BlogReadingProgress />
@@ -53,9 +57,11 @@ const BlogPost = () => {
   if (error || !post) {
     return (
       <>
-        <Helmet>
-          <title>Artikel nicht gefunden | Rückenwind Eltern</title>
-        </Helmet>
+        <SEOHead
+          title="Artikel nicht gefunden | Rückenwind Eltern"
+          description="Der gewünschte Artikel existiert nicht oder wurde entfernt."
+          noindex={true}
+        />
         <Navbar />
         <main>
           <section className="py-16">
@@ -101,32 +107,45 @@ const BlogPost = () => {
     excerpt: post.excerpt || ''
   };
 
+  const currentUrl = `https://rueckenwind-eltern.de/blog/${post.slug}`;
+  
+  // Article schema data
+  const articleSchema = {
+    title: post.title,
+    description: post.excerpt || '',
+    image: getImageUrl(),
+    author: post.author || 'Janike Arent',
+    datePublished: post.published_at || post.created_at,
+    dateModified: post.updated_at || post.published_at || post.created_at,
+    url: currentUrl,
+    baseUrl: 'https://rueckenwind-eltern.de'
+  };
+
+  // Breadcrumb schema
+  const breadcrumbSchema = {
+    items: breadcrumbs
+  };
+
   return (
     <>
-      <Helmet>
-        <title>{post.meta_title || post.title} | Rückenwind Eltern</title>
-        <meta name="description" content={post.meta_description || post.excerpt || ''} />
-        <meta name="keywords" content={post.tags?.join(', ') || ''} />
-        <meta name="author" content={post.author || 'Janike Arent'} />
-        
-        {/* Open Graph tags */}
-        <meta property="og:title" content={post.title} />
-        <meta property="og:description" content={post.excerpt || ''} />
-        <meta property="og:image" content={getImageUrl()} />
-        <meta property="og:type" content="article" />
-        <meta property="article:author" content={post.author || 'Janike Arent'} />
-        <meta property="article:published_time" content={post.published_at || post.created_at} />
-        <meta property="article:section" content={post.category_label} />
-        {post.tags?.map(tag => (
-          <meta key={tag} property="article:tag" content={tag} />
-        ))}
-        
-        {/* Twitter Card tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={post.title} />
-        <meta name="twitter:description" content={post.excerpt || ''} />
-        <meta name="twitter:image" content={getImageUrl()} />
-      </Helmet>
+      <SEOHead
+        title={post.meta_title || post.title}
+        description={post.meta_description || post.excerpt || ''}
+        keywords={post.tags?.join(', ') || ''}
+        author={post.author || 'Janike Arent'}
+        url={currentUrl}
+        image={getImageUrl()}
+        type="article"
+        publishedTime={post.published_at || post.created_at}
+        modifiedTime={post.updated_at || post.published_at || post.created_at}
+        section={post.category_label}
+        tags={post.tags}
+        canonical={currentUrl}
+      />
+      
+      <SchemaMarkup type="article" data={articleSchema} />
+      <SchemaMarkup type="breadcrumb" data={breadcrumbSchema} />
+      
       <Navbar />
       <main>
         <BlogReadingProgress />
