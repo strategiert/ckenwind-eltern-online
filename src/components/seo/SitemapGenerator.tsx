@@ -2,6 +2,13 @@
 import React, { useEffect } from 'react';
 import { useBlogPosts } from '@/hooks/useBlogPosts';
 
+interface SitemapUrl {
+  url: string;
+  changefreq: string;
+  priority: string;
+  lastmod?: string;
+}
+
 const SitemapGenerator: React.FC = () => {
   const { data: blogPosts } = useBlogPosts();
 
@@ -16,7 +23,7 @@ const SitemapGenerator: React.FC = () => {
     const currentDate = new Date().toISOString();
     
     // Static pages
-    const staticPages = [
+    const staticPages: SitemapUrl[] = [
       { url: '/', changefreq: 'weekly', priority: '1.0' },
       { url: '/blog', changefreq: 'daily', priority: '0.9' },
       { url: '/glossar', changefreq: 'weekly', priority: '0.8' },
@@ -26,7 +33,7 @@ const SitemapGenerator: React.FC = () => {
     ];
 
     // Blog posts
-    const blogPostUrls = blogPosts?.map(post => ({
+    const blogPostUrls: SitemapUrl[] = blogPosts?.map(post => ({
       url: `/blog/${post.slug}`,
       changefreq: 'monthly',
       priority: '0.7',
@@ -34,7 +41,7 @@ const SitemapGenerator: React.FC = () => {
     })) || [];
 
     // Combine all URLs
-    const allUrls = [...staticPages, ...blogPostUrls];
+    const allUrls: SitemapUrl[] = [...staticPages, ...blogPostUrls];
 
     // Generate XML sitemap
     const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
