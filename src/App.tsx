@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -9,9 +10,26 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import WebVitalsTracker from "@/components/performance/WebVitalsTracker";
-import { ICD10DataSeeder } from "./components/mental-health/ICD10DataSeeder";
+import ICD10DataSeeder from "./components/mental-health/ICD10DataSeeder";
 import FloatingChatButton from "./components/mental-health/FloatingChatButton";
 import ChatModal from "./components/mental-health/ChatModal";
+
+// Import all page components
+import Index from "@/pages/Index";
+import UeberMich from "@/pages/UeberMich";
+import Blog from "@/pages/Blog";
+import BlogPost from "@/pages/BlogPost";
+import BlogCategory from "@/pages/BlogCategory";
+import BlogArchive from "@/pages/BlogArchive";
+import Auth from "@/pages/Auth";
+import BlogAdmin from "@/pages/BlogAdmin";
+import GratisBuch from "@/pages/GratisBuch";
+import Glossar from "@/pages/Glossar";
+import GlossaryDetail from "@/pages/GlossaryDetail";
+import Kontakt from "@/pages/Kontakt";
+import MentalHealthChat from "@/pages/MentalHealthChat";
+import Impressum from "@/pages/Impressum";
+import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
 
