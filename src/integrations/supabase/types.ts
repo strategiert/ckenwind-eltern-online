@@ -170,6 +170,42 @@ export type Database = {
         }
         Relationships: []
       }
+      ebook_downloads: {
+        Row: {
+          consent_given: boolean
+          consent_timestamp: string | null
+          created_at: string
+          email: string
+          first_name: string
+          id: string
+          ip_address: unknown | null
+          updated_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          consent_given?: boolean
+          consent_timestamp?: string | null
+          created_at?: string
+          email: string
+          first_name: string
+          id?: string
+          ip_address?: unknown | null
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          consent_given?: boolean
+          consent_timestamp?: string | null
+          created_at?: string
+          email?: string
+          first_name?: string
+          id?: string
+          ip_address?: unknown | null
+          updated_at?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       icd10_conditions: {
         Row: {
           category: string | null

@@ -104,6 +104,8 @@ const handler = async (req: Request): Promise<Response> => {
       throw insertError;
     }
 
+    console.log('E-Book download request stored successfully for:', email);
+
     // Send E-Book via email using Resend
     const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
     
