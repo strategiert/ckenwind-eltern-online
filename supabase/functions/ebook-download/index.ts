@@ -110,11 +110,11 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('E-Book download request stored successfully for:', email);
 
-    // Send E-Book via email using Resend
+    // Send E-Book via email using Resend with default domain
     const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
     
     const emailResponse = await resend.emails.send({
-      from: 'Rückenwind Eltern <ebook@rueckenwind-eltern.de>',
+      from: 'Rückenwind Eltern <onboarding@resend.dev>',
       to: [email],
       subject: 'Ihr kostenloses E-Book: Wege aus dem elterlichen Burnout',
       html: `
