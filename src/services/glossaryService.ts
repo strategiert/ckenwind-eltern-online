@@ -2,6 +2,9 @@ import { supabase } from '@/integrations/supabase/client';
 import type { GlossaryItem } from '@/data/glossary/types';
 import type { Database } from '@/integrations/supabase/types';
 
+// Import the glossary category enum type from the database
+type GlossaryCategory = Database['public']['Enums']['glossary_category'];
+
 export interface DatabaseGlossaryTerm {
   id: string;
   term: string;
