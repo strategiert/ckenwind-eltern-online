@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -8,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useEbookDownload } from '@/hooks/useEbookDownload';
 import { useGoogleFormSubmission } from '@/hooks/useGoogleFormSubmission';
 import { useNewsletter } from '@/hooks/useNewsletter';
+
 const GratisBuch = () => {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -16,18 +18,22 @@ const GratisBuch = () => {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState('');
+
   const {
     downloadEbook,
     isLoading
   } = useEbookDownload();
+
   const {
     submitToGoogleForm,
     isSubmitting
   } = useGoogleFormSubmission();
+
   const {
     subscribe: subscribeNewsletter,
     isLoading: isNewsletterLoading
   } = useNewsletter();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       name,
@@ -38,14 +44,30 @@ const GratisBuch = () => {
       [name]: value
     }));
   };
+
   const handleCheckboxChange = (checked: boolean) => {
     setFormData(prev => ({
       ...prev,
       dataConsent: checked
     }));
   };
+
+  const triggerEbookDownload = () => {
+    // Create a temporary link element to trigger the download
+    const link = document.createElement('a');
+    link.href = '/ebook.pdf';
+    link.download = 'wege-aus-dem-elterlichen-burnout.pdf';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Trigger the PDF download immediately
+    triggerEbookDownload();
 
     // Submit to Google Form first (non-blocking)
     submitToGoogleForm({
@@ -53,7 +75,7 @@ const GratisBuch = () => {
       email: formData.email
     });
 
-    // Then proceed with E-Book download
+    // Then proceed with E-Book email sending (optional, as backup)
     const success = await downloadEbook(formData);
     if (success) {
       setIsSubmitted(true);
@@ -64,6 +86,7 @@ const GratisBuch = () => {
       });
     }
   };
+
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const success = await subscribeNewsletter(newsletterEmail, 'ebook-page');
@@ -71,8 +94,10 @@ const GratisBuch = () => {
       setNewsletterEmail('');
     }
   };
+
   if (isSubmitted) {
-    return <>
+    return (
+      <>
         <Navbar />
         <main className="min-h-screen">
           <section className="bg-gradient-to-b from-rueckenwind-light-purple to-white py-16 md:py-20">
@@ -88,8 +113,8 @@ const GratisBuch = () => {
                     Vielen Dank!
                   </h1>
                   <p className="text-gray-700 mb-6">
-                    Ihr E-Book wurde erfolgreich an Ihre E-Mail-Adresse gesendet. 
-                    Bitte überprüfen Sie auch Ihren Spam-Ordner, falls Sie die E-Mail nicht sofort erhalten.
+                    Ihr E-Book wurde automatisch heruntergeladen und auch an Ihre E-Mail-Adresse gesendet. 
+                    Bitte überprüfen Sie auch Ihren Download-Ordner und Spam-Ordner.
                   </p>
                   <p className="text-sm text-gray-600 mb-8">
                     Sie haben sich automatisch für unseren Newsletter angemeldet und erhalten 
@@ -104,9 +129,12 @@ const GratisBuch = () => {
           </section>
         </main>
         <Footer />
-      </>;
+      </>
+    );
   }
-  return <>
+
+  return (
+    <>
       <Navbar />
       <main className="min-h-screen">
         {/* Hero Section */}
@@ -169,33 +197,63 @@ const GratisBuch = () => {
           <div className="container-custom">
             <div className="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-md">
               <h2 className="text-2xl md:text-3xl font-display font-semibold mb-6 text-center">
-                Jetzt gratis E-Book anfordern
+                Jetzt gratis E-Book herunterladen
               </h2>
               <p className="text-gray-700 mb-8 text-center">
-                Geben Sie Ihre E-Mail-Adresse ein, um Ihr kostenloses Exemplar zu erhalten:
+                Geben Sie Ihre Daten ein, um Ihr kostenloses E-Book sofort herunterzuladen:
               </p>
               <form onSubmit={handleSubmit}>
                 <div className="space-y-6">
                   <div>
                     <Label htmlFor="firstName">Vorname</Label>
-                    <Input id="firstName" name="firstName" type="text" value={formData.firstName} onChange={handleChange} placeholder="Ihr Vorname" className="mt-1" disabled={isLoading || isSubmitting} required />
+                    <Input 
+                      id="firstName" 
+                      name="firstName" 
+                      type="text" 
+                      value={formData.firstName} 
+                      onChange={handleChange} 
+                      placeholder="Ihr Vorname" 
+                      className="mt-1" 
+                      disabled={isLoading || isSubmitting} 
+                      required 
+                    />
                   </div>
                   
                   <div>
                     <Label htmlFor="email">E-Mail-Adresse</Label>
-                    <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="ihre-email@beispiel.de" className="mt-1" disabled={isLoading || isSubmitting} required />
+                    <Input 
+                      id="email" 
+                      name="email" 
+                      type="email" 
+                      value={formData.email} 
+                      onChange={handleChange} 
+                      placeholder="ihre-email@beispiel.de" 
+                      className="mt-1" 
+                      disabled={isLoading || isSubmitting} 
+                      required 
+                    />
                   </div>
                   
                   <div className="flex items-start space-x-2">
-                    <Checkbox id="dataConsent" checked={formData.dataConsent} onCheckedChange={handleCheckboxChange} disabled={isLoading || isSubmitting} required />
+                    <Checkbox 
+                      id="dataConsent" 
+                      checked={formData.dataConsent} 
+                      onCheckedChange={handleCheckboxChange} 
+                      disabled={isLoading || isSubmitting} 
+                      required 
+                    />
                     <Label htmlFor="dataConsent" className="text-sm text-gray-600 cursor-pointer">
                       Ich stimme der Verarbeitung meiner Daten gemäß der Datenschutzerklärung zu. 
                       Sie können sich jederzeit wieder abmelden.
                     </Label>
                   </div>
                   
-                  <Button type="submit" className="w-full bg-rueckenwind-purple hover:bg-rueckenwind-dark-purple" disabled={isLoading || isSubmitting}>
-                    {isLoading || isSubmitting ? "Wird gesendet..." : "Gratis E-Book anfordern"}
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-rueckenwind-purple hover:bg-rueckenwind-dark-purple" 
+                    disabled={isLoading || isSubmitting}
+                  >
+                    {isLoading || isSubmitting ? "Wird heruntergeladen..." : "E-Book jetzt herunterladen"}
                   </Button>
                 </div>
               </form>
@@ -222,6 +280,8 @@ const GratisBuch = () => {
         </section>
       </main>
       <Footer />
-    </>;
+    </>
+  );
 };
+
 export default GratisBuch;
