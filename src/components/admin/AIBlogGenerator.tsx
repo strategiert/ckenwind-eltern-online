@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Sparkles, ArrowLeft, Save, Loader2, Wand2, Image, RefreshCw } from 'lucide-react';
+import { Sparkles, ArrowLeft, Save, Loader2, Wand2, Image, RefreshCw, Zap } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
 import { useCreateBlogPost } from '@/hooks/useBlogPosts';
@@ -85,7 +84,8 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
       setGeneratedContent(data.content);
       toast({
         title: "Erfolg",
-        description: "Blog-Artikel wurde erfolgreich generiert!",
+        description: "Framework-basierter Artikel wurde erfolgreich generiert! Bereit für inhaltsspezifische Bildgenerierung.",
+        duration: 5000,
       });
     } catch (error) {
       console.error('Error generating blog content:', error);
@@ -116,7 +116,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
           title: generatedContent.title,
           topic: topic.trim(),
           category: generatedContent.category_label,
-          content: generatedContent.content // Pass the full content for analysis
+          content: generatedContent.content // Full content for deep analysis
         }
       });
 
@@ -129,7 +129,8 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
 
       toast({
         title: "Erfolg",
-        description: "Inhaltsspezifisches Titelbild wurde erfolgreich generiert!",
+        description: "Inhaltsspezifisches Bild wurde basierend auf detaillierter Artikel-Analyse generiert!",
+        duration: 5000,
       });
     } catch (error) {
       console.error('Error generating image:', error);
@@ -193,15 +194,22 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
           </Button>
           <h1 className="text-3xl font-display font-semibold flex items-center gap-2">
             <Wand2 className="w-8 h-8 text-purple-600" />
-            AI Blog Generator
+            Enhanced AI Blog Generator
           </h1>
+          <Badge variant="outline" className="bg-gradient-to-r from-purple-100 to-blue-100">
+            <Zap className="w-3 h-3 mr-1" />
+            Framework-basiert
+          </Badge>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-2">
           {/* Input Section */}
           <Card>
             <CardHeader>
-              <CardTitle>Blog-Artikel erstellen</CardTitle>
+              <CardTitle>Framework-basierter Blog-Artikel erstellen</CardTitle>
+              <p className="text-sm text-gray-600">
+                Nutzt das bewährte 8-Punkte-Framework für strukturierte, empathische Artikel mit inhaltsspezifischer Bildgenerierung.
+              </p>
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
@@ -249,15 +257,23 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
                 {isGenerating ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Generiere Artikel...
+                    Generiere Framework-basierten Artikel...
                   </>
                 ) : (
                   <>
                     <Sparkles className="w-4 h-4 mr-2" />
-                    Artikel generieren
+                    Framework-Artikel generieren
                   </>
                 )}
               </Button>
+              
+              {isGenerating && (
+                <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded">
+                  <p>✨ Anwenden des 8-Punkte-Frameworks...</p>
+                  <p>📝 Erstelle strukturierten, empathischen Inhalt...</p>
+                  <p>🎯 Optimiere für SEO und Lesbarkeit...</p>
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -266,7 +282,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
-                  Generierter Artikel
+                  Framework-basierter Artikel
                   <div className="flex gap-2">
                     <Button 
                       onClick={saveAsDraft}
@@ -349,8 +365,8 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
                         </>
                       ) : (
                         <>
-                          {generatedContent.image_url ? <RefreshCw className="w-4 h-4 mr-2" /> : <Image className="w-4 h-4 mr-2" />}
-                          {generatedContent.image_url ? 'Neu generieren' : 'Bild generieren'}
+                          {generatedContent.image_url ? <RefreshCw className="w-4 h-4 mr-2" /> : <Zap className="w-4 h-4 mr-2" />}
+                          {generatedContent.image_url ? 'Neu analysieren' : 'Inhalt analysieren'}
                         </>
                       )}
                     </Button>
@@ -360,7 +376,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
                     <div className="mb-2">
                       <img 
                         src={generatedContent.image_url} 
-                        alt="Generated title image" 
+                        alt="Content-specific generated image" 
                         className="w-full h-32 object-cover rounded border"
                       />
                     </div>
@@ -373,8 +389,16 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
                     placeholder="Oder manuelle URL eingeben..."
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    Das Bild wird basierend auf dem Artikelinhalt generiert für maximale Relevanz.
+                    Das Bild wird durch Deep-Content-Analyse des Artikels generiert. Emotionale Stimmung, spezifische Szenarien und visuelle Metaphern werden automatisch extrahiert.
                   </p>
+                  
+                  {isGeneratingImage && (
+                    <div className="text-xs text-blue-600 bg-blue-50 p-2 rounded mt-2">
+                      <p>🔍 Analysiere Artikelinhalt für visuelle Elemente...</p>
+                      <p>🎨 Extrahiere emotionale Stimmung und Szenarien...</p>
+                      <p>🖼️ Erstelle passgenaues Titelbild...</p>
+                    </div>
+                  )}
                 </div>
 
                 <div>

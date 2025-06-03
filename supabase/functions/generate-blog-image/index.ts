@@ -28,19 +28,35 @@ serve(async (req) => {
       );
     }
 
-    console.log(`Generating image for blog title: ${title}`);
+    console.log(`Generating content-specific image for blog title: ${title}`);
 
-    // First, analyze the content to extract specific visual elements
+    // Detailed content analysis to extract specific visual elements
     let contentAnalysis = '';
-    if (content) {
-      console.log('Analyzing blog content for visual elements...');
-      
-      const analysisPrompt = `Analyze this German parenting blog article and extract 2-3 specific visual elements or scenarios that could be illustrated in an image. Focus on concrete situations, emotions, or activities mentioned in the article.
+    let emotionalTone = '';
+    let specificScenarios = '';
 
-Article content:
+    if (content) {
+      console.log('Performing deep content analysis for image generation...');
+      
+      const analysisPrompt = `Analysiere diesen deutschen Eltern-Blog-Artikel und extrahiere spezifische visuelle Elemente für ein Titelbild. Fokussiere auf konkrete Situationen, Emotionen und Aktivitäten.
+
+Artikel: "${title}"
+Kategorie: ${category}
+
+Volltext:
 ${content}
 
-Return only a brief description of visual elements (max 100 words) that would represent the main scenarios or situations discussed in the article.`;
+Erstelle eine Analyse in folgender Struktur:
+
+EMOTIONALE STIMMUNG: [Beschreibe die Hauptemotion des Artikels - hoffnungsvoll, beruhigend, unterstützend, etc.]
+
+SPEZIFISCHE SZENARIEN: [2-3 konkrete Familiensituationen oder Aktivitäten aus dem Artikel]
+
+VISUELLE METAPHERN: [Symbolische Elemente, die das Thema repräsentieren]
+
+ZIELGRUPPE DETAILS: [Spezifische Details über die angesprochenen Eltern/Familien]
+
+Antworte in maximal 150 Wörtern, fokussiert auf visuelle Umsetzung.`;
 
       const analysisResponse = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
@@ -54,40 +70,70 @@ Return only a brief description of visual elements (max 100 words) that would re
             { role: 'user', content: analysisPrompt }
           ],
           temperature: 0.3,
-          max_tokens: 200,
+          max_tokens: 300,
         }),
       });
 
       if (analysisResponse.ok) {
         const analysisData = await analysisResponse.json();
         contentAnalysis = analysisData.choices[0].message.content;
-        console.log('Content analysis result:', contentAnalysis);
+        console.log('Deep content analysis completed:', contentAnalysis);
+
+        // Extract emotional tone and scenarios for more targeted prompting
+        const lines = contentAnalysis.split('\n');
+        emotionalTone = lines.find(line => line.includes('EMOTIONALE STIMMUNG'))?.split(':')[1]?.trim() || '';
+        specificScenarios = lines.find(line => line.includes('SPEZIFISCHE SZENARIEN'))?.split(':')[1]?.trim() || '';
       }
     }
 
-    // Create a detailed image prompt based on content analysis
-    const baseImagePrompt = `Create a warm, professional illustration for a German parenting blog article titled "${title}". The image should be:
-    - Family-friendly and supportive in tone
-    - Related to ${category || 'parenting and family life'}
-    - Featuring soft, calming colors (purples, blues, warm tones)
-    - Modern, clean illustration style
-    - Suitable for a mental health and parenting support website
-    - No text overlays
-    - Horizontal layout (16:9 aspect ratio)`;
+    // Create highly specific image prompt based on detailed analysis
+    const categoryStyles = {
+      'eltern-tipps': 'praktische Familiensituation, Alltagshilfen',
+      'burnout-praevention': 'ruhige, entspannende Atmosphäre, Selbstfürsorge',
+      'adhs-hilfe': 'strukturierte, organisierte Umgebung, Fokus und Klarheit',
+      'esstoerungen': 'gesunde Familienmahlzeiten, positive Körperwahrnehmung',
+      'familienalltag': 'lebendiges Familienleben, Zusammenhalt',
+      'selbstfuersorge': 'Ruhe, persönliche Zeit, Wohlbefinden'
+    };
 
-    const specificPrompt = contentAnalysis 
-      ? `${baseImagePrompt}
-    
-    Specific visual elements to include based on article content:
-    ${contentAnalysis}
-    
-    Make the illustration represent these specific scenarios while maintaining a professional, supportive appearance.`
-      : `${baseImagePrompt}
-    
-    Topic context: ${topic || title}
-    Show a realistic family situation that relates to the challenges and solutions discussed in parenting and mental health support.`;
+    const categoryStyle = categoryStyles[category] || 'unterstützende Familienatmosphäre';
 
-    console.log('Using image prompt:', specificPrompt);
+    const specificImagePrompt = `Erstelle eine professionelle, warmherzige Illustration für einen deutschen Elternratgeber-Blog:
+
+**Artikel-Titel:** "${title}"
+**Emotional Tone:** ${emotionalTone || 'unterstützend und hoffnungsvoll'}
+**Kategorie-Stil:** ${categoryStyle}
+
+${contentAnalysis ? `**Spezifische Inhalts-Elemente:**
+${contentAnalysis}
+
+**Umzusetzende Szenarien:**
+${specificScenarios}` : `**Thema-Kontext:** ${topic || title}`}
+
+**Technische Anforderungen:**
+- Moderne, warme Illustration (nicht fotorealistisch)
+- Familien-freundlich und professionell
+- Soft, beruhigende Farbpalette (warme Töne, sanfte Pastelle, dezente Akzentfarben)
+- Hochformat-Layout (9:16 oder ähnlich) für Blog-Header optimiert
+- Keine Text-Overlays oder Schrift
+- Deutsche/europäische Familiendarstellung
+- Stil: minimalistisch-modern, illustrativ
+
+**Emotionale Anforderungen:**
+- Vermittle Hoffnung und Unterstützung
+- Zeige Verbindung und Verständnis
+- Professionell aber zugänglich
+- Beruhigend, nicht überfordernd
+
+**Spezifische Umsetzung:**
+- Integriere die identifizierten Szenarien subtil
+- Fokus auf die emotionale Botschaft des Artikels
+- Berücksichtige die spezifische Zielgruppe
+- Schaffe visuelle Metaphern für die Artikelinhalte
+
+Die Illustration soll perfekt zum Artikelinhalt passen und die Leser emotional ansprechen.`;
+
+    console.log('Using enhanced content-specific image prompt');
 
     const response = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
@@ -97,7 +143,7 @@ Return only a brief description of visual elements (max 100 words) that would re
       },
       body: JSON.stringify({
         model: 'dall-e-3',
-        prompt: specificPrompt,
+        prompt: specificImagePrompt,
         n: 1,
         size: '1024x1024',
         quality: 'standard',
@@ -112,7 +158,7 @@ Return only a brief description of visual elements (max 100 words) that would re
     const data = await response.json();
     const imageUrl = data.data[0].url;
 
-    console.log('Successfully generated content-specific blog title image');
+    console.log('Successfully generated highly content-specific blog image');
 
     return new Response(
       JSON.stringify({ imageUrl }),
