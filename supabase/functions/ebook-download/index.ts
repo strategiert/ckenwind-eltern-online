@@ -87,6 +87,10 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    // Extract the first IP address from the forwarded headers
+    const forwardedFor = req.headers.get('x-forwarded-for') || '';
+    const clientIp = forwardedFor.split(',')[0].trim() || 'unknown';
+
     // Store the download request in database
     const { error: insertError } = await supabase
       .from('ebook_downloads')
@@ -95,7 +99,7 @@ const handler = async (req: Request): Promise<Response> => {
         email: email.toLowerCase(),
         consent_given: dataConsent,
         consent_timestamp: new Date().toISOString(),
-        ip_address: req.headers.get('x-forwarded-for') || 'unknown',
+        ip_address: clientIp === 'unknown' ? null : clientIp,
         user_agent: req.headers.get('user-agent') || 'unknown'
       });
 
