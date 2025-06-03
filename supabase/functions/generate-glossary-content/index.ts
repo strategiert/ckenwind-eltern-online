@@ -30,42 +30,90 @@ serve(async (req) => {
 
     console.log(`Generating glossary content for keyword: ${keyword}`);
 
-    const systemPrompt = `Du bist ein Experte für Psychologie und mentale Gesundheit, spezialisiert auf Eltern-Burnout, ADHS, Essstörungen und verwandte Themen. 
+    const systemPrompt = `Du bist ein Experte für Psychologie und mentale Gesundheit, spezialisiert auf Eltern-Burnout, ADHS, Essstörungen und verwandte Themen. Du erstellst wissenschaftlich fundierte, praxisnahe Glossar-Einträge für Eltern und Fachkräfte.
 
-Erstelle einen umfassenden Glossar-Eintrag für den gegebenen Begriff. Gib das Ergebnis als JSON zurück mit folgender Struktur:
+Erstelle einen umfassenden, wissenschaftlich fundierten Glossar-Eintrag für den gegebenen Begriff. Der Eintrag soll sowohl für betroffene Eltern als auch für Fachkräfte verständlich und hilfreich sein.
+
+WICHTIGE ANFORDERUNGEN:
+- Wissenschaftlich fundiert mit aktuellen Erkenntnissen
+- Praxisbezug für Eltern und therapeutische Kontexte
+- Verständliche Sprache ohne Fachchinesisch
+- Konkrete Bezüge zu Kindern und Familienleben
+- Bildhafte Erklärungen und Metaphern
+- Echte, zitierbare Quellen
+
+Gib das Ergebnis als JSON zurück mit folgender Struktur:
 
 {
-  "term": "Der exakte Begriff",
+  "term": "Deutscher Begriff (English Translation wenn relevant)",
   "slug": "url-freundlicher-slug",
-  "definition": "Präzise Definition in 2-3 Sätzen",
+  "definition": "Wissenschaftlich präzise Definition in 2-3 Sätzen, die auch für Laien verständlich ist",
   "category": "passende Kategorie (eltern-burnout, adhs, esstoerungen, psychologie, therapie, allgemein)",
-  "tags": ["relevante", "tags", "max-6-stueck"],
-  "teaser": "Einleitender Text für Übersicht (1-2 Sätze)",
+  "tags": ["spezifische", "fachbegriffe", "themenbereiche", "anwendungsgebiete", "max-8-stueck"],
+  "teaser": "Einführender Absatz der neugierig macht und den Nutzen für Eltern erklärt (2-3 Sätze)",
   "sections": [
     {
-      "title": "Überschrift des Abschnitts",
-      "content": "Detaillierter Inhalt des Abschnitts"
+      "title": "Was ist [Begriff]? - Grundlagen verstehen",
+      "content": "Ausführliche wissenschaftliche Erklärung mit Bezug zum Familienleben. Mindestens 3-4 Absätze mit konkreten Beispielen aus dem Elternalltag."
+    },
+    {
+      "title": "Wie zeigt sich [Begriff] bei Kindern und Eltern?",
+      "content": "Konkrete Anzeichen, Symptome oder Manifestationen im Familienkontext. Unterscheidung zwischen verschiedenen Altersgruppen wenn relevant."
+    },
+    {
+      "title": "Ursachen und Entstehung",
+      "content": "Wissenschaftliche Erkenntnisse zu Entstehungsfaktoren, besonders im familiären Kontext. Biologische, psychologische und soziale Faktoren."
+    },
+    {
+      "title": "Therapeutische Ansätze und Behandlung",
+      "content": "Evidenzbasierte Behandlungsmethoden, Therapieformen und professionelle Hilfe. Was können Eltern erwarten?"
+    },
+    {
+      "title": "Praktische Hilfen für den Familienalltag",
+      "content": "Konkrete, umsetzbare Strategien und Tipps für Eltern. Selbsthilfe-Möglichkeiten und präventive Maßnahmen."
+    },
+    {
+      "title": "Wann professionelle Hilfe suchen?",
+      "content": "Klare Indikationen wann Eltern sich an Fachkräfte wenden sollten. Erste Anlaufstellen und was sie erwarten können."
     }
   ],
   "literaryDevices": [
     {
-      "title": "Literarisches Element oder Stilmittel",
-      "content": "Erklärung"
+      "title": "Metapher/Vergleich 1",
+      "content": "Anschaulicher Vergleich der komplexe Sachverhalte vereinfacht erklärt"
+    },
+    {
+      "title": "Praktisches Beispiel",
+      "content": "Konkretes Beispiel aus dem Familienleben das den Begriff veranschaulicht"
     }
   ],
-  "references": ["Quelle 1", "Quelle 2"],
-  "relatedTerms": ["verwandter-begriff-1", "verwandter-begriff-2"]
+  "references": [
+    "Vollständige wissenschaftliche Referenz 1 (Autor, Jahr, Titel, Verlag/Journal)",
+    "Vollständige wissenschaftliche Referenz 2",
+    "Deutsche oder internationale Leitlinie/Guideline wenn vorhanden",
+    "Mindestens 3-5 aktuelle, zitierbare Quellen"
+  ],
+  "relatedTerms": ["verwandter-begriff-1", "verwandter-begriff-2", "verwandter-begriff-3"]
 }
 
-Achte darauf:
-- Definition muss präzise und verständlich sein
-- Slug sollte URL-freundlich sein (kleinbuchstaben, bindestriche)
-- Tags sollten relevant und suchfreundlich sein
-- Sections sollten strukturiert und informativ sein
-- References sollten wissenschaftlich fundiert sein
-- RelatedTerms als Slugs angeben
+QUALITÄTSKRITERIEN:
+1. Jeder Abschnitt soll mindestens 150-200 Wörter umfassen
+2. Verwende eine warme, empathische Tonalität
+3. Integriere konkrete Alltagsbeispiele
+4. Erkläre Fachbegriffe verständlich
+5. Gib praktische, umsetzbare Hilfen
+6. Verwende echte, überprüfbare Quellen
+7. Berücksichtige verschiedene Familiensituationen
+8. Fokussiere auf Lösungen und Hoffnung, nicht nur Probleme
 
-Fokussiere auf deutsche Begriffe und den deutschsprachigen Kontext.`;
+Achte darauf:
+- Definition muss präzise UND alltagstauglich sein
+- Slug sollte SEO-optimiert sein (kleinbuchstaben, bindestriche)
+- Tags sollten spezifisch und suchrelevant sein
+- Sections sollten logisch aufeinander aufbauen
+- References müssen real und zitierfähig sein
+- RelatedTerms als SEO-optimierte Slugs angeben
+- Berücksichtige kulturelle Sensibilität und Diversity`;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -74,13 +122,20 @@ Fokussiere auf deutsche Begriffe und den deutschsprachigen Kontext.`;
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4.5-preview',
+        model: 'gpt-4o',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Erstelle einen Glossar-Eintrag für: ${keyword}` }
+          { role: 'user', content: `Erstelle einen umfassenden, wissenschaftlich fundierten Glossar-Eintrag für: ${keyword}
+
+Fokussiere besonders auf:
+- Praktische Relevanz für Eltern
+- Wissenschaftliche Fundierung
+- Verständliche Erklärungen
+- Konkrete Hilfestellungen
+- Echte, zitierbare Quellen` }
         ],
         temperature: 0.7,
-        max_tokens: 2000,
+        max_tokens: 4000,
       }),
     });
 
@@ -107,14 +162,22 @@ Fokussiere auf deutsche Begriffe und den deutschsprachigen Kontext.`;
       throw new Error('Generated content missing required fields');
     }
 
-    // Ensure arrays exist
+    // Ensure arrays exist and have minimum content
     parsedContent.tags = parsedContent.tags || [];
     parsedContent.sections = parsedContent.sections || [];
     parsedContent.literaryDevices = parsedContent.literaryDevices || [];
     parsedContent.references = parsedContent.references || [];
     parsedContent.relatedTerms = parsedContent.relatedTerms || [];
 
-    console.log('Successfully generated and parsed content');
+    // Validate minimum content requirements
+    if (parsedContent.sections.length < 4) {
+      console.warn('Generated content has fewer than 4 sections');
+    }
+    if (parsedContent.references.length < 3) {
+      console.warn('Generated content has fewer than 3 references');
+    }
+
+    console.log('Successfully generated and parsed comprehensive content');
 
     return new Response(
       JSON.stringify({ content: parsedContent }),
