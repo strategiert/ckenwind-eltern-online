@@ -1,6 +1,6 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import type { GlossaryItem } from '@/data/glossary/types';
+import type { Database } from '@/integrations/supabase/types';
 
 export interface DatabaseGlossaryTerm {
   id: string;
@@ -178,11 +178,26 @@ export async function searchGlossaryTerms(query: string): Promise<GlossaryItem[]
  * Filter glossary terms by category
  */
 export async function fetchGlossaryTermsByCategory(category: string): Promise<GlossaryItem[]> {
+  // Validate that the category is a valid enum value
+  const validCategories: GlossaryCategory[] = [
+    'eltern-burnout',
+    'adhs', 
+    'esstoerungen',
+    'psychologie',
+    'therapie',
+    'allgemein'
+  ];
+  
+  if (!validCategories.includes(category as GlossaryCategory)) {
+    console.warn(`Invalid category: ${category}. Using 'allgemein' as fallback.`);
+    category = 'allgemein';
+  }
+
   const { data: terms, error } = await supabase
     .from('glossary_terms')
     .select('*')
     .eq('is_published', true)
-    .eq('category', category)
+    .eq('category', category as GlossaryCategory)
     .order('term');
 
   if (error) {
