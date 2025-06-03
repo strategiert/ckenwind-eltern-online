@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEbookDownload } from '@/hooks/useEbookDownload';
 import { useGoogleFormSubmission } from '@/hooks/useGoogleFormSubmission';
+import { useNewsletter } from '@/hooks/useNewsletter';
 
 const GratisBuch = () => {
   const [formData, setFormData] = useState({
@@ -16,8 +17,10 @@ const GratisBuch = () => {
     dataConsent: false
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
   const { downloadEbook, isLoading } = useEbookDownload();
   const { submitToGoogleForm, isSubmitting } = useGoogleFormSubmission();
+  const { subscribe: subscribeNewsletter, isLoading: isNewsletterLoading } = useNewsletter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -46,6 +49,14 @@ const GratisBuch = () => {
         email: '',
         dataConsent: false
       });
+    }
+  };
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const success = await subscribeNewsletter(newsletterEmail, 'ebook-page');
+    if (success) {
+      setNewsletterEmail('');
     }
   };
 
@@ -215,6 +226,39 @@ const GratisBuch = () => {
                   </Button>
                 </div>
               </form>
+            </div>
+
+            {/* Newsletter Section */}
+            <div className="max-w-xl mx-auto mt-8 bg-rueckenwind-light-purple p-8 rounded-lg shadow-md">
+              <h3 className="text-xl font-display font-semibold mb-4 text-center">
+                Newsletter abonnieren
+              </h3>
+              <p className="text-gray-700 mb-6 text-center">
+                Erhalten Sie regelmäßig praktische Tipps und neue Artikel direkt in Ihr Postfach.
+              </p>
+              <form onSubmit={handleNewsletterSubmit}>
+                <div className="space-y-4">
+                  <Input
+                    type="email"
+                    placeholder="Ihre E-Mail-Adresse"
+                    value={newsletterEmail}
+                    onChange={(e) => setNewsletterEmail(e.target.value)}
+                    required
+                    disabled={isNewsletterLoading}
+                  />
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-rueckenwind-purple hover:bg-rueckenwind-dark-purple"
+                    disabled={isNewsletterLoading}
+                  >
+                    {isNewsletterLoading ? "Wird angemeldet..." : "Jetzt anmelden"}
+                  </Button>
+                </div>
+              </form>
+              <p className="text-xs text-gray-600 mt-4 text-center">
+                Mit der Anmeldung stimmen Sie unserer Datenschutzerklärung zu. 
+                Sie erhalten eine Bestätigungs-E-Mail und können sich jederzeit abmelden.
+              </p>
             </div>
 
             {/* Testimonial */}
