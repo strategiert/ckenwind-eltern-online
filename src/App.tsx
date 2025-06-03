@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -23,6 +22,7 @@ import BlogCategory from "@/pages/BlogCategory";
 import BlogArchive from "@/pages/BlogArchive";
 import Auth from "@/pages/Auth";
 import BlogAdmin from "@/pages/BlogAdmin";
+import GlossaryAdmin from "@/pages/GlossaryAdmin";
 import GratisBuch from "@/pages/GratisBuch";
 import Glossar from "@/pages/Glossar";
 import GlossaryDetail from "@/pages/GlossaryDetail";
@@ -60,6 +60,14 @@ const App = () => {
                   element={
                     <ProtectedRoute requireAdmin>
                       <BlogAdmin />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/glossary" 
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <GlossaryAdmin />
                     </ProtectedRoute>
                   } 
                 />
