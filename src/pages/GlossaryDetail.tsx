@@ -2,7 +2,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams, Link } from 'react-router-dom';
-import { getTermBySlug, getRelatedTerms, glossaryData } from '@/data/glossary';
+import { useGlossaryTerm, useGlossaryTerms } from '@/hooks/useGlossary';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Badge } from "@/components/ui/badge";
@@ -10,8 +10,46 @@ import { ArrowLeft, BookOpen } from 'lucide-react';
 
 const GlossaryDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const term = getTermBySlug(slug || '');
+  const { data: term, isLoading, error } = useGlossaryTerm(slug || '');
+  const { data: allTerms = [] } = useGlossaryTerms();
   
+  // Loading state
+  if (isLoading) {
+    return (
+      <>
+        <Navbar />
+        <div className="container-custom py-20 min-h-screen">
+          <div className="flex flex-col items-center justify-center text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-rueckenwind-purple mb-4"></div>
+            <p className="text-gray-600">Begriff wird geladen...</p>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <>
+        <Navbar />
+        <div className="container-custom py-20 min-h-screen">
+          <div className="flex flex-col items-center justify-center text-center">
+            <BookOpen className="h-16 w-16 text-red-300 mb-4" />
+            <h1 className="text-3xl font-semibold text-red-600 mb-4">Fehler beim Laden</h1>
+            <p className="text-gray-600 mb-6">Der Begriff konnte nicht geladen werden.</p>
+            <Link to="/glossar" className="text-rueckenwind-purple hover:underline flex items-center">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Zurück zum Glossar
+            </Link>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
   // If term not found, render a "not found" message
   if (!term) {
     return (
@@ -34,12 +72,14 @@ const GlossaryDetail = () => {
   }
 
   // Get related terms if available
-  const relatedTerms = term.content?.relatedTerms ? getRelatedTerms(term.content.relatedTerms) : [];
+  const relatedTerms = term.content?.relatedTerms 
+    ? allTerms.filter(item => term.content?.relatedTerms?.includes(item.slug))
+    : [];
 
   // Replace glossary term links in text
   const createTermLinks = (text: string) => {
     let processedText = text;
-    glossaryData.forEach(item => {
+    allTerms.forEach(item => {
       const regex = new RegExp(`\\b${item.term}\\b`, 'gi');
       processedText = processedText.replace(regex, `<a href="/glossar/${item.slug}" class="text-rueckenwind-purple hover:underline">${item.term}</a>`);
       if (item.alias) {

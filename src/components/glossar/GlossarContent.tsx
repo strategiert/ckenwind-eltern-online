@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { glossaryData } from '@/data/glossaryData';
+import { useGlossaryTerms } from '@/hooks/useGlossary';
 import GlossarSearch from './GlossarSearch';
 import GlossarAlphabet from './GlossarAlphabet';
 import GlossarLetterSection from './GlossarLetterSection';
@@ -23,6 +23,9 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [view, setView] = useState<'grid' | 'table'>('grid');
+  
+  // Fetch glossary data from database
+  const { data: glossaryData = [], isLoading, error } = useGlossaryTerms();
   
   // Check if there's a tag parameter in the URL
   React.useEffect(() => {
@@ -61,6 +64,34 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
     navigate(`/glossar/${slug}`);
   };
 
+  if (error) {
+    return (
+      <section className="py-16">
+        <div className="container-custom">
+          <div className="text-center py-20">
+            <h3 className="text-xl font-semibold text-red-600 mb-2">Fehler beim Laden</h3>
+            <p className="text-gray-600">
+              Das Glossar konnte nicht geladen werden. Bitte versuchen Sie es später erneut.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <section className="py-16">
+        <div className="container-custom">
+          <div className="text-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rueckenwind-purple mx-auto mb-4"></div>
+            <p className="text-gray-600">Glossar wird geladen...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-16">
       <div className="container-custom">
@@ -79,7 +110,7 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
         <GlossarAlphabet groupedItems={groupedItems} />
 
         {/* No results message */}
-        {letters.length === 0 && (
+        {letters.length === 0 && !isLoading && (
           <div className="text-center py-20">
             <h3 className="text-xl font-semibold text-gray-700 mb-2">Keine Ergebnisse gefunden</h3>
             <p className="text-gray-600">
