@@ -16,7 +16,7 @@ serve(async (req) => {
   }
 
   try {
-    const { title, topic, category } = await req.json();
+    const { title, topic, category, content } = await req.json();
 
     if (!title) {
       return new Response(
@@ -30,16 +30,64 @@ serve(async (req) => {
 
     console.log(`Generating image for blog title: ${title}`);
 
-    // Create a descriptive prompt for the blog title image
-    const imagePrompt = `Create a warm, professional illustration for a German parenting blog article titled "${title}". The image should be:
+    // First, analyze the content to extract specific visual elements
+    let contentAnalysis = '';
+    if (content) {
+      console.log('Analyzing blog content for visual elements...');
+      
+      const analysisPrompt = `Analyze this German parenting blog article and extract 2-3 specific visual elements or scenarios that could be illustrated in an image. Focus on concrete situations, emotions, or activities mentioned in the article.
+
+Article content:
+${content}
+
+Return only a brief description of visual elements (max 100 words) that would represent the main scenarios or situations discussed in the article.`;
+
+      const analysisResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openAIApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            { role: 'user', content: analysisPrompt }
+          ],
+          temperature: 0.3,
+          max_tokens: 200,
+        }),
+      });
+
+      if (analysisResponse.ok) {
+        const analysisData = await analysisResponse.json();
+        contentAnalysis = analysisData.choices[0].message.content;
+        console.log('Content analysis result:', contentAnalysis);
+      }
+    }
+
+    // Create a detailed image prompt based on content analysis
+    const baseImagePrompt = `Create a warm, professional illustration for a German parenting blog article titled "${title}". The image should be:
     - Family-friendly and supportive in tone
     - Related to ${category || 'parenting and family life'}
     - Featuring soft, calming colors (purples, blues, warm tones)
     - Modern, clean illustration style
     - Suitable for a mental health and parenting support website
     - No text overlays
-    - Horizontal layout (16:9 aspect ratio)
-    Topic context: ${topic || title}`;
+    - Horizontal layout (16:9 aspect ratio)`;
+
+    const specificPrompt = contentAnalysis 
+      ? `${baseImagePrompt}
+    
+    Specific visual elements to include based on article content:
+    ${contentAnalysis}
+    
+    Make the illustration represent these specific scenarios while maintaining a professional, supportive appearance.`
+      : `${baseImagePrompt}
+    
+    Topic context: ${topic || title}
+    Show a realistic family situation that relates to the challenges and solutions discussed in parenting and mental health support.`;
+
+    console.log('Using image prompt:', specificPrompt);
 
     const response = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
@@ -49,7 +97,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: 'dall-e-3',
-        prompt: imagePrompt,
+        prompt: specificPrompt,
         n: 1,
         size: '1024x1024',
         quality: 'standard',
@@ -64,7 +112,7 @@ serve(async (req) => {
     const data = await response.json();
     const imageUrl = data.data[0].url;
 
-    console.log('Successfully generated blog title image');
+    console.log('Successfully generated content-specific blog title image');
 
     return new Response(
       JSON.stringify({ imageUrl }),

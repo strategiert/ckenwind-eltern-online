@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -114,7 +115,8 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
         body: { 
           title: generatedContent.title,
           topic: topic.trim(),
-          category: generatedContent.category_label
+          category: generatedContent.category_label,
+          content: generatedContent.content // Pass the full content for analysis
         }
       });
 
@@ -127,7 +129,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
 
       toast({
         title: "Erfolg",
-        description: "Titelbild wurde erfolgreich generiert!",
+        description: "Inhaltsspezifisches Titelbild wurde erfolgreich generiert!",
       });
     } catch (error) {
       console.error('Error generating image:', error);
@@ -333,7 +335,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
 
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <Label htmlFor="generated-image">Titelbild</Label>
+                    <Label htmlFor="generated-image">Inhaltsspezifisches Titelbild</Label>
                     <Button
                       onClick={generateTitleImage}
                       disabled={isGeneratingImage}
@@ -343,7 +345,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
                       {isGeneratingImage ? (
                         <>
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Generiere...
+                          Analysiere Inhalt...
                         </>
                       ) : (
                         <>
@@ -370,6 +372,9 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
                     onChange={(e) => updateGeneratedContent('image_url', e.target.value)}
                     placeholder="Oder manuelle URL eingeben..."
                   />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Das Bild wird basierend auf dem Artikelinhalt generiert für maximale Relevanz.
+                  </p>
                 </div>
 
                 <div>
