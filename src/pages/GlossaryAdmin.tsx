@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -12,6 +11,7 @@ import { useGlossaryTerms } from '@/hooks/useGlossary';
 import { useAuth } from '@/contexts/AuthContext';
 import GlossaryTermForm from '@/components/admin/GlossaryTermForm';
 import AIGlossaryGenerator from '@/components/admin/AIGlossaryGenerator';
+import AdminUserCreator from '@/components/admin/AdminUserCreator';
 
 const GlossaryAdmin = () => {
   const [showForm, setShowForm] = useState(false);
@@ -85,6 +85,11 @@ const GlossaryAdmin = () => {
                   Abmelden
                 </Button>
               </div>
+            </div>
+
+            {/* Add Admin User Creator at the top */}
+            <div className="mb-8">
+              <AdminUserCreator />
             </div>
 
             {isLoading && (
