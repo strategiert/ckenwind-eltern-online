@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Sparkles, ArrowLeft, Save, Loader2, Wand2 } from 'lucide-react';
+import { Sparkles, ArrowLeft, Save, Loader2, Wand2, Image, RefreshCw } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
 import { useCreateBlogPost } from '@/hooks/useBlogPosts';
@@ -39,6 +38,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
   const [targetAudience, setTargetAudience] = useState('');
   const [contentType, setContentType] = useState<'ratgeber' | 'erfahrungsbericht' | 'wissenschaftlich' | 'praktische-tipps'>('ratgeber');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const [generatedContent, setGeneratedContent] = useState<GeneratedBlogContent | null>(null);
   const { toast } = useToast();
   const createMutation = useCreateBlogPost();
@@ -95,6 +95,49 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
       });
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  const generateTitleImage = async () => {
+    if (!generatedContent?.title) {
+      toast({
+        title: "Fehler",
+        description: "Zuerst muss ein Artikel generiert werden.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsGeneratingImage(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-blog-image', {
+        body: { 
+          title: generatedContent.title,
+          topic: topic.trim(),
+          category: generatedContent.category_label
+        }
+      });
+
+      if (error) throw error;
+
+      setGeneratedContent(prev => prev ? {
+        ...prev,
+        image_url: data.imageUrl
+      } : null);
+
+      toast({
+        title: "Erfolg",
+        description: "Titelbild wurde erfolgreich generiert!",
+      });
+    } catch (error) {
+      console.error('Error generating image:', error);
+      toast({
+        title: "Fehler",
+        description: "Fehler beim Generieren des Titelbilds. Bitte versuchen Sie es erneut.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGeneratingImage(false);
     }
   };
 
@@ -286,6 +329,47 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
                       ))}
                     </SelectContent>
                   </Select>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <Label htmlFor="generated-image">Titelbild</Label>
+                    <Button
+                      onClick={generateTitleImage}
+                      disabled={isGeneratingImage}
+                      variant="outline"
+                      size="sm"
+                    >
+                      {isGeneratingImage ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Generiere...
+                        </>
+                      ) : (
+                        <>
+                          {generatedContent.image_url ? <RefreshCw className="w-4 h-4 mr-2" /> : <Image className="w-4 h-4 mr-2" />}
+                          {generatedContent.image_url ? 'Neu generieren' : 'Bild generieren'}
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                  
+                  {generatedContent.image_url && (
+                    <div className="mb-2">
+                      <img 
+                        src={generatedContent.image_url} 
+                        alt="Generated title image" 
+                        className="w-full h-32 object-cover rounded border"
+                      />
+                    </div>
+                  )}
+                  
+                  <Input
+                    id="generated-image"
+                    value={generatedContent.image_url}
+                    onChange={(e) => updateGeneratedContent('image_url', e.target.value)}
+                    placeholder="Oder manuelle URL eingeben..."
+                  />
                 </div>
 
                 <div>
