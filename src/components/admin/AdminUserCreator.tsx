@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { UserPlus, Shield, CheckCircle, XCircle } from 'lucide-react';
+import { UserPlus, Shield, CheckCircle, XCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 interface CreateResult {
@@ -12,27 +12,54 @@ interface CreateResult {
   message: string;
 }
 
+interface FunctionResponse {
+  success: boolean;
+  results?: CreateResult[];
+  debug?: {
+    timestamp: string;
+    totalUsers: number;
+    triggerExists: boolean;
+  };
+  error?: string;
+}
+
 const AdminUserCreator: React.FC = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [results, setResults] = useState<CreateResult[]>([]);
+  const [debugInfo, setDebugInfo] = useState<any>(null);
   const { toast } = useToast();
 
   const createAdminUsers = async () => {
     setIsCreating(true);
     setResults([]);
+    setDebugInfo(null);
 
     try {
+      console.log('Invoking create-admin-users function...');
+      
       const { data, error } = await supabase.functions.invoke('create-admin-users', {
         body: {}
       });
 
+      console.log('Function response:', { data, error });
+
       if (error) {
-        throw error;
+        console.error('Function invocation error:', error);
+        throw new Error(`Function error: ${error.message}`);
       }
 
-      setResults(data.results || []);
+      const response: FunctionResponse = data;
+      
+      if (!response.success) {
+        throw new Error(response.error || 'Unknown function error');
+      }
 
-      const successCount = data.results?.filter((r: CreateResult) => r.status === 'success' || r.status === 'updated').length || 0;
+      setResults(response.results || []);
+      setDebugInfo(response.debug);
+
+      const successCount = response.results?.filter((r: CreateResult) => 
+        r.status === 'success' || r.status === 'updated'
+      ).length || 0;
       
       if (successCount > 0) {
         toast({
@@ -42,18 +69,25 @@ const AdminUserCreator: React.FC = () => {
       } else {
         toast({
           title: "Warnung",
-          description: "Keine Benutzer wurden erstellt. Siehe Details unten.",
+          description: "Keine Benutzer wurden erfolgreich erstellt. Siehe Details unten.",
           variant: "destructive",
         });
       }
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating admin users:', error);
       toast({
         title: "Fehler",
-        description: "Fehler beim Erstellen der Admin-Benutzer.",
+        description: `Fehler beim Erstellen der Admin-Benutzer: ${error.message}`,
         variant: "destructive",
       });
+      
+      // Add error to results for display
+      setResults([{
+        email: 'Systemfehler',
+        status: 'error',
+        message: error.message
+      }]);
     } finally {
       setIsCreating(false);
     }
@@ -68,7 +102,7 @@ const AdminUserCreator: React.FC = () => {
       case 'created_no_admin':
         return <XCircle className="w-5 h-5 text-red-600" />;
       default:
-        return <Shield className="w-5 h-5 text-gray-600" />;
+        return <AlertCircle className="w-5 h-5 text-yellow-600" />;
     }
   };
 
@@ -81,7 +115,7 @@ const AdminUserCreator: React.FC = () => {
       case 'created_no_admin':
         return 'text-red-700 bg-red-50 border-red-200';
       default:
-        return 'text-gray-700 bg-gray-50 border-gray-200';
+        return 'text-yellow-700 bg-yellow-50 border-yellow-200';
     }
   };
 
@@ -96,6 +130,8 @@ const AdminUserCreator: React.FC = () => {
       <CardContent className="space-y-4">
         <p className="text-sm text-gray-600">
           Erstellt die erforderlichen Admin-Benutzer für das System.
+          <br />
+          <strong>Benutzer:</strong> klaus@strategiert.com, nieke1989@gmail.com
         </p>
         
         <Button 
@@ -103,9 +139,29 @@ const AdminUserCreator: React.FC = () => {
           disabled={isCreating}
           className="w-full"
         >
-          <UserPlus className="w-4 h-4 mr-2" />
-          {isCreating ? 'Erstelle Admin-Benutzer...' : 'Admin-Benutzer erstellen'}
+          {isCreating ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              Erstelle Admin-Benutzer...
+            </>
+          ) : (
+            <>
+              <UserPlus className="w-4 h-4 mr-2" />
+              Admin-Benutzer erstellen
+            </>
+          )}
         </Button>
+
+        {debugInfo && (
+          <div className="p-3 bg-blue-50 border border-blue-200 rounded-md">
+            <h5 className="font-medium text-sm text-blue-800 mb-2">Debug-Informationen:</h5>
+            <div className="text-xs text-blue-700 space-y-1">
+              <div>Zeitstempel: {debugInfo.timestamp}</div>
+              <div>Verarbeitete Benutzer: {debugInfo.totalUsers}</div>
+              <div>Trigger existiert: {debugInfo.triggerExists ? 'Ja' : 'Nein'}</div>
+            </div>
+          </div>
+        )}
 
         {results.length > 0 && (
           <div className="space-y-2">
