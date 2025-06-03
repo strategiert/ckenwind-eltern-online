@@ -149,9 +149,11 @@ const GlossaryDetail = () => {
             </h1>
             <div className="flex flex-wrap gap-2 mb-6">
               {term.tags.map((tag, index) => (
-                <Badge key={index} variant="outline" className="bg-rueckenwind-light-purple text-rueckenwind-purple border-none">
-                  {tag}
-                </Badge>
+                <Link key={index} to={`/glossar?tag=${tag}`}>
+                  <Badge variant="outline" className="bg-rueckenwind-light-purple text-rueckenwind-purple border-none hover:bg-rueckenwind-purple hover:text-white transition-colors cursor-pointer">
+                    {tag}
+                  </Badge>
+                </Link>
               ))}
             </div>
             <p className="text-xl text-gray-700 max-w-3xl">
@@ -249,11 +251,11 @@ const GlossaryDetail = () => {
                 )}
               </div>
 
-              {/* Sidebar */}
+              {/* Sidebar - only related terms, no duplicate tags */}
               <div className="lg:col-span-1">
                 {/* Related terms */}
                 {relatedTerms.length > 0 && (
-                  <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm mb-8">
+                  <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
                     <h3 className="text-lg font-medium mb-4">Verwandte Begriffe</h3>
                     <div className="space-y-3">
                       {relatedTerms.map((relatedTerm, index) => (
@@ -269,20 +271,6 @@ const GlossaryDetail = () => {
                     </div>
                   </div>
                 )}
-
-                {/* Tags cloud */}
-                <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
-                  <h3 className="text-lg font-medium mb-4">Kategorien & Tags</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {term.tags.map((tag, index) => (
-                      <Link key={index} to={`/glossar?tag=${tag}`}>
-                        <Badge variant="outline" className="cursor-pointer hover:bg-gray-100">
-                          {tag}
-                        </Badge>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
               </div>
             </div>
           </div>
