@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEbookDownload } from '@/hooks/useEbookDownload';
+import { useGoogleFormSubmission } from '@/hooks/useGoogleFormSubmission';
 
 const GratisBuch = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +17,7 @@ const GratisBuch = () => {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { downloadEbook, isLoading } = useEbookDownload();
+  const { submitToGoogleForm, isSubmitting } = useGoogleFormSubmission();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,6 +31,13 @@ const GratisBuch = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Submit to Google Form first (non-blocking)
+    submitToGoogleForm({
+      firstName: formData.firstName,
+      email: formData.email
+    });
+    
+    // Then proceed with E-Book download
     const success = await downloadEbook(formData);
     if (success) {
       setIsSubmitted(true);
@@ -163,7 +172,8 @@ const GratisBuch = () => {
                       onChange={handleChange}
                       placeholder="Ihr Vorname"
                       className="mt-1"
-                      disabled={isLoading}
+                      disabled={isLoading || isSubmitting}
+                      required
                     />
                   </div>
                   
@@ -177,7 +187,8 @@ const GratisBuch = () => {
                       onChange={handleChange}
                       placeholder="ihre-email@beispiel.de"
                       className="mt-1"
-                      disabled={isLoading}
+                      disabled={isLoading || isSubmitting}
+                      required
                     />
                   </div>
                   
@@ -186,7 +197,8 @@ const GratisBuch = () => {
                       id="dataConsent" 
                       checked={formData.dataConsent} 
                       onCheckedChange={handleCheckboxChange}
-                      disabled={isLoading}
+                      disabled={isLoading || isSubmitting}
+                      required
                     />
                     <Label htmlFor="dataConsent" className="text-sm text-gray-600 cursor-pointer">
                       Ich stimme der Verarbeitung meiner Daten gemäß der Datenschutzerklärung zu. 
@@ -197,9 +209,9 @@ const GratisBuch = () => {
                   <Button 
                     type="submit" 
                     className="w-full bg-rueckenwind-purple hover:bg-rueckenwind-dark-purple"
-                    disabled={isLoading}
+                    disabled={isLoading || isSubmitting}
                   >
-                    {isLoading ? "Wird gesendet..." : "Gratis E-Book anfordern"}
+                    {(isLoading || isSubmitting) ? "Wird gesendet..." : "Gratis E-Book anfordern"}
                   </Button>
                 </div>
               </form>
