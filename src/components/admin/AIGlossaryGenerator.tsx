@@ -11,11 +11,13 @@ import { Sparkles, ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
 
+type GlossaryCategory = 'allgemein' | 'eltern-burnout' | 'adhs' | 'esstoerungen' | 'psychologie' | 'therapie';
+
 interface GeneratedContent {
   term: string;
   slug: string;
   definition: string;
-  category: string;
+  category: GlossaryCategory;
   tags: string[];
   teaser: string;
   sections: Array<{ title: string; content: string; }>;
@@ -35,7 +37,7 @@ const AIGlossaryGenerator: React.FC<AIGlossaryGeneratorProps> = ({ onClose }) =>
   const [generatedContent, setGeneratedContent] = useState<GeneratedContent | null>(null);
   const { toast } = useToast();
 
-  const categories = [
+  const categories: Array<{ value: GlossaryCategory; label: string }> = [
     { value: 'eltern-burnout', label: 'Eltern-Burnout' },
     { value: 'adhs', label: 'ADHS' },
     { value: 'esstoerungen', label: 'Essstörungen' },
@@ -84,24 +86,26 @@ const AIGlossaryGenerator: React.FC<AIGlossaryGeneratorProps> = ({ onClose }) =>
 
     setIsSaving(true);
     try {
-      // Create the main term
-      const { data: termData, error: termError } = await supabase
+      // Create the main term with proper typing
+      const termData = {
+        term: generatedContent.term,
+        slug: generatedContent.slug,
+        definition: generatedContent.definition,
+        tags: generatedContent.tags,
+        teaser: generatedContent.teaser,
+        category: generatedContent.category,
+        is_published: true
+      };
+
+      const { data: termDataResult, error: termError } = await supabase
         .from('glossary_terms')
-        .insert({
-          term: generatedContent.term,
-          slug: generatedContent.slug,
-          definition: generatedContent.definition,
-          tags: generatedContent.tags,
-          teaser: generatedContent.teaser,
-          category: generatedContent.category,
-          is_published: true
-        })
+        .insert(termData)
         .select()
         .single();
 
       if (termError) throw termError;
 
-      const termId = termData.id;
+      const termId = termDataResult.id;
 
       // Save sections
       if (generatedContent.sections.length > 0) {
@@ -276,7 +280,7 @@ const AIGlossaryGenerator: React.FC<AIGlossaryGeneratorProps> = ({ onClose }) =>
                   <Label htmlFor="generated-category">Kategorie</Label>
                   <Select
                     value={generatedContent.category}
-                    onValueChange={(value) => updateGeneratedContent('category', value)}
+                    onValueChange={(value: GlossaryCategory) => updateGeneratedContent('category', value)}
                   >
                     <SelectTrigger>
                       <SelectValue />

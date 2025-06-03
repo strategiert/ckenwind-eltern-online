@@ -11,6 +11,8 @@ import { ArrowLeft, Save } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
 
+type GlossaryCategory = 'allgemein' | 'eltern-burnout' | 'adhs' | 'esstoerungen' | 'psychologie' | 'therapie';
+
 interface GlossaryTermFormProps {
   term?: any;
   onClose: () => void;
@@ -24,7 +26,7 @@ const GlossaryTermForm: React.FC<GlossaryTermFormProps> = ({ term, onClose }) =>
     tags: [] as string[],
     alias: '',
     teaser: '',
-    category: 'allgemein',
+    category: 'allgemein' as GlossaryCategory,
     is_published: true
   });
   
@@ -32,7 +34,7 @@ const GlossaryTermForm: React.FC<GlossaryTermFormProps> = ({ term, onClose }) =>
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const categories = [
+  const categories: Array<{ value: GlossaryCategory; label: string }> = [
     { value: 'eltern-burnout', label: 'Eltern-Burnout' },
     { value: 'adhs', label: 'ADHS' },
     { value: 'esstoerungen', label: 'Essstörungen' },
@@ -50,7 +52,7 @@ const GlossaryTermForm: React.FC<GlossaryTermFormProps> = ({ term, onClose }) =>
         tags: term.tags || [],
         alias: term.alias || '',
         teaser: term.content?.teaser || '',
-        category: term.category || 'allgemein',
+        category: (term.category as GlossaryCategory) || 'allgemein',
         is_published: term.is_published !== false
       });
     }
@@ -205,7 +207,7 @@ const GlossaryTermForm: React.FC<GlossaryTermFormProps> = ({ term, onClose }) =>
                   <Label htmlFor="category">Kategorie *</Label>
                   <Select
                     value={formData.category}
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
+                    onValueChange={(value: GlossaryCategory) => setFormData(prev => ({ ...prev, category: value }))}
                   >
                     <SelectTrigger>
                       <SelectValue />

@@ -74,7 +74,7 @@ Fokussiere auf deutsche Begriffe und den deutschsprachigen Kontext.`;
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4.5-preview',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Erstelle einen Glossar-Eintrag für: ${keyword}` }
