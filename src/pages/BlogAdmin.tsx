@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Plus, Edit, Trash2, Eye, EyeOff, LogOut, Shield } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, EyeOff, LogOut, Shield, Sparkles } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,11 @@ import { Badge } from "@/components/ui/badge";
 import { useAllBlogPosts, useDeleteBlogPost, useUpdateBlogPost } from '@/hooks/useBlogPosts';
 import { useAuth } from '@/contexts/AuthContext';
 import BlogPostForm from '@/components/admin/BlogPostForm';
+import AIBlogGenerator from '@/components/admin/AIBlogGenerator';
 
 const BlogAdmin = () => {
   const [showForm, setShowForm] = useState(false);
+  const [showAIGenerator, setShowAIGenerator] = useState(false);
   const [editingPost, setEditingPost] = useState(null);
   
   const { data: posts, isLoading, error } = useAllBlogPosts();
@@ -44,12 +46,22 @@ const BlogAdmin = () => {
     setEditingPost(null);
   };
 
+  const handleCloseAIGenerator = () => {
+    setShowAIGenerator(false);
+  };
+
   if (showForm) {
     return (
       <BlogPostForm 
         post={editingPost} 
         onClose={handleCloseForm}
       />
+    );
+  }
+
+  if (showAIGenerator) {
+    return (
+      <AIBlogGenerator onClose={handleCloseAIGenerator} />
     );
   }
 
@@ -75,9 +87,16 @@ const BlogAdmin = () => {
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button onClick={() => setShowForm(true)}>
+                <Button 
+                  onClick={() => setShowAIGenerator(true)}
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                >
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  AI Artikel Generator
+                </Button>
+                <Button onClick={() => setShowForm(true)} variant="outline">
                   <Plus className="w-4 h-4 mr-2" />
-                  Neuer Artikel
+                  Manuell erstellen
                 </Button>
                 <Button variant="outline" onClick={signOut}>
                   <LogOut className="w-4 h-4 mr-2" />
@@ -101,10 +120,19 @@ const BlogAdmin = () => {
             {posts && posts.length === 0 && (
               <div className="text-center py-12">
                 <p className="text-gray-600">Noch keine Blog-Artikel vorhanden.</p>
-                <Button onClick={() => setShowForm(true)} className="mt-4">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Ersten Artikel erstellen
-                </Button>
+                <div className="flex gap-4 justify-center mt-4">
+                  <Button 
+                    onClick={() => setShowAIGenerator(true)}
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                  >
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Mit AI erstellen
+                  </Button>
+                  <Button onClick={() => setShowForm(true)} variant="outline">
+                    <Plus className="w-4 h-4 mr-2" />
+                    Manuell erstellen
+                  </Button>
+                </div>
               </div>
             )}
 
