@@ -2,17 +2,109 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams, Link } from 'react-router-dom';
-import { getTermBySlug, getRelatedTerms, glossaryData } from '@/data/glossary';
+import { useGlossaryTerm, useGlossaryTerms } from '@/hooks/useGlossary';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, BookOpen } from 'lucide-react';
+import { Skeleton } from "@/components/ui/skeleton";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ArrowLeft, BookOpen, AlertCircle } from 'lucide-react';
 
 const GlossaryDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const term = getTermBySlug(slug || '');
+  const { data: term, isLoading, error } = useGlossaryTerm(slug || '');
+  const { data: allTerms } = useGlossaryTerms();
   
-  // If term not found, render a "not found" message
+  // Replace glossary term links in text
+  const createTermLinks = (text: string) => {
+    if (!allTerms) return text;
+    
+    let processedText = text;
+    allTerms.forEach(item => {
+      const regex = new RegExp(`\\b${item.term}\\b`, 'gi');
+      processedText = processedText.replace(regex, `<a href="/glossar/${item.slug}" class="text-rueckenwind-purple hover:underline">${item.term}</a>`);
+      if (item.alias) {
+        const aliasRegex = new RegExp(`\\b${item.alias}\\b`, 'gi');
+        processedText = processedText.replace(aliasRegex, `<a href="/glossar/${item.slug}" class="text-rueckenwind-purple hover:underline">${item.alias}</a>`);
+      }
+    });
+    return processedText;
+  };
+
+  // Get related terms if available
+  const relatedTerms = React.useMemo(() => {
+    if (!term?.content?.relatedTerms || !allTerms) return [];
+    return term.content.relatedTerms
+      .map(slug => allTerms.find(t => t.slug === slug))
+      .filter((t): t is NonNullable<typeof t> => t !== undefined);
+  }, [term, allTerms]);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <>
+        <Navbar />
+        <main className="min-h-screen">
+          <section className="bg-gradient-to-b from-rueckenwind-light-purple to-white py-16 md:py-20">
+            <div className="container-custom">
+              <Link to="/glossar" className="inline-flex items-center text-rueckenwind-purple mb-6 hover:underline">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Zurück zum Glossar
+              </Link>
+              <Skeleton className="h-12 w-3/4 mb-4" />
+              <div className="flex flex-wrap gap-2 mb-6">
+                {[1, 2, 3].map(i => <Skeleton key={i} className="h-6 w-20" />)}
+              </div>
+              <Skeleton className="h-6 w-full max-w-3xl" />
+            </div>
+          </section>
+          
+          <section className="py-12 md:py-16">
+            <div className="container-custom">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2 space-y-8">
+                  {[1, 2, 3].map(i => (
+                    <div key={i} className="space-y-4">
+                      <Skeleton className="h-8 w-1/2" />
+                      <Skeleton className="h-32 w-full" />
+                    </div>
+                  ))}
+                </div>
+                <div className="lg:col-span-1">
+                  <Skeleton className="h-64 w-full" />
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <>
+        <Navbar />
+        <div className="container-custom py-20 min-h-screen">
+          <Alert>
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              Fehler beim Laden des Glossar-Eintrags. Bitte versuchen Sie es später erneut.
+            </AlertDescription>
+          </Alert>
+          <Link to="/glossar" className="text-rueckenwind-purple hover:underline flex items-center mt-4">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Zurück zum Glossar
+          </Link>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  // Term not found
   if (!term) {
     return (
       <>
@@ -32,23 +124,6 @@ const GlossaryDetail = () => {
       </>
     );
   }
-
-  // Get related terms if available
-  const relatedTerms = term.content?.relatedTerms ? getRelatedTerms(term.content.relatedTerms) : [];
-
-  // Replace glossary term links in text
-  const createTermLinks = (text: string) => {
-    let processedText = text;
-    glossaryData.forEach(item => {
-      const regex = new RegExp(`\\b${item.term}\\b`, 'gi');
-      processedText = processedText.replace(regex, `<a href="/glossar/${item.slug}" class="text-rueckenwind-purple hover:underline">${item.term}</a>`);
-      if (item.alias) {
-        const aliasRegex = new RegExp(`\\b${item.alias}\\b`, 'gi');
-        processedText = processedText.replace(aliasRegex, `<a href="/glossar/${item.slug}" class="text-rueckenwind-purple hover:underline">${item.alias}</a>`);
-      }
-    });
-    return processedText;
-  };
 
   return (
     <>
