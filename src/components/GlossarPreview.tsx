@@ -3,58 +3,19 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { useGlossaryTerms } from '@/hooks/useGlossary';
+import { glossaryData } from '@/data/glossary';
 import { BookOpen } from 'lucide-react';
 
 const GlossarPreview: React.FC = () => {
-  const { data: glossaryData = [], isLoading } = useGlossaryTerms();
-
   // Find specific terms to feature: ADHS, Burn-out, and a random term from B
-  const featuredTerms = React.useMemo(() => {
-    if (!glossaryData.length) return [];
-    
-    const adhs = glossaryData.find(term => term.term === "ADHS");
-    const belastung = glossaryData.find(term => term.term === "Belastung");
-    const bTerms = glossaryData.filter(term => term.term.startsWith("B"));
-    const randomBTerm = bTerms.length > 0 ? bTerms[Math.floor(Math.random() * bTerms.length)] : null;
-    
-    return [adhs, belastung, randomBTerm].filter(Boolean);
-  }, [glossaryData]);
-
-  if (isLoading) {
-    return (
-      <section className="py-16 md:py-24 bg-rueckenwind-soft-gray">
-        <div className="container-custom">
-          <h2 className="section-title">Glossar</h2>
-          <p className="section-subtitle">Fachbegriffe aus Psychologie und Therapie verständlich erklärt</p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-            {[1, 2, 3].map((i) => (
-              <Card key={i} className="bg-white h-full flex flex-col animate-pulse">
-                <CardHeader className="pb-2">
-                  <div className="h-6 bg-gray-200 rounded w-3/4"></div>
-                </CardHeader>
-                <CardContent className="grow">
-                  <div className="space-y-2">
-                    <div className="h-4 bg-gray-200 rounded"></div>
-                    <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-                    <div className="h-4 bg-gray-200 rounded w-4/6"></div>
-                  </div>
-                  <div className="flex gap-2 mt-4">
-                    <div className="h-6 bg-gray-200 rounded w-16"></div>
-                    <div className="h-6 bg-gray-200 rounded w-20"></div>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <div className="h-4 bg-gray-200 rounded w-24"></div>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
+  const featuredTerms = [
+    glossaryData.find(term => term.term === "ADHS"),
+    glossaryData.find(term => term.term === "Belastung"),
+    ...glossaryData
+      .filter(term => term.term.startsWith("B"))
+      .sort(() => 0.5 - Math.random())
+      .slice(0, 1)
+  ].filter(Boolean) as typeof glossaryData;
 
   return (
     <section className="py-16 md:py-24 bg-rueckenwind-soft-gray">
@@ -63,7 +24,7 @@ const GlossarPreview: React.FC = () => {
         <p className="section-subtitle">Fachbegriffe aus Psychologie und Therapie verständlich erklärt</p>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-          {featuredTerms.slice(0, 3).map((term, index) => (
+          {featuredTerms.map((term, index) => (
             <Card key={index} className="bg-white hover:shadow-lg transition-shadow h-full flex flex-col">
               <CardHeader className="pb-2">
                 <h3 className="text-xl font-medium text-rueckenwind-purple flex items-start gap-2 break-words">
@@ -100,13 +61,6 @@ const GlossarPreview: React.FC = () => {
             </Card>
           ))}
         </div>
-        
-        {/* Show fallback if no featured terms */}
-        {featuredTerms.length === 0 && !isLoading && (
-          <div className="text-center mt-12">
-            <p className="text-gray-600 mb-8">Glossarbegriffe werden aus der Datenbank geladen...</p>
-          </div>
-        )}
         
         <div className="text-center mt-12">
           <Button asChild variant="outline" className="border-rueckenwind-purple text-rueckenwind-purple hover:bg-rueckenwind-light-purple">
