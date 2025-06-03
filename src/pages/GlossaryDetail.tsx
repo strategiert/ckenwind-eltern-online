@@ -39,6 +39,24 @@ const GlossaryDetail = () => {
       .filter((t): t is NonNullable<typeof t> => t !== undefined);
   }, [term, allTerms]);
 
+  // Get matching glossary entries based on shared tags
+  const matchingEntries = React.useMemo(() => {
+    if (!term?.tags || !allTerms) return [];
+    
+    return allTerms
+      .filter(entry => 
+        entry.slug !== term.slug && // Exclude current term
+        entry.tags.some(tag => term.tags.includes(tag)) // Has at least one shared tag
+      )
+      .sort((a, b) => {
+        // Sort by number of shared tags (descending)
+        const aSharedTags = a.tags.filter(tag => term.tags.includes(tag)).length;
+        const bSharedTags = b.tags.filter(tag => term.tags.includes(tag)).length;
+        return bSharedTags - aSharedTags;
+      })
+      .slice(0, 5); // Limit to 5 entries
+  }, [term, allTerms]);
+
   // Loading state
   if (isLoading) {
     return (
@@ -104,7 +122,6 @@ const GlossaryDetail = () => {
     );
   }
 
-  // Term not found
   if (!term) {
     return (
       <>
@@ -251,8 +268,8 @@ const GlossaryDetail = () => {
                 )}
               </div>
 
-              {/* Sidebar - only related terms, no duplicate tags */}
-              <div className="lg:col-span-1">
+              {/* Sidebar */}
+              <div className="lg:col-span-1 space-y-6">
                 {/* Related terms */}
                 {relatedTerms.length > 0 && (
                   <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
@@ -268,6 +285,42 @@ const GlossaryDetail = () => {
                           <div className="text-sm text-gray-600 line-clamp-2">{relatedTerm.definition}</div>
                         </Link>
                       ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Matching glossary entries */}
+                {matchingEntries.length > 0 && (
+                  <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                    <h3 className="text-lg font-medium mb-4">Passende Beiträge</h3>
+                    <div className="space-y-3">
+                      {matchingEntries.map((entry, index) => {
+                        const sharedTags = entry.tags.filter(tag => term.tags.includes(tag));
+                        return (
+                          <Link 
+                            key={index} 
+                            to={`/glossar/${entry.slug}`}
+                            className="block p-3 bg-gray-50 hover:bg-rueckenwind-light-purple rounded-md transition-colors"
+                          >
+                            <div className="font-medium text-rueckenwind-purple mb-1">{entry.term}</div>
+                            <div className="text-sm text-gray-600 line-clamp-2 mb-2">{entry.definition}</div>
+                            <div className="flex flex-wrap gap-1">
+                              {sharedTags.slice(0, 3).map((tag, tagIndex) => (
+                                <Badge 
+                                  key={tagIndex} 
+                                  variant="outline" 
+                                  className="text-xs bg-rueckenwind-light-purple text-rueckenwind-purple border-none"
+                                >
+                                  {tag}
+                                </Badge>
+                              ))}
+                              {sharedTags.length > 3 && (
+                                <span className="text-xs text-gray-500">+{sharedTags.length - 3}</span>
+                              )}
+                            </div>
+                          </Link>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
