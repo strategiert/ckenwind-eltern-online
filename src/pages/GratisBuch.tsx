@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -9,7 +8,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useEbookDownload } from '@/hooks/useEbookDownload';
 import { useGoogleFormSubmission } from '@/hooks/useGoogleFormSubmission';
 import { useNewsletter } from '@/hooks/useNewsletter';
-
 const GratisBuch = () => {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -18,28 +16,43 @@ const GratisBuch = () => {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState('');
-  const { downloadEbook, isLoading } = useEbookDownload();
-  const { submitToGoogleForm, isSubmitting } = useGoogleFormSubmission();
-  const { subscribe: subscribeNewsletter, isLoading: isNewsletterLoading } = useNewsletter();
-
+  const {
+    downloadEbook,
+    isLoading
+  } = useEbookDownload();
+  const {
+    submitToGoogleForm,
+    isSubmitting
+  } = useGoogleFormSubmission();
+  const {
+    subscribe: subscribeNewsletter,
+    isLoading: isNewsletterLoading
+  } = useNewsletter();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const {
+      name,
+      value
+    } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
-
   const handleCheckboxChange = (checked: boolean) => {
-    setFormData(prev => ({ ...prev, dataConsent: checked }));
+    setFormData(prev => ({
+      ...prev,
+      dataConsent: checked
+    }));
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Submit to Google Form first (non-blocking)
     submitToGoogleForm({
       firstName: formData.firstName,
       email: formData.email
     });
-    
+
     // Then proceed with E-Book download
     const success = await downloadEbook(formData);
     if (success) {
@@ -51,7 +64,6 @@ const GratisBuch = () => {
       });
     }
   };
-
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const success = await subscribeNewsletter(newsletterEmail, 'ebook-page');
@@ -59,10 +71,8 @@ const GratisBuch = () => {
       setNewsletterEmail('');
     }
   };
-
   if (isSubmitted) {
-    return (
-      <>
+    return <>
         <Navbar />
         <main className="min-h-screen">
           <section className="bg-gradient-to-b from-rueckenwind-light-purple to-white py-16 md:py-20">
@@ -94,12 +104,9 @@ const GratisBuch = () => {
           </section>
         </main>
         <Footer />
-      </>
-    );
+      </>;
   }
-
-  return (
-    <>
+  return <>
       <Navbar />
       <main className="min-h-screen">
         {/* Hero Section */}
@@ -149,11 +156,7 @@ const GratisBuch = () => {
               <div className="order-1 lg:order-2 relative max-w-md mx-auto">
                 <div className="absolute -top-6 -left-6 w-32 h-32 rounded-full bg-rueckenwind-soft-blue opacity-60 z-0"></div>
                 <div className="relative z-10 shadow-xl">
-                  <img 
-                    src="/lovable-uploads/7d2ad28c-b24a-4328-9709-ff66596391f2.png" 
-                    alt="E-Book Cover: Wege aus dem elterlichen Burnout" 
-                    className="w-full h-auto rounded-lg"
-                  />
+                  <img src="/lovable-uploads/7d2ad28c-b24a-4328-9709-ff66596391f2.png" alt="E-Book Cover: Wege aus dem elterlichen Burnout" className="w-full h-auto rounded-lg" />
                 </div>
                 <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-full bg-rueckenwind-light-purple opacity-60 z-0"></div>
               </div>
@@ -175,101 +178,37 @@ const GratisBuch = () => {
                 <div className="space-y-6">
                   <div>
                     <Label htmlFor="firstName">Vorname</Label>
-                    <Input
-                      id="firstName"
-                      name="firstName"
-                      type="text"
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      placeholder="Ihr Vorname"
-                      className="mt-1"
-                      disabled={isLoading || isSubmitting}
-                      required
-                    />
+                    <Input id="firstName" name="firstName" type="text" value={formData.firstName} onChange={handleChange} placeholder="Ihr Vorname" className="mt-1" disabled={isLoading || isSubmitting} required />
                   </div>
                   
                   <div>
                     <Label htmlFor="email">E-Mail-Adresse</Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="ihre-email@beispiel.de"
-                      className="mt-1"
-                      disabled={isLoading || isSubmitting}
-                      required
-                    />
+                    <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="ihre-email@beispiel.de" className="mt-1" disabled={isLoading || isSubmitting} required />
                   </div>
                   
                   <div className="flex items-start space-x-2">
-                    <Checkbox 
-                      id="dataConsent" 
-                      checked={formData.dataConsent} 
-                      onCheckedChange={handleCheckboxChange}
-                      disabled={isLoading || isSubmitting}
-                      required
-                    />
+                    <Checkbox id="dataConsent" checked={formData.dataConsent} onCheckedChange={handleCheckboxChange} disabled={isLoading || isSubmitting} required />
                     <Label htmlFor="dataConsent" className="text-sm text-gray-600 cursor-pointer">
                       Ich stimme der Verarbeitung meiner Daten gemäß der Datenschutzerklärung zu. 
                       Sie können sich jederzeit wieder abmelden.
                     </Label>
                   </div>
                   
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-rueckenwind-purple hover:bg-rueckenwind-dark-purple"
-                    disabled={isLoading || isSubmitting}
-                  >
-                    {(isLoading || isSubmitting) ? "Wird gesendet..." : "Gratis E-Book anfordern"}
+                  <Button type="submit" className="w-full bg-rueckenwind-purple hover:bg-rueckenwind-dark-purple" disabled={isLoading || isSubmitting}>
+                    {isLoading || isSubmitting ? "Wird gesendet..." : "Gratis E-Book anfordern"}
                   </Button>
                 </div>
               </form>
             </div>
 
             {/* Newsletter Section */}
-            <div className="max-w-xl mx-auto mt-8 bg-rueckenwind-light-purple p-8 rounded-lg shadow-md">
-              <h3 className="text-xl font-display font-semibold mb-4 text-center">
-                Newsletter abonnieren
-              </h3>
-              <p className="text-gray-700 mb-6 text-center">
-                Erhalten Sie regelmäßig praktische Tipps und neue Artikel direkt in Ihr Postfach.
-              </p>
-              <form onSubmit={handleNewsletterSubmit}>
-                <div className="space-y-4">
-                  <Input
-                    type="email"
-                    placeholder="Ihre E-Mail-Adresse"
-                    value={newsletterEmail}
-                    onChange={(e) => setNewsletterEmail(e.target.value)}
-                    required
-                    disabled={isNewsletterLoading}
-                  />
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-rueckenwind-purple hover:bg-rueckenwind-dark-purple"
-                    disabled={isNewsletterLoading}
-                  >
-                    {isNewsletterLoading ? "Wird angemeldet..." : "Jetzt anmelden"}
-                  </Button>
-                </div>
-              </form>
-              <p className="text-xs text-gray-600 mt-4 text-center">
-                Mit der Anmeldung stimmen Sie unserer Datenschutzerklärung zu. 
-                Sie erhalten eine Bestätigungs-E-Mail und können sich jederzeit abmelden.
-              </p>
-            </div>
+            
 
             {/* Testimonial */}
             <div className="max-w-2xl mx-auto mt-16 bg-rueckenwind-soft-gray p-8 rounded-lg shadow-sm">
               <div className="flex flex-col md:flex-row items-center gap-6">
                 <div className="w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
-                  <img 
-                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070" 
-                    alt="Sarah M." 
-                    className="w-full h-full object-cover"
-                  />
+                  <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070" alt="Sarah M." className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <p className="text-gray-700 italic mb-4">
@@ -283,8 +222,6 @@ const GratisBuch = () => {
         </section>
       </main>
       <Footer />
-    </>
-  );
+    </>;
 };
-
 export default GratisBuch;
