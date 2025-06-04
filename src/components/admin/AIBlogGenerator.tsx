@@ -7,10 +7,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { Sparkles, ArrowLeft, Save, Loader2, Wand2, Image, RefreshCw, Zap, CheckCircle } from 'lucide-react';
+import { Sparkles, ArrowLeft, Save, Loader2, Wand2, CheckCircle } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
 import { useCreateBlogPost } from '@/hooks/useBlogPosts';
+import { useImageGeneration } from '@/hooks/useImageGeneration';
+import ImageGenerationButton from './ImageGenerationButton';
+import ImageGenerationStatus from './ImageGenerationStatus';
 
 type BlogCategory = 'eltern-tipps' | 'burnout-praevention' | 'adhs-hilfe' | 'esstoerungen' | 'familienalltag' | 'selbstfuersorge';
 
@@ -38,7 +41,6 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
   const [targetAudience, setTargetAudience] = useState('');
   const [contentType, setContentType] = useState<'ratgeber' | 'erfahrungsbericht' | 'wissenschaftlich' | 'praktische-tipps'>('ratgeber');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const [generatedContent, setGeneratedContent] = useState<GeneratedBlogContent | null>(null);
   const { toast } = useToast();
   const createMutation = useCreateBlogPost();
@@ -58,6 +60,22 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
     { value: 'wissenschaftlich', label: 'Wissenschaftlicher Artikel' },
     { value: 'praktische-tipps', label: 'Praktische Tipps' }
   ];
+
+  // Enhanced image generation with comprehensive error handling
+  const {
+    generateImage,
+    retry: retryImageGeneration,
+    clearError,
+    isGenerating: isGeneratingImage,
+    error: imageError
+  } = useImageGeneration({
+    onSuccess: (imageUrl) => {
+      setGeneratedContent(prev => prev ? { ...prev, image_url: imageUrl } : null);
+    },
+    onError: (error) => {
+      console.error('Image generation failed:', error);
+    }
+  });
 
   const generateContent = async () => {
     if (!topic.trim()) {
@@ -84,7 +102,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
       setGeneratedContent(data.content);
       toast({
         title: "Erfolg",
-        description: "Framework-basierter Artikel wurde erfolgreich generiert! Bereit für inhaltsspezifische Bildgenerierung.",
+        description: "Framework-basierter Artikel wurde erfolgreich generiert! Bereit für optimierte Bildgenerierung.",
         duration: 5000,
       });
     } catch (error) {
@@ -99,7 +117,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
     }
   };
 
-  const generateTitleImage = async () => {
+  const handleGenerateImage = () => {
     if (!generatedContent?.title) {
       toast({
         title: "Fehler",
@@ -109,43 +127,30 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
       return;
     }
 
-    setIsGeneratingImage(true);
-    try {
-      console.log('Starting optimized image generation...');
-      
-      const { data, error } = await supabase.functions.invoke('generate-blog-image', {
-        body: { 
-          title: generatedContent.title,
-          topic: topic.trim(),
-          category: generatedContent.category,
-          content: generatedContent.content
-        }
-      });
+    generateImage(
+      generatedContent.title,
+      topic.trim(),
+      generatedContent.category,
+      generatedContent.content
+    );
+  };
 
-      if (error) {
-        console.error('Image generation error:', error);
-        throw error;
-      }
+  const handleRetryImage = () => {
+    if (!generatedContent?.title) return;
+    
+    clearError();
+    retryImageGeneration(
+      generatedContent.title,
+      topic.trim(),
+      generatedContent.category,
+      generatedContent.content
+    );
+  };
 
-      setGeneratedContent(prev => prev ? {
-        ...prev,
-        image_url: data.imageUrl
-      } : null);
-
-      toast({
-        title: "Erfolg",
-        description: "Optimiertes Bild wurde durch lokale Inhaltsanalyse generiert! Deutlich kürzere Ladezeiten.",
-        duration: 5000,
-      });
-    } catch (error) {
-      console.error('Error generating optimized image:', error);
-      toast({
-        title: "Fehler",
-        description: "Fehler beim Generieren des optimierten Titelbilds. Bitte versuchen Sie es erneut.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsGeneratingImage(false);
+  const handleClearImage = () => {
+    if (generatedContent) {
+      setGeneratedContent({ ...generatedContent, image_url: '' });
+      clearError();
     }
   };
 
@@ -199,11 +204,11 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
           </Button>
           <h1 className="text-3xl font-display font-semibold flex items-center gap-2">
             <Wand2 className="w-8 h-8 text-purple-600" />
-            Optimized AI Blog Generator
+            Enhanced AI Blog Generator
           </h1>
           <Badge variant="outline" className="bg-gradient-to-r from-green-100 to-blue-100">
             <CheckCircle className="w-3 h-3 mr-1" />
-            Lokale Analyse
+            Verbesserte Bildgenerierung
           </Badge>
         </div>
 
@@ -213,7 +218,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
             <CardHeader>
               <CardTitle>Framework-basierter Blog-Artikel erstellen</CardTitle>
               <p className="text-sm text-gray-600">
-                Nutzt das bewährte 8-Punkte-Framework mit optimierter, lokaler Bildgenerierung für bessere Performance.
+                Nutzt das bewährte 8-Punkte-Framework mit verbesserter Bildgenerierung, erweiterten Fehlerbehandlung und automatischen Wiederholungsversuchen.
               </p>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -287,7 +292,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
-                  Optimierter Framework-Artikel
+                  Enhanced Framework-Artikel
                   <div className="flex gap-2">
                     <Button 
                       onClick={saveAsDraft}
@@ -356,32 +361,28 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
 
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <Label htmlFor="generated-image">Optimiertes Titelbild</Label>
-                    <Button
-                      onClick={generateTitleImage}
-                      disabled={isGeneratingImage}
-                      variant="outline"
-                      size="sm"
-                    >
-                      {isGeneratingImage ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Lokale Analyse...
-                        </>
-                      ) : (
-                        <>
-                          {generatedContent.image_url ? <RefreshCw className="w-4 h-4 mr-2" /> : <Zap className="w-4 h-4 mr-2" />}
-                          {generatedContent.image_url ? 'Neu optimieren' : 'Smart-Analyse starten'}
-                        </>
-                      )}
-                    </Button>
+                    <Label htmlFor="generated-image">Enhanced Titelbild</Label>
+                    <ImageGenerationButton
+                      onClick={handleGenerateImage}
+                      isGenerating={isGeneratingImage}
+                      hasImage={!!generatedContent.image_url}
+                      disabled={!generatedContent.title}
+                    />
                   </div>
+                  
+                  <ImageGenerationStatus
+                    isGenerating={isGeneratingImage}
+                    hasImage={!!generatedContent.image_url}
+                    error={imageError}
+                    onRetry={handleRetryImage}
+                    onClear={handleClearImage}
+                  />
                   
                   {generatedContent.image_url && (
                     <div className="mb-2">
                       <img 
                         src={generatedContent.image_url} 
-                        alt="Locally analyzed and optimized image" 
+                        alt="Enhanced AI-generated blog image" 
                         className="w-full h-32 object-cover rounded border"
                       />
                     </div>
@@ -394,7 +395,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
                     placeholder="Oder manuelle URL eingeben..."
                   />
                   <p className="text-xs text-gray-500 mt-1">
-                    🚀 Neue Technologie: Lokale Inhaltsanalyse extrahiert Emotionen, Szenarien und Metaphern automatisch. Deutlich schnellere Bildgenerierung ohne externe API-Calls für die Analyse.
+                    🚀 Enhanced: Verbesserte Fehlerbehandlung, automatische Wiederholungsversuche, erweiterte Prompt-Analyse und optimierte Performance für zuverlässige Bildgenerierung.
                   </p>
                   
                   {isGeneratingImage && (
