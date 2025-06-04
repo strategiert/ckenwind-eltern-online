@@ -32,6 +32,15 @@ export const useImageGeneration = ({ onSuccess, onError, onPromptGenerated }: Us
 
   const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+  // Helper function to get auth headers
+  const getAuthHeaders = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.access_token) {
+      return { Authorization: `Bearer ${session.access_token}` };
+    }
+    return {};
+  };
+
   // Step 1: Analyze content and generate image description
   const analyzeContent = useCallback(async (
     title: string,
@@ -56,6 +65,9 @@ export const useImageGeneration = ({ onSuccess, onError, onPromptGenerated }: Us
     try {
       console.log('Starting content analysis for image description...');
       
+      // Get auth headers for the request
+      const authHeaders = await getAuthHeaders();
+      
       const { data, error } = await supabase.functions.invoke('generate-blog-image', {
         body: { 
           mode: 'analyze',
@@ -63,11 +75,18 @@ export const useImageGeneration = ({ onSuccess, onError, onPromptGenerated }: Us
           topic: topic.trim(),
           category,
           content
-        }
+        },
+        headers: authHeaders
       });
 
       if (error) {
         console.error('Content analysis error:', error);
+        
+        // Handle specific error cases
+        if (error.message?.includes('Authentifizierung')) {
+          throw new Error('Bitte melden Sie sich an, um die Bildgenerierung zu nutzen');
+        }
+        
         throw new Error(error.message || 'Unbekannter Fehler bei der Inhaltsanalyse');
       }
 
@@ -130,15 +149,25 @@ export const useImageGeneration = ({ onSuccess, onError, onPromptGenerated }: Us
     try {
       console.log('Generating image from analyzed prompt...');
       
+      // Get auth headers for the request
+      const authHeaders = await getAuthHeaders();
+      
       const { data, error } = await supabase.functions.invoke('generate-blog-image', {
         body: { 
           mode: 'generate',
           imagePrompt: imagePrompt.trim()
-        }
+        },
+        headers: authHeaders
       });
 
       if (error) {
         console.error('Image generation error:', error);
+        
+        // Handle specific error cases
+        if (error.message?.includes('Authentifizierung')) {
+          throw new Error('Bitte melden Sie sich an, um die Bildgenerierung zu nutzen');
+        }
+        
         throw new Error(error.message || 'Unbekannter Fehler bei der Bildgenerierung');
       }
 
@@ -216,15 +245,25 @@ export const useImageGeneration = ({ onSuccess, onError, onPromptGenerated }: Us
     try {
       console.log('Generating image from manual description...');
       
+      // Get auth headers for the request
+      const authHeaders = await getAuthHeaders();
+      
       const { data, error } = await supabase.functions.invoke('generate-blog-image', {
         body: { 
           mode: 'generate',
           imagePrompt: manualDescription.trim()
-        }
+        },
+        headers: authHeaders
       });
 
       if (error) {
         console.error('Image generation error:', error);
+        
+        // Handle specific error cases
+        if (error.message?.includes('Authentifizierung')) {
+          throw new Error('Bitte melden Sie sich an, um die Bildgenerierung zu nutzen');
+        }
+        
         throw new Error(error.message || 'Unbekannter Fehler bei der Bildgenerierung');
       }
 

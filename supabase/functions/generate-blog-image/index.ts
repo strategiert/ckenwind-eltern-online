@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
@@ -128,6 +129,10 @@ function truncatePromptIntelligently(prompt: string, maxLength: number = 950): s
 async function analyzeContentForImage(title: string, topic: string, category: string, content: string): Promise<string> {
   console.log('Analyzing content with GPT-4 mini for image description...');
   
+  if (!openAIApiKey) {
+    throw new Error('OpenAI API key is not configured');
+  }
+  
   const analysisPrompt = `Analyze this German parenting blog article and create a concise image description for DALL-E 3.
 
 Article Title: "${title}"
@@ -225,6 +230,10 @@ Art: Contemporary digital, clean lines, soft lighting`;
 async function generateImageFromPrompt(imagePrompt: string): Promise<string> {
   console.log('Generating image with DALL-E 3 from provided prompt...');
 
+  if (!openAIApiKey) {
+    throw new Error('OpenAI API key is not configured');
+  }
+
   // Apply truncation as safety measure
   const truncatedPrompt = truncatePromptIntelligently(imagePrompt, 950);
   console.log(`Using prompt (${truncatedPrompt.length} characters): ${truncatedPrompt.substring(0, 100)}...`);
@@ -306,7 +315,6 @@ function validateRequest(body: any): { isValid: boolean; error?: string } {
     if (!body.imagePrompt || typeof body.imagePrompt !== 'string' || !body.imagePrompt.trim()) {
       return { isValid: false, error: 'Image prompt is required for image generation' };
     }
-    // Removed the length check here since we now handle truncation automatically
   }
   
   return { isValid: true };
@@ -319,6 +327,36 @@ serve(async (req) => {
   }
 
   try {
+    // Get authorization header
+    const authHeader = req.headers.get('authorization');
+    console.log('Authorization header present:', !!authHeader);
+
+    // Initialize Supabase client with auth header if present
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+    
+    const supabase = createClient(supabaseUrl, supabaseKey, {
+      global: {
+        headers: authHeader ? { Authorization: authHeader } : {},
+      },
+    });
+
+    // Verify user authentication for protected operations
+    if (authHeader) {
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) {
+        console.error('Authentication error:', authError);
+        return new Response(
+          JSON.stringify({ error: 'Authentifizierung fehlgeschlagen' }),
+          { 
+            status: 401, 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          }
+        );
+      }
+      console.log('User authenticated:', user.email);
+    }
+
     const body = await req.json();
     
     // Enhanced input validation
@@ -376,7 +414,10 @@ serve(async (req) => {
     let statusCode = 500;
     
     if (error instanceof Error) {
-      if (error.message.includes('fetch')) {
+      if (error.message.includes('OpenAI API key')) {
+        errorMessage = 'OpenAI API-Schlüssel ist nicht konfiguriert.';
+        statusCode = 500;
+      } else if (error.message.includes('fetch')) {
         errorMessage = 'Netzwerkfehler. Bitte überprüfen Sie Ihre Verbindung.';
       } else if (error.message.includes('JSON')) {
         errorMessage = 'Fehler beim Verarbeiten der Antwort.';
