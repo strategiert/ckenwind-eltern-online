@@ -9,6 +9,96 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Enhanced JSON extraction function to handle markdown-wrapped JSON
+function extractAndParseJSON(text: string): any {
+  console.log('Attempting to parse OpenAI response...');
+  
+  // First try direct JSON parsing
+  try {
+    return JSON.parse(text);
+  } catch (directError) {
+    console.log('Direct JSON parse failed, trying markdown extraction...');
+  }
+
+  // Look for JSON in markdown code blocks
+  const jsonBlockRegex = /```(?:json)?\s*(\{[\s\S]*?\})\s*```/;
+  const match = text.match(jsonBlockRegex);
+  
+  if (match && match[1]) {
+    try {
+      console.log('Found JSON in markdown block, parsing...');
+      return JSON.parse(match[1]);
+    } catch (blockError) {
+      console.error('Failed to parse JSON from markdown block:', blockError);
+    }
+  }
+
+  // Try to find JSON-like content between first { and last }
+  const firstBrace = text.indexOf('{');
+  const lastBrace = text.lastIndexOf('}');
+  
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    const jsonCandidate = text.substring(firstBrace, lastBrace + 1);
+    try {
+      console.log('Attempting to parse extracted JSON candidate...');
+      return JSON.parse(jsonCandidate);
+    } catch (candidateError) {
+      console.error('Failed to parse JSON candidate:', candidateError);
+    }
+  }
+
+  throw new Error('Unable to extract valid JSON from response');
+}
+
+// Validation function for generated content
+function validateGeneratedContent(content: any): boolean {
+  const requiredFields = ['title', 'content', 'slug', 'category'];
+  
+  for (const field of requiredFields) {
+    if (!content[field] || typeof content[field] !== 'string' || content[field].trim().length === 0) {
+      console.error(`Missing or invalid field: ${field}`);
+      return false;
+    }
+  }
+
+  // Validate content length
+  if (content.content.length < 800) {
+    console.warn('Generated content seems too short for framework standards');
+  }
+
+  return true;
+}
+
+// Sanitization function
+function sanitizeContent(content: any): any {
+  const sanitized = { ...content };
+
+  // Ensure required arrays exist
+  sanitized.tags = Array.isArray(sanitized.tags) ? sanitized.tags : [];
+  
+  // Sanitize and limit title length
+  if (sanitized.title && sanitized.title.length > 60) {
+    sanitized.title = sanitized.title.substring(0, 57) + '...';
+  }
+
+  // Sanitize meta description
+  if (sanitized.meta_description && sanitized.meta_description.length > 160) {
+    sanitized.meta_description = sanitized.meta_description.substring(0, 157) + '...';
+  }
+
+  // Ensure reading time is reasonable
+  if (!sanitized.reading_time || sanitized.reading_time < 3) {
+    sanitized.reading_time = Math.max(3, Math.ceil(sanitized.content.length / 200));
+  }
+
+  // Set defaults for missing optional fields
+  sanitized.featured = sanitized.featured || false;
+  sanitized.author = sanitized.author || 'Janike Arent';
+  sanitized.image_url = sanitized.image_url || '';
+
+  return sanitized;
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -84,6 +174,12 @@ Du folgst einem bewährten Framework für deine Artikel:
    - Erinnerung: Du bist nicht allein
    - Positive Zukunftsperspektive
 
+**WICHTIGE AUSGABE-ANFORDERUNGEN:**
+- Antworte NUR mit einem gültigen JSON-Objekt
+- Verwende KEINE Markdown-Formatierung oder Code-Blöcke
+- Beginne direkt mit { und ende mit }
+- Keine zusätzlichen Texte vor oder nach dem JSON
+
 **TONALITÄT UND STIL:**
 - Persönliche Ansprache mit "Du"
 - Empathisch und verständnisvoll
@@ -101,7 +197,7 @@ Du folgst einem bewährten Framework für deine Artikel:
 - Wissenschaftlich fundiert
 - Emotional ansprechend
 
-Gib das Ergebnis als JSON zurück mit folgender Struktur:
+Antworte ausschließlich mit diesem JSON-Format:
 
 {
   "title": "Aussagekräftiger, SEO-optimierter Titel (max. 60 Zeichen)",
@@ -133,7 +229,9 @@ Gib das Ergebnis als JSON zurück mit folgender Struktur:
 - Empathische, validierender Tonalität durchgehend
 - SEO-optimiert für bessere Auffindbarkeit
 
-Der Artikel soll Eltern praktische Hilfe bieten und ihnen Mut machen, während er gleichzeitig wissenschaftlich fundiert und professionell ist.`;
+ANTWORTE NUR MIT GÜLTIGEM JSON - KEINE MARKDOWN-FORMATIERUNG!`;
+
+    console.log('Sending request to OpenAI with enhanced prompts...');
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -153,52 +251,36 @@ Der Artikel soll Eltern praktische Hilfe bieten und ihnen Mut machen, während e
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`OpenAI API error: ${response.status} - ${errorText}`);
       throw new Error(`OpenAI API error: ${response.status}`);
     }
 
     const data = await response.json();
     const generatedText = data.choices[0].message.content;
 
-    console.log('Generated blog content using framework');
+    console.log('Generated blog content using framework, parsing response...');
 
-    // Parse the JSON response from OpenAI
+    // Use enhanced JSON parsing
     let parsedContent;
     try {
-      parsedContent = JSON.parse(generatedText);
+      parsedContent = extractAndParseJSON(generatedText);
+      console.log('Successfully parsed JSON response');
     } catch (parseError) {
-      console.error('Error parsing OpenAI response:', parseError);
-      throw new Error('Failed to parse generated content');
+      console.error('Enhanced parsing failed:', parseError);
+      console.error('Raw OpenAI response:', generatedText);
+      throw new Error('Failed to parse generated content - invalid JSON format');
     }
 
-    // Validate required fields
-    if (!parsedContent.title || !parsedContent.content) {
-      throw new Error('Generated content missing required fields');
+    // Validate the parsed content
+    if (!validateGeneratedContent(parsedContent)) {
+      throw new Error('Generated content failed validation - missing required fields');
     }
 
-    // Ensure arrays exist and have minimum content
-    parsedContent.tags = parsedContent.tags || [];
-    
-    // Validate content length (should be longer with framework)
-    if (parsedContent.content.length < 1200) {
-      console.warn('Generated content seems shorter than expected for framework');
-    }
+    // Sanitize and normalize the content
+    parsedContent = sanitizeContent(parsedContent);
 
-    // Ensure meta_description is within limits
-    if (parsedContent.meta_description && parsedContent.meta_description.length > 160) {
-      parsedContent.meta_description = parsedContent.meta_description.substring(0, 157) + '...';
-    }
-
-    // Ensure title is within limits
-    if (parsedContent.title && parsedContent.title.length > 60) {
-      parsedContent.title = parsedContent.title.substring(0, 57) + '...';
-    }
-
-    // Increase reading time estimate for framework-based content
-    if (parsedContent.reading_time < 6) {
-      parsedContent.reading_time = Math.max(6, Math.ceil(parsedContent.content.length / 200));
-    }
-
-    console.log('Successfully generated framework-based blog content');
+    console.log('Successfully generated, validated, and sanitized framework-based blog content');
 
     return new Response(
       JSON.stringify({ content: parsedContent }),
@@ -209,8 +291,24 @@ Der Artikel soll Eltern praktische Hilfe bieten und ihnen Mut machen, während e
 
   } catch (error) {
     console.error('Error in generate-blog-content function:', error);
+    
+    // Provide more specific error messages
+    let errorMessage = 'Ein unerwarteter Fehler ist aufgetreten.';
+    
+    if (error.message.includes('parse')) {
+      errorMessage = 'Fehler beim Verarbeiten der generierten Inhalte. Bitte versuchen Sie es erneut.';
+    } else if (error.message.includes('validation')) {
+      errorMessage = 'Die generierten Inhalte entsprechen nicht den Qualitätsstandards. Bitte versuchen Sie es erneut.';
+    } else if (error.message.includes('OpenAI')) {
+      errorMessage = 'Fehler beim Zugriff auf den KI-Service. Bitte prüfen Sie Ihre Verbindung und versuchen Sie es erneut.';
+    }
+
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: errorMessage,
+        details: error.message,
+        timestamp: new Date().toISOString()
+      }),
       {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
