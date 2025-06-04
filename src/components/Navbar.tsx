@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -17,6 +18,7 @@ const Navbar = () => {
     { href: '/ueber-mich', label: 'Über mich' },
     { href: '/blog', label: 'Blog' },
     { href: '/glossar', label: 'Glossar' },
+    { href: '/eltern-cloud', label: 'Eltern-Cloud' },
     { href: '/gratis-buch', label: 'Gratis Buch' },
     { href: '/kontakt', label: 'Kontakt' },
   ];
@@ -124,3 +126,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

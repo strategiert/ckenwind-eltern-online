@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -30,6 +31,7 @@ import Kontakt from "@/pages/Kontakt";
 import MentalHealthChat from "@/pages/MentalHealthChat";
 import Impressum from "@/pages/Impressum";
 import NotFound from "@/pages/NotFound";
+import ElternCloud from "@/pages/ElternCloud";
 
 const queryClient = new QueryClient();
 
@@ -76,6 +78,7 @@ const App = () => {
                 <Route path="/glossar/:slug" element={<GlossaryDetail />} />
                 <Route path="/kontakt" element={<Kontakt />} />
                 <Route path="/mental-health-chat" element={<MentalHealthChat />} />
+                <Route path="/eltern-cloud" element={<ElternCloud />} />
                 <Route path="/impressum" element={<Impressum />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
@@ -94,3 +97,4 @@ const App = () => {
 };
 
 export default App;
+
