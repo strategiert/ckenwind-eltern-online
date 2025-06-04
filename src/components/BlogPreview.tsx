@@ -4,22 +4,52 @@ import { Link } from 'react-router-dom';
 import { Clock, User, Calendar } from 'lucide-react';
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import type { BlogPost } from '@/services/blogService';
 import BlogMarkdownRenderer from './BlogMarkdownRenderer';
 
+interface BlogPreviewPost {
+  id: string | number;
+  title: string;
+  excerpt?: string;
+  date?: string;
+  imageUrl?: string;
+  slug: string;
+  category?: string;
+  categoryLabel?: string;
+  tags?: string[];
+  readingTime?: number;
+  author?: string;
+  featured?: boolean;
+  // Also support Supabase format
+  image_url?: string;
+  category_label?: string;
+  reading_time?: number;
+  created_at?: string;
+}
+
 interface BlogPreviewProps {
-  post: BlogPost;
+  post: BlogPreviewPost;
   showExcerpt?: boolean;
 }
 
 const BlogPreview: React.FC<BlogPreviewProps> = ({ post, showExcerpt = true }) => {
+  // Helper functions to get the right property regardless of format
+  const getImageUrl = () => post.image_url || post.imageUrl || '';
+  const getCategoryLabel = () => post.category_label || post.categoryLabel || '';
+  const getReadingTime = () => post.reading_time || post.readingTime;
+  const getDate = () => {
+    if (post.created_at) {
+      return new Date(post.created_at).toLocaleDateString('de-DE');
+    }
+    return post.date || '';
+  };
+
   return (
     <Card className="group hover:shadow-lg transition-shadow duration-300">
       <CardContent className="p-0">
-        {post.image_url && (
+        {getImageUrl() && (
           <div className="aspect-video overflow-hidden rounded-t-lg">
             <img 
-              src={post.image_url} 
+              src={getImageUrl()} 
               alt={post.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
@@ -30,20 +60,24 @@ const BlogPreview: React.FC<BlogPreviewProps> = ({ post, showExcerpt = true }) =
           <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
             <div className="flex items-center gap-1">
               <User className="w-4 h-4" />
-              <span>{post.author}</span>
+              <span>{post.author || 'Janike Arent'}</span>
             </div>
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
-              <span>{new Date(post.created_at).toLocaleDateString('de-DE')}</span>
+              <span>{getDate()}</span>
             </div>
-            <div className="flex items-center gap-1">
-              <Clock className="w-4 h-4" />
-              <span>{post.reading_time} Min.</span>
-            </div>
+            {getReadingTime() && (
+              <div className="flex items-center gap-1">
+                <Clock className="w-4 h-4" />
+                <span>{getReadingTime()} Min.</span>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-2 mb-3">
-            <Badge variant="secondary">{post.category_label}</Badge>
+            {getCategoryLabel() && (
+              <Badge variant="secondary">{getCategoryLabel()}</Badge>
+            )}
             {post.featured && <Badge variant="default">Empfohlen</Badge>}
           </div>
 

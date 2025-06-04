@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -117,7 +118,8 @@ const BlogPost = () => {
             
             <BlogSocialShare 
               title={post.title}
-              url={window.location.href}
+              slug={post.slug}
+              excerpt={post.excerpt}
             />
             
             {post.tags && post.tags.length > 0 && (
