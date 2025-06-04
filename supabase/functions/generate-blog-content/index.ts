@@ -50,7 +50,7 @@ function extractAndParseJSON(text: string): any {
   throw new Error('Unable to extract valid JSON from response');
 }
 
-// Validation function for generated content
+// Enhanced validation function for generated content with headline validation
 function validateGeneratedContent(content: any): boolean {
   const requiredFields = ['title', 'content', 'slug', 'category'];
   
@@ -61,12 +61,85 @@ function validateGeneratedContent(content: any): boolean {
     }
   }
 
+  // Enhanced headline validation
+  const headlines = extractHeadlines(content.content);
+  if (!validateHeadlines(headlines, content.title)) {
+    console.error('Generated headlines failed validation - too generic or framework-based');
+    return false;
+  }
+
   // Validate content length
   if (content.content.length < 800) {
     console.warn('Generated content seems too short for framework standards');
   }
 
   return true;
+}
+
+// Extract headlines from markdown content
+function extractHeadlines(content: string): string[] {
+  const headlineRegex = /^#{2}\s+(.+)$/gm;
+  const headlines = [];
+  let match;
+  
+  while ((match = headlineRegex.exec(content)) !== null) {
+    headlines.push(match[1].trim());
+  }
+  
+  return headlines;
+}
+
+// Validate that headlines are specific and not generic framework placeholders
+function validateHeadlines(headlines: string[], title: string): boolean {
+  const genericPhrases = [
+    'was ist',
+    'grundlagen verstehen',
+    'anzeichen und symptome',
+    'ursachen und entstehung',
+    'praktische strategien',
+    'professionelle hilfe',
+    'erste schritte',
+    'abschluss'
+  ];
+
+  const topicKeywords = extractTopicKeywords(title);
+  let specificHeadlines = 0;
+
+  for (const headline of headlines) {
+    const lowerHeadline = headline.toLowerCase();
+    
+    // Check if headline is too generic
+    const isGeneric = genericPhrases.some(phrase => 
+      lowerHeadline.includes(phrase) && !topicKeywords.some(keyword => 
+        lowerHeadline.includes(keyword.toLowerCase())
+      )
+    );
+
+    // Check if headline contains topic-specific keywords
+    const isSpecific = topicKeywords.some(keyword => 
+      lowerHeadline.includes(keyword.toLowerCase())
+    );
+
+    if (!isGeneric && isSpecific) {
+      specificHeadlines++;
+    }
+  }
+
+  // At least 60% of headlines should be specific
+  return specificHeadlines >= Math.ceil(headlines.length * 0.6);
+}
+
+// Extract keywords from the article title/topic
+function extractTopicKeywords(title: string): string[] {
+  // Remove common stop words and extract meaningful keywords
+  const stopWords = ['der', 'die', 'das', 'und', 'oder', 'aber', 'für', 'mit', 'bei', 'von', 'zu', 'auf', 'an', 'in', 'ist', 'wie', 'was'];
+  const words = title.toLowerCase().split(/\s+/);
+  
+  return words.filter(word => 
+    word.length > 3 && 
+    !stopWords.includes(word) &&
+    /^[a-zäöüß]+$/.test(word)
+  );
 }
 
 // Sanitization function
@@ -122,57 +195,68 @@ serve(async (req) => {
 
     const systemPrompt = `Du bist Janike Arent, eine erfahrene Expertin für Eltern-Burnout, ADHS, Essstörungen und mentale Gesundheit von Familien. Du erstellst wissenschaftlich fundierte, empathische und praxisnahe Blog-Artikel für betroffene Eltern und Familien.
 
-Du folgst einem bewährten Framework für deine Artikel:
+Du folgst einem bewährten Framework für deine Artikel mit SPEZIFISCHEN, THEMENRELEVANTEN ÜBERSCHRIFTEN:
 
-**ARTIKEL-FRAMEWORK:**
+**ARTIKEL-FRAMEWORK MIT HEADLINE-RICHTLINIEN:**
 
 1. **Validierender Einstieg** (150-200 Wörter)
    - Erkenne das Problem der Leser an
    - Zeige Verständnis für ihre Situation
    - Keine Lösungen, nur Validation
-   - Beispiel: "Es ist völlig normal, dass du dich als Mutter manchmal überfordert fühlst..."
 
-2. **Was ist [Thema]? - Grundlagen verstehen** (200-300 Wörter)
-   - Klare, wissenschaftlich fundierte Definition
-   - Häufigkeit und Verbreitung
-   - Unterschiede zu ähnlichen Zuständen
-   - Warum es wichtig ist, darüber zu sprechen
+2. **Themenspezifische Grundlagen-Überschrift** (200-300 Wörter)
+   ❌ NICHT: "Was ist [Thema]? - Grundlagen verstehen"
+   ✅ SONDERN: Spezifische Headlines wie:
+   - "Burnout bei Eltern: Mehr als nur Müdigkeit"
+   - "ADHS-Symptome richtig deuten: Der Unterschied zu normalem Verhalten"
+   - "Fressattacken verstehen: Warum Willenskraft nicht ausreicht"
 
-3. **Anzeichen und Symptome erkennen** (300-400 Wörter)
-   - Körperliche Symptome
-   - Emotionale Anzeichen
-   - Verhaltensänderungen
-   - Auswirkungen auf den Familienalltag
-   - Konkrete Beispiele aus dem Alltag
+3. **Symptome/Anzeichen mit konkretem Bezug** (300-400 Wörter)
+   ❌ NICHT: "Anzeichen und Symptome erkennen"
+   ✅ SONDERN: Themenspezifisch wie:
+   - "Diese 7 Burnout-Warnsignale übersehen Eltern oft"
+   - "ADHS-Alltag: Wenn jeder Tag zum Kampf wird"
+   - "Heimliche Essanfälle: Woran du merkst, dass es mehr ist"
 
-4. **Ursachen und Entstehung** (250-300 Wörter)
-   - Wissenschaftliche Hintergründe
-   - Gesellschaftliche Faktoren
-   - Persönliche Risikofaktoren
-   - Warum es jeden treffen kann
+4. **Ursachen mit Lebensweltbezug** (250-300 Wörter)
+   ❌ NICHT: "Ursachen und Entstehung"
+   ✅ SONDERN: Konkret wie:
+   - "Warum gerade Mütter so oft ausbrennen"
+   - "ADHS-Vererbung: Genetik und Umweltfaktoren verstehen"
+   - "Von der Diät zur Essstörung: Wie es beginnt"
 
-5. **Praktische Strategien und Lösungsansätze** (400-500 Wörter)
-   - Sofort umsetzbare Tipps
-   - Langfristige Strategien
-   - Konkrete Handlungsschritte
-   - Realistische Erwartungen setzen
+5. **Praxisnahe Lösungsstrategien** (400-500 Wörter)
+   ❌ NICHT: "Praktische Strategien und Lösungsansätze"
+   ✅ SONDERN: Handlungsorientiert wie:
+   - "Burnout stoppen: 5 sofort umsetzbare Strategien"
+   - "ADHS-Struktur im Familienchaos: Alltagstipps die funktionieren"
+   - "Essanfälle durchbrechen: Dein Notfallplan für schwere Momente"
 
-6. **Professionelle Hilfe - Wann und wo?** (200-250 Wörter)
-   - Warnzeichen, die professionelle Hilfe erfordern
-   - Arten von Unterstützung
-   - Wie man Hilfe findet
-   - Mut machen, Hilfe zu suchen
+6. **Professionelle Hilfe themenspezifisch** (200-250 Wörter)
+   ❌ NICHT: "Professionelle Hilfe - Wann und wo?"
+   ✅ SONDERN: Konkret wie:
+   - "Burnout-Therapie finden: Diese Anlaufstellen helfen wirklich"
+   - "ADHS-Diagnose für Kinder: Der Weg zum Spezialisten"
+   - "Essstörungs-Hilfe: Wann du nicht mehr allein kämpfen solltest"
 
-7. **Erste Schritte - Was du heute tun kannst** (150-200 Wörter)
-   - 3-5 konkrete, kleine Schritte
-   - Leicht umsetzbare Maßnahmen
-   - Realistische Ziele
+7. **Konkrete erste Schritte** (150-200 Wörter)
+   ❌ NICHT: "Erste Schritte - Was du heute tun kannst"
+   ✅ SONDERN: Spezifisch wie:
+   - "Dein Anti-Burnout-Plan: 3 Dinge für heute"
+   - "ADHS-Alltag entspannen: Starte mit diesen 5 Minuten"
+   - "Essanfälle stoppen: Deine ersten 24 Stunden"
 
-8. **Ermutigender Abschluss** (100-150 Wörter)
+8. **Hoffnungsvoller, thematischer Abschluss** (100-150 Wörter)
    - Hoffnung vermitteln
    - Stärken der Leser betonen
-   - Erinnerung: Du bist nicht allein
-   - Positive Zukunftsperspektive
+   - Themenspezifische Ermutigung
+
+**KRITISCHE HEADLINE-ANFORDERUNGEN:**
+- Jede Überschrift MUSS das konkrete Thema enthalten
+- Verwende NIEMALS die generischen Framework-Begriffe als Hauptüberschrift
+- Headlines müssen emotional ansprechen und neugierig machen
+- Nutze Zahlen, konkrete Begriffe und Handlungsaufforderungen
+- Jede Überschrift soll sofort zeigen, welchen Mehrwert der Abschnitt bietet
 
 **WICHTIGE AUSGABE-ANFORDERUNGEN:**
 - Antworte NUR mit einem gültigen JSON-Objekt
@@ -220,7 +304,19 @@ Antworte ausschließlich mit diesem JSON-Format:
 **Zielgruppe:** ${targetAudience || 'Eltern in herausfordernden Situationen'}
 **Artikel-Typ:** ${contentType}
 
-**WICHTIGE ANFORDERUNGEN:**
+**KRITISCHE HEADLINE-ANFORDERUNGEN:**
+- Erstelle für JEDEN Abschnitt eine spezifische, themenrelevante Überschrift
+- Verwende NIEMALS generische Framework-Begriffe wie "Was ist X?", "Anzeichen und Symptome", "Ursachen und Entstehung"
+- Jede Überschrift muss das konkrete Thema "${topic}" reflektieren
+- Headlines sollen neugierig machen, Mehrwert versprechen und emotional ansprechen
+- Nutze Zahlen, konkrete Begriffe und Handlungsaufforderungen
+
+**BEISPIELE FÜR GUTE HEADLINES:**
+- Statt "Was ist Burnout?" → "Eltern-Burnout: Mehr als nur Erschöpfung"
+- Statt "Anzeichen erkennen" → "Diese 5 Burnout-Warnsignale übersehen Mütter oft"
+- Statt "Praktische Strategien" → "Burnout stoppen: Sofort umsetzbare Notfall-Strategien"
+
+**WEITERE ANFORDERUNGEN:**
 - Folge exakt dem 8-Punkte-Framework für die Struktur
 - Verwende konkrete, realistische Beispiele aus dem Familienalltag
 - Integriere wissenschaftliche Erkenntnisse verständlich
@@ -231,7 +327,7 @@ Antworte ausschließlich mit diesem JSON-Format:
 
 ANTWORTE NUR MIT GÜLTIGEM JSON - KEINE MARKDOWN-FORMATIERUNG!`;
 
-    console.log('Sending request to OpenAI with enhanced prompts...');
+    console.log('Sending request to OpenAI with enhanced headline-focused prompts...');
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -259,7 +355,7 @@ ANTWORTE NUR MIT GÜLTIGEM JSON - KEINE MARKDOWN-FORMATIERUNG!`;
     const data = await response.json();
     const generatedText = data.choices[0].message.content;
 
-    console.log('Generated blog content using framework, parsing response...');
+    console.log('Generated blog content with enhanced headline validation, parsing response...');
 
     // Use enhanced JSON parsing
     let parsedContent;
@@ -272,15 +368,15 @@ ANTWORTE NUR MIT GÜLTIGEM JSON - KEINE MARKDOWN-FORMATIERUNG!`;
       throw new Error('Failed to parse generated content - invalid JSON format');
     }
 
-    // Validate the parsed content
+    // Validate the parsed content with enhanced headline validation
     if (!validateGeneratedContent(parsedContent)) {
-      throw new Error('Generated content failed validation - missing required fields');
+      throw new Error('Generated content failed enhanced validation - headlines too generic or missing topic relevance');
     }
 
     // Sanitize and normalize the content
     parsedContent = sanitizeContent(parsedContent);
 
-    console.log('Successfully generated, validated, and sanitized framework-based blog content');
+    console.log('Successfully generated, validated, and sanitized framework-based blog content with specific headlines');
 
     return new Response(
       JSON.stringify({ content: parsedContent }),
@@ -298,7 +394,7 @@ ANTWORTE NUR MIT GÜLTIGEM JSON - KEINE MARKDOWN-FORMATIERUNG!`;
     if (error.message.includes('parse')) {
       errorMessage = 'Fehler beim Verarbeiten der generierten Inhalte. Bitte versuchen Sie es erneut.';
     } else if (error.message.includes('validation')) {
-      errorMessage = 'Die generierten Inhalte entsprechen nicht den Qualitätsstandards. Bitte versuchen Sie es erneut.';
+      errorMessage = 'Die generierten Inhalte entsprechen nicht den Qualitätsstandards. Headlines zu generisch - bitte versuchen Sie es erneut.';
     } else if (error.message.includes('OpenAI')) {
       errorMessage = 'Fehler beim Zugriff auf den KI-Service. Bitte prüfen Sie Ihre Verbindung und versuchen Sie es erneut.';
     }
