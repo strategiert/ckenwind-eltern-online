@@ -19,7 +19,8 @@ function analyzeContentTone(content: string, title: string): string {
     hope: ['hilfe', 'unterstützung', 'lösung', 'erfolg', 'schaffen', 'hoffnung'],
     family: ['familie', 'kinder', 'eltern', 'mutter', 'vater', 'geschwister'],
     healing: ['heilung', 'therapie', 'genesung', 'besserung', 'fortschritt'],
-    crisis: ['krise', 'notfall', 'akut', 'gefahr', 'panik']
+    crisis: ['krise', 'notfall', 'akut', 'gefahr', 'panik'],
+    eating: ['essen', 'fress', 'hunger', 'satt', 'diät', 'gewicht', 'körper']
   };
   
   for (const [emotion, keywords] of Object.entries(emotions)) {
@@ -30,6 +31,7 @@ function analyzeContentTone(content: string, title: string): string {
         case 'family': return 'warm family atmosphere with caring, nurturing vibes';
         case 'healing': return 'gentle healing energy with restorative, peaceful mood';
         case 'crisis': return 'safe and secure environment with protective, reassuring tone';
+        case 'eating': return 'balanced, healthy lifestyle with positive relationship to food';
         default: return 'peaceful and nurturing with gentle, supportive energy';
       }
     }
@@ -43,7 +45,7 @@ function getCategoryStyle(category: string): string {
     'eltern-tipps': 'modern family scene with parent and child in warm, cozy setting',
     'burnout-praevention': 'serene restoration scene with soft lighting and calming elements',
     'adhs-hilfe': 'organized, structured environment with clear, focused imagery',
-    'esstoerungen': 'healthy, balanced lifestyle scene with positive food relationships',
+    'esstoerungen': 'healthy, balanced lifestyle scene with positive food relationships and mindful eating',
     'familienalltag': 'authentic family moments with natural, everyday warmth',
     'selbstfuersorge': 'peaceful self-care moment with gentle, nurturing atmosphere',
     'mentale-gesundheit': 'supportive mental wellness scene with hope and strength'
@@ -63,7 +65,9 @@ function extractKeyThemes(content: string, title: string): string[] {
     'communication': ['gespräch', 'reden', 'kommunikation', 'sprechen'],
     'education': ['lernen', 'schule', 'bildung', 'wissen', 'verstehen'],
     'routine': ['routine', 'struktur', 'plan', 'organisation', 'ordnung'],
-    'emotion': ['gefühl', 'emotion', 'freude', 'angst', 'trauer', 'wut']
+    'emotion': ['gefühl', 'emotion', 'freude', 'angst', 'trauer', 'wut'],
+    'food': ['essen', 'fress', 'hunger', 'satt', 'diät', 'mahlzeit', 'küche'],
+    'support': ['hilfe', 'unterstützung', 'begleitung', 'therapie', 'beratung']
   };
   
   for (const [theme, keywords] of Object.entries(themeMap)) {
@@ -73,6 +77,65 @@ function extractKeyThemes(content: string, title: string): string[] {
   }
   
   return themes;
+}
+
+async function analyzeContentForImage(title: string, topic: string, category: string, content: string): Promise<string> {
+  console.log('Analyzing content with GPT-4 mini for image description...');
+  
+  const analysisPrompt = `Analyze this German parenting blog article and create a detailed image description for DALL-E 3.
+
+Article Title: "${title}"
+Topic: "${topic}"
+Category: "${category}"
+Content Preview: "${content.substring(0, 500)}..."
+
+Create a professional image description that includes:
+1. Main visual scene (people, setting, objects)
+2. Emotional tone and atmosphere
+3. Art style (modern illustration, warm colors, etc.)
+4. Specific details for the German parenting context
+
+The image should be:
+- Professional yet approachable
+- Culturally appropriate for German families
+- Emotionally supportive and positive
+- Portrait orientation (3:4 ratio)
+- Modern illustration style with warm colors
+
+Respond with ONLY the image description, no additional text.`;
+
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${openAIApiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      messages: [
+        { role: 'system', content: 'You are an expert at creating detailed image descriptions for family and parenting content. Respond only with the image description.' },
+        { role: 'user', content: analysisPrompt }
+      ],
+      max_tokens: 300,
+      temperature: 0.7
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`GPT-4 mini analysis error: ${response.status} - ${errorText}`);
+    throw new Error(`Fehler bei der Inhaltsanalyse: ${response.status}`);
+  }
+
+  const data = await response.json();
+  const imageDescription = data.choices[0]?.message?.content;
+  
+  if (!imageDescription || typeof imageDescription !== 'string') {
+    throw new Error('Keine gültige Bildbeschreibung von der Analyse erhalten.');
+  }
+
+  console.log(`Generated image description: ${imageDescription.substring(0, 100)}...`);
+  return imageDescription.trim();
 }
 
 function generateOptimizedPrompt(title: string, category: string, content: string): string {
@@ -102,6 +165,8 @@ No text overlays or written words in the image
     if (themes.includes('education')) prompt += 'Learning and growth imagery, ';
     if (themes.includes('routine')) prompt += 'Organized, structured elements, ';
     if (themes.includes('emotion')) prompt += 'Emotionally expressive and authentic, ';
+    if (themes.includes('food')) prompt += 'Positive relationship with food and eating, ';
+    if (themes.includes('support')) prompt += 'Supportive and caring interactions, ';
   }
 
   prompt += `\nOverall Mood: Calming, professional yet approachable, hopeful and supportive
@@ -112,14 +177,89 @@ Lighting: Soft, natural lighting that creates warmth and comfort`;
   return prompt;
 }
 
-// Enhanced error handling and validation
-function validateRequest(body: any): { isValid: boolean; error?: string } {
-  if (!body.title || typeof body.title !== 'string' || !body.title.trim()) {
-    return { isValid: false, error: 'Title is required and must be a non-empty string' };
+async function generateImageFromPrompt(imagePrompt: string): Promise<string> {
+  console.log('Generating image with DALL-E 3 from provided prompt...');
+
+  const response = await fetch('https://api.openai.com/v1/images/generations', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${openAIApiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'dall-e-3',
+      prompt: imagePrompt,
+      n: 1,
+      size: '1024x1024',
+      quality: 'standard',
+      style: 'natural'
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error(`DALL-E 3 error: ${response.status} - ${errorText}`);
+    
+    let userFriendlyError = 'Fehler bei der Bildgenerierung.';
+    if (response.status === 429) {
+      userFriendlyError = 'Zu viele Anfragen. Bitte versuchen Sie es in einem Moment erneut.';
+    } else if (response.status === 400) {
+      userFriendlyError = 'Ungültige Anfrage für die Bildgenerierung.';
+    } else if (response.status === 401) {
+      userFriendlyError = 'Authentifizierungsfehler. API-Schlüssel überprüfen.';
+    } else if (response.status >= 500) {
+      userFriendlyError = 'Server-Fehler. Bitte versuchen Sie es später erneut.';
+    }
+    
+    throw new Error(`${userFriendlyError} (Status: ${response.status})`);
+  }
+
+  const data = await response.json();
+  
+  if (!data || !data.data || !Array.isArray(data.data) || data.data.length === 0) {
+    console.error('Invalid DALL-E 3 response structure:', data);
+    throw new Error('Ungültige Antwort von der Bildgenerierung erhalten.');
   }
   
-  if (body.title.length > 200) {
-    return { isValid: false, error: 'Title is too long (max 200 characters)' };
+  const imageUrl = data.data[0]?.url;
+  if (!imageUrl || typeof imageUrl !== 'string') {
+    console.error('Missing or invalid image URL in response:', data.data[0]);
+    throw new Error('Keine gültige Bild-URL in der Antwort erhalten.');
+  }
+
+  // Validate URL format
+  try {
+    new URL(imageUrl);
+  } catch {
+    console.error('Invalid URL format received:', imageUrl);
+    throw new Error('Ungültige Bild-URL Format erhalten.');
+  }
+
+  return imageUrl;
+}
+
+// Enhanced error handling and validation
+function validateRequest(body: any): { isValid: boolean; error?: string } {
+  if (!body.mode || (body.mode !== 'analyze' && body.mode !== 'generate')) {
+    return { isValid: false, error: 'Mode is required and must be either "analyze" or "generate"' };
+  }
+
+  if (body.mode === 'analyze') {
+    if (!body.title || typeof body.title !== 'string' || !body.title.trim()) {
+      return { isValid: false, error: 'Title is required for content analysis' };
+    }
+    if (body.title.length > 200) {
+      return { isValid: false, error: 'Title is too long (max 200 characters)' };
+    }
+  }
+
+  if (body.mode === 'generate') {
+    if (!body.imagePrompt || typeof body.imagePrompt !== 'string' || !body.imagePrompt.trim()) {
+      return { isValid: false, error: 'Image prompt is required for image generation' };
+    }
+    if (body.imagePrompt.length > 1000) {
+      return { isValid: false, error: 'Image prompt is too long (max 1000 characters)' };
+    }
   }
   
   return { isValid: true };
@@ -147,81 +287,39 @@ serve(async (req) => {
       );
     }
 
-    const { title, topic, category, content } = body;
+    const { mode, title, topic, category, content, imagePrompt } = body;
 
-    console.log(`Generating enhanced image for: ${title} (Category: ${category || 'unknown'})`);
-
-    // Generate enhanced prompt with comprehensive analysis
-    const imagePrompt = generateOptimizedPrompt(title, category || '', content || '');
-
-    console.log('Calling OpenAI with enhanced prompt and improved error handling...');
-
-    // Enhanced OpenAI API call with better error handling
-    const response = await fetch('https://api.openai.com/v1/images/generations', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'dall-e-3',
-        prompt: imagePrompt,
-        n: 1,
-        size: '1024x1024',
-        quality: 'standard',
-        style: 'natural'
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`OpenAI API error: ${response.status} - ${errorText}`);
+    if (mode === 'analyze') {
+      console.log(`Analyzing content for: ${title} (Category: ${category || 'unknown'})`);
       
-      // Enhanced error classification
-      let userFriendlyError = 'Fehler bei der Bildgenerierung.';
-      if (response.status === 429) {
-        userFriendlyError = 'Zu viele Anfragen. Bitte versuchen Sie es in einem Moment erneut.';
-      } else if (response.status === 400) {
-        userFriendlyError = 'Ungültige Anfrage. Bitte überprüfen Sie den Titel.';
-      } else if (response.status === 401) {
-        userFriendlyError = 'Authentifizierungsfehler. API-Schlüssel überprüfen.';
-      } else if (response.status >= 500) {
-        userFriendlyError = 'Server-Fehler. Bitte versuchen Sie es später erneut.';
-      }
+      // Use GPT-4 mini to analyze content and generate image description
+      const imageDescription = await analyzeContentForImage(title, topic || '', category || '', content || '');
       
-      throw new Error(`${userFriendlyError} (Status: ${response.status})`);
-    }
-
-    const data = await response.json();
-    
-    // Enhanced response validation
-    if (!data || !data.data || !Array.isArray(data.data) || data.data.length === 0) {
-      console.error('Invalid OpenAI response structure:', data);
-      throw new Error('Ungültige Antwort von der Bildgenerierung erhalten.');
+      console.log('Successfully analyzed content and generated image description');
+      
+      return new Response(
+        JSON.stringify({ imageDescription }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
     }
     
-    const imageUrl = data.data[0]?.url;
-    if (!imageUrl || typeof imageUrl !== 'string') {
-      console.error('Missing or invalid image URL in response:', data.data[0]);
-      throw new Error('Keine gültige Bild-URL in der Antwort erhalten.');
+    if (mode === 'generate') {
+      console.log(`Generating image from prompt: ${imagePrompt.substring(0, 100)}...`);
+      
+      // Use DALL-E 3 to generate image from the provided prompt
+      const imageUrl = await generateImageFromPrompt(imagePrompt);
+      
+      console.log('Successfully generated image from prompt');
+      
+      return new Response(
+        JSON.stringify({ imageUrl }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
     }
-
-    // Validate URL format
-    try {
-      new URL(imageUrl);
-    } catch {
-      console.error('Invalid URL format received:', imageUrl);
-      throw new Error('Ungültige Bild-URL Format erhalten.');
-    }
-
-    console.log('Successfully generated enhanced, optimized blog image');
-
-    return new Response(
-      JSON.stringify({ imageUrl }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    );
 
   } catch (error) {
     console.error('Error in enhanced generate-blog-image function:', error);
@@ -237,7 +335,7 @@ serve(async (req) => {
         errorMessage = 'Fehler beim Verarbeiten der Antwort.';
         statusCode = 422;
       } else if (error.message.includes('API')) {
-        errorMessage = 'Fehler beim Zugriff auf den Bildgenerator.';
+        errorMessage = 'Fehler beim Zugriff auf den AI-Service.';
       } else {
         errorMessage = error.message;
       }

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,8 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
 import { useCreateBlogPost } from '@/hooks/useBlogPosts';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
-import ImageGenerationButton from './ImageGenerationButton';
-import ImageGenerationStatus from './ImageGenerationStatus';
+import ImageGenerationOptions from './ImageGenerationOptions';
 
 type BlogCategory = 'eltern-tipps' | 'burnout-praevention' | 'adhs-hilfe' | 'esstoerungen' | 'familienalltag' | 'selbstfuersorge';
 
@@ -61,19 +61,26 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
     { value: 'praktische-tipps', label: 'Praktische Tipps' }
   ];
 
-  // Enhanced image generation with comprehensive error handling
+  // Enhanced image generation with three-step process
   const {
-    generateImage,
-    retry: retryImageGeneration,
+    analyzeContent,
+    generateFromPrompt,
+    generateFromManual,
     clearError,
+    clearPrompt,
+    isAnalyzing,
     isGenerating: isGeneratingImage,
-    error: imageError
+    error: imageError,
+    generatedPrompt
   } = useImageGeneration({
     onSuccess: (imageUrl) => {
       setGeneratedContent(prev => prev ? { ...prev, image_url: imageUrl } : null);
     },
     onError: (error) => {
       console.error('Image generation failed:', error);
+    },
+    onPromptGenerated: (prompt) => {
+      console.log('Generated image prompt:', prompt);
     }
   });
 
@@ -117,7 +124,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
     }
   };
 
-  const handleGenerateImage = () => {
+  const handleAnalyzeContent = () => {
     if (!generatedContent?.title) {
       toast({
         title: "Fehler",
@@ -127,7 +134,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
       return;
     }
 
-    generateImage(
+    analyzeContent(
       generatedContent.title,
       topic.trim(),
       generatedContent.category,
@@ -135,23 +142,12 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
     );
   };
 
-  const handleRetryImage = () => {
-    if (!generatedContent?.title) return;
-    
-    clearError();
-    retryImageGeneration(
-      generatedContent.title,
-      topic.trim(),
-      generatedContent.category,
-      generatedContent.content
-    );
+  const handleGenerateFromPrompt = (prompt: string) => {
+    generateFromPrompt(prompt);
   };
 
-  const handleClearImage = () => {
-    if (generatedContent) {
-      setGeneratedContent({ ...generatedContent, image_url: '' });
-      clearError();
-    }
+  const handleGenerateFromManual = (description: string) => {
+    generateFromManual(description);
   };
 
   const saveAsDraft = () => {
@@ -208,7 +204,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
           </h1>
           <Badge variant="outline" className="bg-gradient-to-r from-green-100 to-blue-100">
             <CheckCircle className="w-3 h-3 mr-1" />
-            Verbesserte Bildgenerierung
+            3-Stufen Bildgenerierung
           </Badge>
         </div>
 
@@ -218,7 +214,7 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
             <CardHeader>
               <CardTitle>Framework-basierter Blog-Artikel erstellen</CardTitle>
               <p className="text-sm text-gray-600">
-                Nutzt das bewährte 8-Punkte-Framework mit verbesserter Bildgenerierung, erweiterten Fehlerbehandlung und automatischen Wiederholungsversuchen.
+                Nutzt das bewährte 8-Punkte-Framework mit neuer 3-Stufen-Bildgenerierung.
               </p>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -359,53 +355,40 @@ const AIBlogGenerator: React.FC<AIBlogGeneratorProps> = ({ onClose }) => {
                   </Select>
                 </div>
 
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <Label htmlFor="generated-image">Enhanced Titelbild</Label>
-                    <ImageGenerationButton
-                      onClick={handleGenerateImage}
-                      isGenerating={isGeneratingImage}
-                      hasImage={!!generatedContent.image_url}
-                      disabled={!generatedContent.title}
-                    />
-                  </div>
-                  
-                  <ImageGenerationStatus
-                    isGenerating={isGeneratingImage}
-                    hasImage={!!generatedContent.image_url}
-                    error={imageError}
-                    onRetry={handleRetryImage}
-                    onClear={handleClearImage}
-                  />
-                  
-                  {generatedContent.image_url && (
-                    <div className="mb-2">
+                {/* New Three-Option Image Generation System */}
+                <ImageGenerationOptions
+                  title={generatedContent.title}
+                  content={generatedContent.content}
+                  topic={topic}
+                  category={generatedContent.category}
+                  onAnalyzeContent={handleAnalyzeContent}
+                  onGenerateFromPrompt={handleGenerateFromPrompt}
+                  onGenerateFromManual={handleGenerateFromManual}
+                  isAnalyzing={isAnalyzing}
+                  isGenerating={isGeneratingImage}
+                  generatedPrompt={generatedPrompt}
+                  error={imageError}
+                  disabled={!generatedContent.title}
+                />
+                
+                {generatedContent.image_url && (
+                  <div className="mb-4">
+                    <Label>Generiertes Bild</Label>
+                    <div className="mt-2">
                       <img 
                         src={generatedContent.image_url} 
                         alt="Enhanced AI-generated blog image" 
-                        className="w-full h-32 object-cover rounded border"
+                        className="w-full h-48 object-cover rounded border"
                       />
                     </div>
-                  )}
-                  
-                  <Input
-                    id="generated-image"
-                    value={generatedContent.image_url}
-                    onChange={(e) => updateGeneratedContent('image_url', e.target.value)}
-                    placeholder="Oder manuelle URL eingeben..."
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    🚀 Enhanced: Verbesserte Fehlerbehandlung, automatische Wiederholungsversuche, erweiterte Prompt-Analyse und optimierte Performance für zuverlässige Bildgenerierung.
-                  </p>
-                  
-                  {isGeneratingImage && (
-                    <div className="text-xs text-green-600 bg-green-50 p-2 rounded mt-2">
-                      <p>⚡ Analysiere Artikel lokal für optimierte Prompts...</p>
-                      <p>🎯 Extrahiere emotionale Stimmung und Kernszenarien...</p>
-                      <p>🖼️ Generiere präzises Bild mit OpenAI...</p>
-                    </div>
-                  )}
-                </div>
+                    <Input
+                      value={generatedContent.image_url}
+                      onChange={(e) => updateGeneratedContent('image_url', e.target.value)}
+                      placeholder="Oder manuelle URL eingeben..."
+                      className="mt-2"
+                    />
+                  </div>
+                )}
 
                 <div>
                   <Label htmlFor="generated-excerpt">Excerpt</Label>
