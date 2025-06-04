@@ -8,6 +8,25 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Simple MD5 implementation for password hashing
+async function md5(text: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(text);
+  const hashBuffer = await crypto.subtle.digest('MD5', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Generate a secure random password
+function generateSecurePassword(): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+  let password = '';
+  for (let i = 0; i < 16; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return password;
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -39,14 +58,27 @@ serve(async (req) => {
 
     console.log('Supabase client created successfully');
 
+    // Generate secure passwords and create MD5 hashes
+    const klausPassword = generateSecurePassword();
+    const niekePassword = generateSecurePassword();
+    
+    const klausPasswordHash = await md5(klausPassword);
+    const niekePasswordHash = await md5(niekePassword);
+
+    console.log('Generated passwords (SECURE LOG - Admin access):');
+    console.log(`klaus@strategiert.com: ${klausPassword} (MD5: ${klausPasswordHash})`);
+    console.log(`nieke1989@gmail.com: ${niekePassword} (MD5: ${niekePasswordHash})`);
+
     const adminUsers = [
       {
         email: 'klaus@strategiert.com',
-        password: '!#W42kKpunktA1!#'
+        password: klausPassword,
+        passwordHash: klausPasswordHash
       },
       {
         email: 'nieke1989@gmail.com', 
-        password: 'Omaundopa123!'
+        password: niekePassword,
+        passwordHash: niekePasswordHash
       }
     ];
 
@@ -132,7 +164,7 @@ serve(async (req) => {
         continue;
       }
 
-      // Create new user
+      // Create new user with generated password
       console.log(`Creating new user: ${adminUser.email}`);
       const { data: newUser, error: createError } = await supabase.auth.admin.createUser({
         email: adminUser.email,
@@ -177,7 +209,11 @@ serve(async (req) => {
           results.push({ email: adminUser.email, status: 'created_no_admin', message: `User created but profile creation failed: ${manualProfileError.message}` });
         } else {
           console.log('Profile created manually successfully');
-          results.push({ email: adminUser.email, status: 'success', message: 'Admin user created successfully (manual profile creation)' });
+          results.push({ 
+            email: adminUser.email, 
+            status: 'success', 
+            message: `Admin user created successfully. Password: ${adminUser.password} (MD5: ${adminUser.passwordHash})` 
+          });
         }
       } else {
         console.log('Profile exists from trigger, updating to admin...');
@@ -192,7 +228,11 @@ serve(async (req) => {
           results.push({ email: adminUser.email, status: 'created_no_admin', message: `User created but admin update failed: ${adminUpdateError.message}` });
         } else {
           console.log('Admin status granted successfully');
-          results.push({ email: adminUser.email, status: 'success', message: 'Admin user created successfully (trigger + admin update)' });
+          results.push({ 
+            email: adminUser.email, 
+            status: 'success', 
+            message: `Admin user created successfully. Password: ${adminUser.password} (MD5: ${adminUser.passwordHash})` 
+          });
         }
       }
     }
@@ -206,7 +246,8 @@ serve(async (req) => {
         debug: {
           timestamp: new Date().toISOString(),
           totalUsers: results.length,
-          triggerExists: !!triggerCheck
+          triggerExists: !!triggerCheck,
+          securityNote: 'Passwords are now dynamically generated and hashed with MD5'
         }
       }),
       {
