@@ -18,7 +18,7 @@ const ElternCloudOverview = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="text-5xl mb-4">⏰</div>
+              <div className="text-5xl mb-4" role="img" aria-label="Uhr">⏰</div>
               <h3 className="text-xl font-semibold mb-2">24/7 Verfügbar</h3>
               <p className="text-gray-600">
                 Hilfe genau dann, wenn du sie brauchst - ohne Wartezeiten oder Terminvereinbarung
@@ -26,7 +26,7 @@ const ElternCloudOverview = () => {
             </div>
             
             <div className="text-center">
-              <div className="text-5xl mb-4">🏠</div>
+              <div className="text-5xl mb-4" role="img" aria-label="Zuhause">🏠</div>
               <h3 className="text-xl font-semibold mb-2">Von Zuhause</h3>
               <p className="text-gray-600">
                 Keine Anfahrtswege, keine Kinderbetreuung nötig - alles bequem von deinem Sofa aus
@@ -34,7 +34,7 @@ const ElternCloudOverview = () => {
             </div>
             
             <div className="text-center">
-              <div className="text-5xl mb-4">🎯</div>
+              <div className="text-5xl mb-4" role="img" aria-label="Zielscheibe">🎯</div>
               <h3 className="text-xl font-semibold mb-2">Professionell</h3>
               <p className="text-gray-600">
                 Über 20 Jahre Erfahrung und fundiertes Fachwissen in einem digitalen Format
@@ -48,4 +48,3 @@ const ElternCloudOverview = () => {
 };
 
 export default ElternCloudOverview;
-

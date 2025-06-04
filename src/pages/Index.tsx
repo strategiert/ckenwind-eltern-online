@@ -1,3 +1,4 @@
+
 import React from 'react';
 import HeroSection from '@/components/HeroSection';
 import FeatureCard from '@/components/FeatureCard';
@@ -10,6 +11,8 @@ import Footer from '@/components/Footer';
 import SEOHead from '@/components/seo/SEOHead';
 import SchemaMarkup from '@/components/seo/SchemaMarkup';
 import RichSnippets from '@/components/seo/RichSnippets';
+import CriticalCSS from '@/components/performance/CriticalCSS';
+import LazyImage from '@/components/performance/LazyImage';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { blogPostsListing } from '@/data/blogPosts';
@@ -56,6 +59,7 @@ const Index = () => {
 
   return (
     <>
+      <CriticalCSS />
       <SEOHead
         title="Rückenwind Eltern | Unterstützung für Ihren Familienalltag"
         description="Wissenschaftlich fundierte und empathische Unterstützung für Eltern bei Burnout, ADHS und Essstörungen. Entdecken Sie Strategien für mehr Leichtigkeit im Familienalltag."
@@ -99,7 +103,11 @@ const Index = () => {
               <div>
                 <div className="relative">
                   <div className="absolute -top-4 -left-4 w-24 h-24 rounded-full bg-rueckenwind-light-purple opacity-70 z-0"></div>
-                  <img alt="Janike Arent" className="relative z-10 rounded-lg shadow-lg max-w-md mx-auto" src="/lovable-uploads/5a353323-d780-4159-976a-7e93624fb784.png" />
+                  <LazyImage 
+                    src="/lovable-uploads/5a353323-d780-4159-976a-7e93624fb784.png"
+                    alt="Janike Arent"
+                    className="relative z-10 rounded-lg shadow-lg max-w-md mx-auto"
+                  />
                   <div className="absolute -bottom-4 -right-4 w-32 h-32 rounded-full bg-rueckenwind-soft-blue opacity-60 z-0"></div>
                 </div>
               </div>
