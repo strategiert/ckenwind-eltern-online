@@ -1,4 +1,3 @@
-
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
@@ -79,21 +78,67 @@ function extractKeyThemes(content: string, title: string): string[] {
   return themes;
 }
 
+// Smart prompt truncation that preserves essential information
+function truncatePromptIntelligently(prompt: string, maxLength: number = 950): string {
+  if (prompt.length <= maxLength) {
+    return prompt;
+  }
+
+  // Split into sentences
+  const sentences = prompt.split(/[.!?]+/).filter(s => s.trim().length > 0);
+  
+  // Always keep the first sentence (usually the main scene description)
+  let result = sentences[0].trim();
+  
+  // Priority keywords to preserve
+  const priorityKeywords = [
+    'emotional tone', 'portrait orientation', 'modern illustration',
+    'warm colors', 'family', 'parent', 'child', 'supportive',
+    'German', 'professional', 'nurturing'
+  ];
+  
+  // Add sentences that contain priority keywords
+  for (let i = 1; i < sentences.length && result.length < maxLength - 100; i++) {
+    const sentence = sentences[i].trim();
+    if (priorityKeywords.some(keyword => sentence.toLowerCase().includes(keyword.toLowerCase()))) {
+      if (result.length + sentence.length + 2 <= maxLength) {
+        result += '. ' + sentence;
+      }
+    }
+  }
+  
+  // Ensure it ends properly
+  if (!result.endsWith('.') && !result.endsWith('!') && !result.endsWith('?')) {
+    result += '.';
+  }
+  
+  // If still too long, truncate at word boundary
+  if (result.length > maxLength) {
+    result = result.substring(0, maxLength - 3);
+    const lastSpace = result.lastIndexOf(' ');
+    if (lastSpace > maxLength * 0.8) {
+      result = result.substring(0, lastSpace);
+    }
+    result += '...';
+  }
+  
+  return result;
+}
+
 async function analyzeContentForImage(title: string, topic: string, category: string, content: string): Promise<string> {
   console.log('Analyzing content with GPT-4 mini for image description...');
   
-  const analysisPrompt = `Analyze this German parenting blog article and create a detailed image description for DALL-E 3.
+  const analysisPrompt = `Analyze this German parenting blog article and create a concise image description for DALL-E 3.
 
 Article Title: "${title}"
 Topic: "${topic}"
 Category: "${category}"
-Content Preview: "${content.substring(0, 500)}..."
+Content Preview: "${content.substring(0, 300)}..."
 
 Create a professional image description that includes:
 1. Main visual scene (people, setting, objects)
 2. Emotional tone and atmosphere
 3. Art style (modern illustration, warm colors, etc.)
-4. Specific details for the German parenting context
 
 The image should be:
 - Professional yet approachable
@@ -102,7 +147,7 @@ The image should be:
 - Portrait orientation (3:4 ratio)
 - Modern illustration style with warm colors
 
-Respond with ONLY the image description, no additional text.`;
+Keep the description concise but detailed. Respond with ONLY the image description, no additional text.`;
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -113,10 +158,10 @@ Respond with ONLY the image description, no additional text.`;
     body: JSON.stringify({
       model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', content: 'You are an expert at creating detailed image descriptions for family and parenting content. Respond only with the image description.' },
+        { role: 'system', content: 'You are an expert at creating concise, detailed image descriptions for family and parenting content. Keep descriptions under 800 characters while maintaining essential details.' },
         { role: 'user', content: analysisPrompt }
       ],
-      max_tokens: 300,
+      max_tokens: 200,
       temperature: 0.7
     }),
   });
@@ -128,14 +173,17 @@ Respond with ONLY the image description, no additional text.`;
   }
 
   const data = await response.json();
-  const imageDescription = data.choices[0]?.message?.content;
+  let imageDescription = data.choices[0]?.message?.content;
   
   if (!imageDescription || typeof imageDescription !== 'string') {
     throw new Error('Keine gültige Bildbeschreibung von der Analyse erhalten.');
   }
 
-  console.log(`Generated image description: ${imageDescription.substring(0, 100)}...`);
-  return imageDescription.trim();
+  // Apply intelligent truncation
+  imageDescription = truncatePromptIntelligently(imageDescription.trim(), 950);
+  
+  console.log(`Generated image description (${imageDescription.length} characters): ${imageDescription.substring(0, 100)}...`);
+  return imageDescription;
 }
 
 function generateOptimizedPrompt(title: string, category: string, content: string): string {
@@ -146,39 +194,40 @@ function generateOptimizedPrompt(title: string, category: string, content: strin
   const themes = extractKeyThemes(content, title);
   
   // Enhanced prompt with better context and specificity
-  let prompt = `Professional illustration for German parenting blog article: "${title.substring(0, 60)}${title.length > 60 ? '...' : ''}"
+  let prompt = `Professional illustration for German parenting blog: "${title.substring(0, 40)}${title.length > 40 ? '...' : ''}"
 
-Visual Style: ${categoryStyle}
-Emotional Tone: ${tone}
-Portrait orientation (3:4 aspect ratio), modern minimalist illustration style
-Warm pastel color palette with soft gradients
-European family representation, diverse and inclusive
-No text overlays or written words in the image
-`;
+Style: ${categoryStyle}
+Tone: ${tone}
+Portrait (3:4), modern illustration, warm pastels
+European family, diverse, no text overlays`;
 
   // Add theme-specific elements
   if (themes.length > 0) {
-    prompt += `\nThematic Elements: `;
-    if (themes.includes('nature')) prompt += 'Natural outdoor setting, ';
-    if (themes.includes('home')) prompt += 'Cozy indoor environment, ';
-    if (themes.includes('communication')) prompt += 'People in meaningful conversation, ';
-    if (themes.includes('education')) prompt += 'Learning and growth imagery, ';
-    if (themes.includes('routine')) prompt += 'Organized, structured elements, ';
-    if (themes.includes('emotion')) prompt += 'Emotionally expressive and authentic, ';
-    if (themes.includes('food')) prompt += 'Positive relationship with food and eating, ';
-    if (themes.includes('support')) prompt += 'Supportive and caring interactions, ';
+    prompt += `\nElements: `;
+    if (themes.includes('nature')) prompt += 'outdoor setting, ';
+    if (themes.includes('home')) prompt += 'cozy indoor, ';
+    if (themes.includes('communication')) prompt += 'meaningful conversation, ';
+    if (themes.includes('emotion')) prompt += 'emotionally expressive, ';
+    if (themes.includes('food')) prompt += 'positive food relationship, ';
+    if (themes.includes('support')) prompt += 'supportive interactions, ';
   }
 
-  prompt += `\nOverall Mood: Calming, professional yet approachable, hopeful and supportive
-Art Style: Contemporary digital illustration, clean lines, gentle shadows
-Lighting: Soft, natural lighting that creates warmth and comfort`;
+  prompt += `\nMood: Calming, professional, hopeful
+Art: Contemporary digital, clean lines, soft lighting`;
 
+  // Apply intelligent truncation
+  prompt = truncatePromptIntelligently(prompt, 950);
+  
   console.log(`Generated enhanced prompt (${prompt.length} characters) with themes:`, themes);
   return prompt;
 }
 
 async function generateImageFromPrompt(imagePrompt: string): Promise<string> {
   console.log('Generating image with DALL-E 3 from provided prompt...');
+
+  // Apply truncation as safety measure
+  const truncatedPrompt = truncatePromptIntelligently(imagePrompt, 950);
+  console.log(`Using prompt (${truncatedPrompt.length} characters): ${truncatedPrompt.substring(0, 100)}...`);
 
   const response = await fetch('https://api.openai.com/v1/images/generations', {
     method: 'POST',
@@ -188,7 +237,7 @@ async function generateImageFromPrompt(imagePrompt: string): Promise<string> {
     },
     body: JSON.stringify({
       model: 'dall-e-3',
-      prompt: imagePrompt,
+      prompt: truncatedPrompt,
       n: 1,
       size: '1024x1024',
       quality: 'standard',
@@ -257,9 +306,7 @@ function validateRequest(body: any): { isValid: boolean; error?: string } {
     if (!body.imagePrompt || typeof body.imagePrompt !== 'string' || !body.imagePrompt.trim()) {
       return { isValid: false, error: 'Image prompt is required for image generation' };
     }
-    if (body.imagePrompt.length > 1000) {
-      return { isValid: false, error: 'Image prompt is too long (max 1000 characters)' };
-    }
+    // Removed the length check here since we now handle truncation automatically
   }
   
   return { isValid: true };
@@ -306,9 +353,9 @@ serve(async (req) => {
     }
     
     if (mode === 'generate') {
-      console.log(`Generating image from prompt: ${imagePrompt.substring(0, 100)}...`);
+      console.log(`Generating image from prompt (${imagePrompt.length} characters): ${imagePrompt.substring(0, 100)}...`);
       
-      // Use DALL-E 3 to generate image from the provided prompt
+      // Use DALL-E 3 to generate image from the provided prompt (with automatic truncation)
       const imageUrl = await generateImageFromPrompt(imagePrompt);
       
       console.log('Successfully generated image from prompt');
