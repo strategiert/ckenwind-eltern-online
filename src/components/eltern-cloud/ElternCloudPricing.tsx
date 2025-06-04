@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -69,7 +68,7 @@ const ElternCloudPricing = () => {
           {/* PREMIUM Paket */}
           <Card className="relative border-2 border-rueckenwind-purple">
             <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-              <span className="bg-rueckenwind-purple text-white px-4 py-1 rounded-full text-sm font-medium">
+              <span className="bg-rueckenwind-purple text-white px-4 py-1 rounded-full text-sm font-medium whitespace-nowrap">
                 ⭐ BELIEBTESTE OPTION
               </span>
             </div>
@@ -180,4 +179,3 @@ const ElternCloudPricing = () => {
 };
 
 export default ElternCloudPricing;
-
