@@ -536,6 +536,10 @@ export type Database = {
         Args: { user_id: string }
         Returns: boolean
       }
+      is_admin_user: {
+        Args: { user_id?: string }
+        Returns: boolean
+      }
     }
     Enums: {
       glossary_category:
