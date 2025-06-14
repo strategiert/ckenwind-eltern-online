@@ -95,6 +95,11 @@ export async function fetchGlossaryTerms(): Promise<GlossaryItem[]> {
     throw error;
   }
 
+  if (!terms || !Array.isArray(terms)) {
+    console.warn('No glossary terms found');
+    return [];
+  }
+
   // Transform to GlossaryItem format
   return terms.map(term => transformDatabaseTermToGlossaryItem(term));
 }

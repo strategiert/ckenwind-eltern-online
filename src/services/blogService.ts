@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables, TablesInsert, TablesUpdate } from "@/integrations/supabase/types";
 
@@ -15,7 +14,7 @@ export const blogService = {
       .select("*")
       .eq("published", true)
       .order("published_at", { ascending: false });
-    
+
     if (error) {
       console.error("Error fetching published posts:", error);
       throw error;
@@ -33,12 +32,16 @@ export const blogService = {
       .eq("slug", slug)
       .eq("published", true)
       .single();
-    
+
     if (error) {
       console.error("Error fetching post by slug:", error);
       throw error;
     }
-    console.log("Fetched post:", data?.title);
+    if (!data) {
+      console.warn("No blog post found for slug:", slug);
+    } else {
+      console.log("Fetched post:", data?.title);
+    }
     return data;
   },
 
