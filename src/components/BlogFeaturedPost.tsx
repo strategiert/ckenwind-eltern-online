@@ -5,47 +5,31 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Clock, User } from 'lucide-react';
 
-interface BlogFeaturedPost {
-  id: string | number;
+interface BlogPost {
+  id: number;
   title: string;
-  excerpt?: string;
-  date?: string;
-  imageUrl?: string;
+  excerpt: string;
+  date: string;
+  imageUrl: string;
   slug: string;
-  category?: string;
-  categoryLabel?: string;
+  category: string;
+  categoryLabel: string;
   tags?: string[];
   readingTime?: number;
   author?: string;
   featured?: boolean;
-  // Also support Supabase format
-  image_url?: string;
-  category_label?: string;
-  reading_time?: number;
-  created_at?: string;
 }
 
 interface BlogFeaturedPostProps {
-  post: BlogFeaturedPost;
+  post: BlogPost;
 }
 
 const BlogFeaturedPost: React.FC<BlogFeaturedPostProps> = ({ post }) => {
-  // Helper functions to get the right property regardless of format
   const getImageUrl = () => {
-    const url = post.image_url || post.imageUrl;
-    if (url && url.trim() !== '') {
-      return url;
+    if (post.imageUrl && post.imageUrl.trim() !== '') {
+      return post.imageUrl;
     }
     return "https://images.unsplash.com/photo-1541199249251-f713e6145474?q=80&w=1974&auto=format&fit=crop";
-  };
-
-  const getCategoryLabel = () => post.category_label || post.categoryLabel || '';
-  const getReadingTime = () => post.reading_time || post.readingTime;
-  const getDate = () => {
-    if (post.created_at) {
-      return new Date(post.created_at).toLocaleDateString('de-DE');
-    }
-    return post.date || '';
   };
 
   return (
@@ -67,15 +51,13 @@ const BlogFeaturedPost: React.FC<BlogFeaturedPostProps> = ({ post }) => {
       </div>
       <CardHeader className="pb-2">
         <div className="flex items-center gap-2 mb-2">
-          {getCategoryLabel() && (
-            <Badge variant="outline" className="text-rueckenwind-purple">
-              {getCategoryLabel()}
-            </Badge>
-          )}
-          {getReadingTime() && (
+          <Badge variant="outline" className="text-rueckenwind-purple">
+            {post.categoryLabel}
+          </Badge>
+          {post.readingTime && (
             <div className="flex items-center text-gray-500 text-sm">
               <Clock className="w-4 h-4 mr-1" />
-              {getReadingTime()} Min. Lesezeit
+              {post.readingTime} Min. Lesezeit
             </div>
           )}
         </div>
@@ -92,7 +74,7 @@ const BlogFeaturedPost: React.FC<BlogFeaturedPostProps> = ({ post }) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center text-gray-500 text-sm">
             <User className="w-4 h-4 mr-1" />
-            {post.author || 'Janike Arent'} • {getDate()}
+            {post.author || 'Janike Arent'} • {post.date}
           </div>
           <Link 
             to={`/blog/${post.slug}`} 

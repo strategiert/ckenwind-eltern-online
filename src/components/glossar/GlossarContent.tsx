@@ -1,14 +1,11 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useGlossaryTerms, useGlossarySearch, useGlossaryTermsByTag } from '@/hooks/useGlossary';
+import { glossaryData } from '@/data/glossaryData';
 import GlossarSearch from './GlossarSearch';
 import GlossarAlphabet from './GlossarAlphabet';
 import GlossarLetterSection from './GlossarLetterSection';
 import GlossarViewToggle from './GlossarViewToggle';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle } from 'lucide-react';
 
 interface GlossarContentProps {
   activeFilter: string;
@@ -35,47 +32,27 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
     }
   }, [searchParams, setActiveFilter]);
 
-  // Use appropriate hook based on current state
-  const allTermsQuery = useGlossaryTerms();
-  const searchQuery = useGlossarySearch(searchTerm);
-  const tagQuery = useGlossaryTermsByTag(activeFilter);
-
-  // Determine which data to use
-  const { data: glossaryItems, isLoading, error } = useMemo(() => {
-    if (searchTerm && searchTerm.length >= 2) {
-      return searchQuery;
-    } else if (activeFilter !== 'all' && !['Diagnose', 'Therapie', 'Symptom', 'Konzept', 'Alltag', 'Burnout', 'ADHS', 'Essstörung'].includes(activeFilter)) {
-      return tagQuery;
-    } else {
-      return allTermsQuery;
-    }
-  }, [searchTerm, activeFilter, allTermsQuery, searchQuery, tagQuery]);
-
-  // Filter items based on activeFilter for predefined categories
-  const filteredItems = useMemo(() => {
-    if (!glossaryItems) return [];
+  // Filter glossary items based on active filter and search term
+  const filteredItems = glossaryData.filter(item => {
+    const matchesFilter = activeFilter === 'all' || 
+      item.tags.some(tag => tag.toLowerCase().includes(activeFilter.toLowerCase()));
     
-    if (activeFilter === 'all' || searchTerm) {
-      return glossaryItems;
-    }
-
-    // Handle predefined filter categories
-    return glossaryItems.filter(item => 
-      item.tags.some(tag => tag.toLowerCase().includes(activeFilter.toLowerCase()))
-    );
-  }, [glossaryItems, activeFilter, searchTerm]);
+    const matchesSearch = !searchTerm || 
+      item.term.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      item.definition.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    return matchesFilter && matchesSearch;
+  });
 
   // Group glossary items by first letter
-  const groupedItems = useMemo(() => {
-    return filteredItems.reduce((acc, item) => {
-      const firstLetter = item.term.charAt(0).toUpperCase();
-      if (!acc[firstLetter]) {
-        acc[firstLetter] = [];
-      }
-      acc[firstLetter].push(item);
-      return acc;
-    }, {} as Record<string, typeof filteredItems>);
-  }, [filteredItems]);
+  const groupedItems = filteredItems.reduce((acc, item) => {
+    const firstLetter = item.term.charAt(0).toUpperCase();
+    if (!acc[firstLetter]) {
+      acc[firstLetter] = [];
+    }
+    acc[firstLetter].push(item);
+    return acc;
+  }, {} as Record<string, typeof glossaryData>);
 
   // Get unique alphabet letters that have items
   const letters = Object.keys(groupedItems).sort();
@@ -83,60 +60,6 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
   const handleTermClick = (slug: string) => {
     navigate(`/glossar/${slug}`);
   };
-
-  // Loading state
-  if (isLoading) {
-    return (
-      <section className="py-16">
-        <div className="container-custom">
-          <GlossarSearch 
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            activeFilter={activeFilter}
-            setActiveFilter={setActiveFilter}
-          />
-          
-          <GlossarViewToggle view={view} setView={setView} />
-          
-          <div className="space-y-8">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="space-y-4">
-                <Skeleton className="h-8 w-16" />
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {[1, 2, 3].map((j) => (
-                    <Skeleton key={j} className="h-32" />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  // Error state
-  if (error) {
-    return (
-      <section className="py-16">
-        <div className="container-custom">
-          <GlossarSearch 
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            activeFilter={activeFilter}
-            setActiveFilter={setActiveFilter}
-          />
-          
-          <Alert className="mt-8">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Fehler beim Laden der Glossar-Einträge. Bitte versuchen Sie es später erneut.
-            </AlertDescription>
-          </Alert>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section className="py-16">
@@ -156,7 +79,7 @@ const GlossarContent: React.FC<GlossarContentProps> = ({
         <GlossarAlphabet groupedItems={groupedItems} />
 
         {/* No results message */}
-        {letters.length === 0 && !isLoading && (
+        {letters.length === 0 && (
           <div className="text-center py-20">
             <h3 className="text-xl font-semibold text-gray-700 mb-2">Keine Ergebnisse gefunden</h3>
             <p className="text-gray-600">

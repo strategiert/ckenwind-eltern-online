@@ -4,12 +4,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, X } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const { user } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -18,7 +16,6 @@ const Navbar = () => {
     { href: '/ueber-mich', label: 'Über mich' },
     { href: '/blog', label: 'Blog' },
     { href: '/glossar', label: 'Glossar' },
-    { href: '/eltern-cloud', label: 'Eltern-Cloud' },
     { href: '/gratis-buch', label: 'Gratis Buch' },
     { href: '/kontakt', label: 'Kontakt' },
   ];
@@ -48,26 +45,6 @@ const Navbar = () => {
                 {item.label}
               </Link>
             ))}
-            
-            {/* Admin Links for authenticated admin users */}
-            {user && (
-              <div className="flex items-center space-x-4 ml-4 pl-4 border-l">
-                <Link
-                  to="/admin/blog"
-                  className="text-sm text-gray-500 hover:text-rueckenwind-purple"
-                  title="Blog Admin"
-                >
-                  Blog Admin
-                </Link>
-                <Link
-                  to="/admin/glossary"
-                  className="text-sm text-gray-500 hover:text-rueckenwind-purple"
-                  title="Glossary Admin"
-                >
-                  Glossar Admin
-                </Link>
-              </div>
-            )}
           </div>
 
           {/* Mobile Navigation */}
@@ -94,27 +71,6 @@ const Navbar = () => {
                       {item.label}
                     </Link>
                   ))}
-                  {/* Admin Links in Mobile Navigation */}
-                  {user && (
-                    <>
-                      <Link
-                        to="/admin/blog"
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-rueckenwind-purple hover:bg-rueckenwind-light-purple"
-                        title="Blog Admin"
-                      >
-                        Blog Admin
-                      </Link>
-                      <Link
-                        to="/admin/glossary"
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-2 px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-rueckenwind-purple hover:bg-rueckenwind-light-purple"
-                        title="Glossar Admin"
-                      >
-                        Glossar Admin
-                      </Link>
-                    </>
-                  )}
                 </div>
               </SheetContent>
             </Sheet>
@@ -126,4 +82,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

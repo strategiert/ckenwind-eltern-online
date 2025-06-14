@@ -206,186 +206,6 @@ export type Database = {
         }
         Relationships: []
       }
-      glossary_literary_devices: {
-        Row: {
-          content: string
-          created_at: string | null
-          id: string
-          order_index: number | null
-          term_id: string | null
-          title: string
-        }
-        Insert: {
-          content: string
-          created_at?: string | null
-          id?: string
-          order_index?: number | null
-          term_id?: string | null
-          title: string
-        }
-        Update: {
-          content?: string
-          created_at?: string | null
-          id?: string
-          order_index?: number | null
-          term_id?: string | null
-          title?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "glossary_literary_devices_term_id_fkey"
-            columns: ["term_id"]
-            isOneToOne: false
-            referencedRelation: "glossary_terms"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      glossary_references: {
-        Row: {
-          created_at: string | null
-          id: string
-          order_index: number | null
-          reference_text: string
-          term_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          order_index?: number | null
-          reference_text: string
-          term_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          order_index?: number | null
-          reference_text?: string
-          term_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "glossary_references_term_id_fkey"
-            columns: ["term_id"]
-            isOneToOne: false
-            referencedRelation: "glossary_terms"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      glossary_related_terms: {
-        Row: {
-          created_at: string | null
-          id: string
-          related_term_id: string | null
-          term_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          related_term_id?: string | null
-          term_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          related_term_id?: string | null
-          term_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "glossary_related_terms_related_term_id_fkey"
-            columns: ["related_term_id"]
-            isOneToOne: false
-            referencedRelation: "glossary_terms"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "glossary_related_terms_term_id_fkey"
-            columns: ["term_id"]
-            isOneToOne: false
-            referencedRelation: "glossary_terms"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      glossary_sections: {
-        Row: {
-          content: string
-          created_at: string | null
-          id: string
-          order_index: number | null
-          term_id: string | null
-          title: string
-        }
-        Insert: {
-          content: string
-          created_at?: string | null
-          id?: string
-          order_index?: number | null
-          term_id?: string | null
-          title: string
-        }
-        Update: {
-          content?: string
-          created_at?: string | null
-          id?: string
-          order_index?: number | null
-          term_id?: string | null
-          title?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "glossary_sections_term_id_fkey"
-            columns: ["term_id"]
-            isOneToOne: false
-            referencedRelation: "glossary_terms"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      glossary_terms: {
-        Row: {
-          alias: string | null
-          category: Database["public"]["Enums"]["glossary_category"]
-          created_at: string | null
-          definition: string
-          id: string
-          is_published: boolean | null
-          slug: string
-          tags: string[] | null
-          teaser: string | null
-          term: string
-          updated_at: string | null
-        }
-        Insert: {
-          alias?: string | null
-          category?: Database["public"]["Enums"]["glossary_category"]
-          created_at?: string | null
-          definition: string
-          id?: string
-          is_published?: boolean | null
-          slug: string
-          tags?: string[] | null
-          teaser?: string | null
-          term: string
-          updated_at?: string | null
-        }
-        Update: {
-          alias?: string | null
-          category?: Database["public"]["Enums"]["glossary_category"]
-          created_at?: string | null
-          definition?: string
-          id?: string
-          is_published?: boolean | null
-          slug?: string
-          tags?: string[] | null
-          teaser?: string | null
-          term?: string
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
       icd10_conditions: {
         Row: {
           category: string | null
@@ -528,27 +348,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      create_admin_user: {
-        Args: { user_email: string; user_password: string }
-        Returns: string
-      }
       is_admin: {
         Args: { user_id: string }
         Returns: boolean
       }
-      is_admin_user: {
-        Args: { user_id?: string }
-        Returns: boolean
-      }
     }
     Enums: {
-      glossary_category:
-        | "eltern-burnout"
-        | "adhs"
-        | "esstoerungen"
-        | "psychologie"
-        | "therapie"
-        | "allgemein"
       severity_level: "mild" | "moderate" | "severe"
     }
     CompositeTypes: {
@@ -665,14 +470,6 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      glossary_category: [
-        "eltern-burnout",
-        "adhs",
-        "esstoerungen",
-        "psychologie",
-        "therapie",
-        "allgemein",
-      ],
       severity_level: ["mild", "moderate", "severe"],
     },
   },

@@ -1,5 +1,5 @@
 
-import { useState, Suspense } from "react";
+import { useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,45 +14,24 @@ import ICD10DataSeeder from "./components/mental-health/ICD10DataSeeder";
 import FloatingChatButton from "./components/mental-health/FloatingChatButton";
 import ChatModal from "./components/mental-health/ChatModal";
 
-// Import critical pages directly (no lazy loading for homepage)
+// Import all page components
 import Index from "@/pages/Index";
+import UeberMich from "@/pages/UeberMich";
+import Blog from "@/pages/Blog";
+import BlogPost from "@/pages/BlogPost";
+import BlogCategory from "@/pages/BlogCategory";
+import BlogArchive from "@/pages/BlogArchive";
 import Auth from "@/pages/Auth";
 import BlogAdmin from "@/pages/BlogAdmin";
-import GlossaryAdmin from "@/pages/GlossaryAdmin";
+import GratisBuch from "@/pages/GratisBuch";
+import Glossar from "@/pages/Glossar";
+import GlossaryDetail from "@/pages/GlossaryDetail";
+import Kontakt from "@/pages/Kontakt";
+import MentalHealthChat from "@/pages/MentalHealthChat";
+import Impressum from "@/pages/Impressum";
 import NotFound from "@/pages/NotFound";
 
-// Import lazy components
-import LazyElternCloud from "@/components/lazy/LazyElternCloud";
-import LazyUeberMich from "@/components/lazy/LazyUeberMich";
-import LazyBlog from "@/components/lazy/LazyBlog";
-import LazyGlossar from "@/components/lazy/LazyGlossary";
-import LazyKontakt from "@/components/lazy/LazyKontakt";
-import LazyGratisBuch from "@/components/lazy/LazyGratisBuch";
-
-// Lazy load other components
-import { lazy } from "react";
-const LazyBlogPost = lazy(() => import("@/pages/BlogPost"));
-const LazyBlogCategory = lazy(() => import("@/pages/BlogCategory"));
-const LazyBlogArchive = lazy(() => import("@/pages/BlogArchive"));
-const LazyGlossaryDetail = lazy(() => import("@/pages/GlossaryDetail"));
-const LazyMentalHealthChat = lazy(() => import("@/pages/MentalHealthChat"));
-const LazyImpressum = lazy(() => import("@/pages/Impressum"));
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      gcTime: 10 * 60 * 1000, // 10 minutes
-    },
-  },
-});
-
-// Loading fallback component
-const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-rueckenwind-purple"></div>
-  </div>
-);
+const queryClient = new QueryClient();
 
 const App = () => {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
@@ -68,41 +47,30 @@ const App = () => {
             <Sonner />
             <ICD10DataSeeder />
             <BrowserRouter>
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/ueber-mich" element={<LazyUeberMich />} />
-                  <Route path="/blog" element={<LazyBlog />} />
-                  <Route path="/blog/:slug" element={<LazyBlogPost />} />
-                  <Route path="/blog/category/:category" element={<LazyBlogCategory />} />
-                  <Route path="/blog/archive" element={<LazyBlogArchive />} />
-                  <Route path="/auth/login" element={<Auth />} />
-                  <Route 
-                    path="/admin/blog" 
-                    element={
-                      <ProtectedRoute requireAdmin>
-                        <BlogAdmin />
-                      </ProtectedRoute>
-                    } 
-                  />
-                  <Route 
-                    path="/admin/glossary" 
-                    element={
-                      <ProtectedRoute requireAdmin>
-                        <GlossaryAdmin />
-                      </ProtectedRoute>
-                    } 
-                  />
-                  <Route path="/gratis-buch" element={<LazyGratisBuch />} />
-                  <Route path="/glossar" element={<LazyGlossar />} />
-                  <Route path="/glossar/:slug" element={<LazyGlossaryDetail />} />
-                  <Route path="/kontakt" element={<LazyKontakt />} />
-                  <Route path="/mental-health-chat" element={<LazyMentalHealthChat />} />
-                  <Route path="/eltern-cloud" element={<LazyElternCloud />} />
-                  <Route path="/impressum" element={<LazyImpressum />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/ueber-mich" element={<UeberMich />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<BlogPost />} />
+                <Route path="/blog/category/:category" element={<BlogCategory />} />
+                <Route path="/blog/archive" element={<BlogArchive />} />
+                <Route path="/auth/login" element={<Auth />} />
+                <Route 
+                  path="/admin/blog" 
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <BlogAdmin />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route path="/gratis-buch" element={<GratisBuch />} />
+                <Route path="/glossar" element={<Glossar />} />
+                <Route path="/glossar/:slug" element={<GlossaryDetail />} />
+                <Route path="/kontakt" element={<Kontakt />} />
+                <Route path="/mental-health-chat" element={<MentalHealthChat />} />
+                <Route path="/impressum" element={<Impressum />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
               
               <FloatingChatButton onClick={() => setIsChatModalOpen(true)} />
               <ChatModal 
