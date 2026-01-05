@@ -23,6 +23,7 @@ import BlogCategory from "@/pages/BlogCategory";
 import BlogArchive from "@/pages/BlogArchive";
 import Auth from "@/pages/Auth";
 import AuthCallback from "@/pages/AuthCallback";
+import AdminDashboard from "@/pages/AdminDashboard";
 import BlogAdmin from "@/pages/BlogAdmin";
 import GlossaryAdmin from "@/pages/GlossaryAdmin";
 import ContentAutomationAdmin from "@/pages/ContentAutomationAdmin";
@@ -59,6 +60,14 @@ const App = () => {
                 <Route path="/blog/archive" element={<BlogArchive />} />
                 <Route path="/auth/login" element={<Auth />} />
                 <Route path="/auth/callback" element={<AuthCallback />} />
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <AdminDashboard />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route
                   path="/admin/blog"
                   element={

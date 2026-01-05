@@ -60,7 +60,7 @@ const AuthCallback = () => {
 
           // Redirect based on admin status
           if (profile?.is_admin) {
-            navigate('/admin/blog', { replace: true });
+            navigate('/admin', { replace: true });
           } else {
             navigate('/', { replace: true });
           }
