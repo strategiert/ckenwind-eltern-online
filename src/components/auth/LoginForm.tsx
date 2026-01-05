@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useAuth } from '@/contexts/AuthContext';
-import { Lock, Mail, Eye, EyeOff, Chrome } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, Chrome, Loader2 } from 'lucide-react';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
@@ -15,9 +15,39 @@ const LoginForm = () => {
   const { signIn, signInWithGoogle, loading, user, isAdmin } = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
 
+  // Show loading while auth state is being determined
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-rueckenwind-light-purple to-white">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 animate-spin text-rueckenwind-purple mx-auto mb-4" />
+          <p className="text-gray-600">Wird geladen...</p>
+        </div>
+      </div>
+    );
+  }
+
   // Redirect if already logged in as admin
   if (user && isAdmin) {
-    return <Navigate to="/admin/blog" replace />;
+    return <Navigate to="/admin" replace />;
+  }
+
+  // If logged in but not admin, show message
+  if (user && !isAdmin) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-rueckenwind-light-purple to-white">
+        <Card className="w-full max-w-md">
+          <CardContent className="pt-6 text-center">
+            <p className="text-gray-600 mb-4">
+              Sie sind angemeldet als {user.email}, haben aber keine Admin-Berechtigung.
+            </p>
+            <Button onClick={() => window.location.href = '/'} variant="outline">
+              Zur Startseite
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
