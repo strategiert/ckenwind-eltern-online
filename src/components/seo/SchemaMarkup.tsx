@@ -3,7 +3,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 interface SchemaMarkupProps {
-  type: 'website' | 'article' | 'person' | 'organization' | 'breadcrumb';
+  type: 'website' | 'article' | 'person' | 'organization' | 'breadcrumb' | 'glossary' | 'faq';
   data: any;
 }
 
@@ -113,6 +113,65 @@ const SchemaMarkup: React.FC<SchemaMarkupProps> = ({ type, data }) => {
             position: index + 1,
             name: item.name,
             item: item.url
+          }))
+        };
+
+      case 'glossary':
+        // DefinedTerm Schema für Glossar-Einträge
+        return {
+          ...baseSchema,
+          "@type": "DefinedTerm",
+          "@id": data.url,
+          name: data.term,
+          description: data.definition,
+          inDefinedTermSet: {
+            "@type": "DefinedTermSet",
+            "@id": `${data.baseUrl}/glossar`,
+            name: "Rückenwind Eltern Glossar",
+            description: "Fachbegriffe aus Psychologie und Elternberatung verständlich erklärt"
+          },
+          ...(data.alias && { alternateName: data.alias }),
+          ...(data.image && { image: data.image }),
+          url: data.url,
+          datePublished: data.datePublished,
+          dateModified: data.dateModified,
+          author: {
+            "@type": "Organization",
+            name: "Rückenwind Eltern",
+            url: data.baseUrl
+          },
+          publisher: {
+            "@type": "Organization",
+            name: "Rückenwind Eltern",
+            logo: {
+              "@type": "ImageObject",
+              url: `${data.baseUrl}/lovable-uploads/5a353323-d780-4159-976a-7e93624fb784.png`
+            }
+          },
+          mainEntityOfPage: {
+            "@type": "WebPage",
+            "@id": data.url
+          },
+          ...(data.relatedTerms && data.relatedTerms.length > 0 && {
+            relatedLink: data.relatedTerms.map((t: any) => `${data.baseUrl}/glossar/${t.slug}`)
+          }),
+          ...(data.tags && data.tags.length > 0 && {
+            keywords: data.tags.join(", ")
+          })
+        };
+
+      case 'faq':
+        // FAQ Schema für häufig gestellte Fragen
+        return {
+          ...baseSchema,
+          "@type": "FAQPage",
+          mainEntity: data.questions.map((q: any) => ({
+            "@type": "Question",
+            name: q.question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: q.answer
+            }
           }))
         };
 
