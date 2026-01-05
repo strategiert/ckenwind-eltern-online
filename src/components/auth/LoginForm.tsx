@@ -6,13 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useAuth } from '@/contexts/AuthContext';
-import { Lock, Mail, Eye, EyeOff } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, Chrome } from 'lucide-react';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const { signIn, loading, user, isAdmin } = useAuth();
+  const { signIn, signInWithGoogle, loading, user, isAdmin } = useAuth();
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   // Redirect if already logged in as admin
   if (user && isAdmin) {
@@ -21,12 +22,21 @@ const LoginForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email || !password) {
       return;
     }
 
     await signIn(email, password);
+  };
+
+  const handleGoogleLogin = async () => {
+    setGoogleLoading(true);
+    try {
+      await signInWithGoogle();
+    } finally {
+      setGoogleLoading(false);
+    }
   };
 
   return (
@@ -83,9 +93,29 @@ const LoginForm = () => {
             <Button
               type="submit"
               className="w-full bg-rueckenwind-purple hover:bg-rueckenwind-dark-purple"
-              disabled={loading}
+              disabled={loading || googleLoading}
             >
               {loading ? "Wird angemeldet..." : "Anmelden"}
+            </Button>
+
+            <div className="relative my-4">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-gray-300" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="bg-white px-2 text-gray-500">oder</span>
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={handleGoogleLogin}
+              disabled={loading || googleLoading}
+            >
+              <Chrome className="w-4 h-4 mr-2" />
+              {googleLoading ? "Wird verbunden..." : "Mit Google anmelden"}
             </Button>
           </form>
         </CardContent>

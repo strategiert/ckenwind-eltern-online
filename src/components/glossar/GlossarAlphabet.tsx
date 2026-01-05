@@ -1,8 +1,8 @@
-
 import React from 'react';
+import { GlossaryTermBasic } from '@/services/glossaryService';
 
 interface GlossarAlphabetProps {
-  groupedItems: Record<string, any[]>;
+  groupedItems: Record<string, GlossaryTermBasic[]>;
 }
 
 const GlossarAlphabet: React.FC<GlossarAlphabetProps> = ({ groupedItems }) => {

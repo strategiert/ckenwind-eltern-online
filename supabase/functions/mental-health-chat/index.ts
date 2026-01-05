@@ -1,14 +1,17 @@
-
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+// Gemini 3 Konfiguration - Neuestes Modell (Januar 2026)
+const GEMINI_MODEL = 'gemini-3-flash-preview'; // Schnell, intelligent, empathisch
+const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+const geminiApiKey = Deno.env.get('GEMINI_API_KEY');
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
@@ -21,7 +24,7 @@ serve(async (req) => {
 
   try {
     const { message, sessionId } = await req.json();
-    
+
     console.log('Processing message:', message, 'for session:', sessionId);
 
     // Get chat history for context
@@ -37,7 +40,7 @@ serve(async (req) => {
       .select('code, title, symptoms, description, category')
       .limit(50);
 
-    const systemPrompt = `Du bist der einfühlsame Mental Health Assistent von "Rückenwind Eltern" - einer spezialisierten Beratungsplattform für deutsche Eltern in belastenden Situationen. 
+    const systemPrompt = `Du bist der einfühlsame Mental Health Assistent von "Rückenwind Eltern" - einer spezialisierten Beratungsplattform für deutsche Eltern in belastenden Situationen.
 
 DEINE IDENTITÄT UND MISSION:
 - Du repräsentierst "Rückenwind Eltern" und bist Teil unseres professionellen Beratungsteams
@@ -85,28 +88,73 @@ Bei akuten Krisen oder Suizidgedanken: Notfallnummern erwähnen UND gleichzeitig
 
 Du bist nicht nur ein Chatbot, sondern der erste Kontaktpunkt zu unserem professionellen Beratungsteam. Dein Ziel ist es, Menschen dabei zu helfen, den Mut zu fassen, den nächsten Schritt zu einer persönlichen Beratung zu gehen.`;
 
-    const messages = [
-      { role: 'system', content: systemPrompt },
-      ...(chatHistory || []),
-      { role: 'user', content: message }
-    ];
+    // Konvertiere Chat-History in Gemini-Format
+    // Gemini verwendet 'model' statt 'assistant' und 'parts' statt 'content'
+    const geminiHistory = (chatHistory || []).map((msg: { role: string; content: string }) => ({
+      role: msg.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: msg.content }]
+    }));
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: messages,
-        temperature: 0.7,
-        max_tokens: 500,
-      }),
-    });
+    // Gemini 3 Flash API Request
+    const response = await fetch(
+      `${GEMINI_API_BASE}/models/${GEMINI_MODEL}:generateContent?key=${geminiApiKey}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [
+            // System-Anweisung als erstes User/Model Paar
+            {
+              role: 'user',
+              parts: [{ text: systemPrompt }]
+            },
+            {
+              role: 'model',
+              parts: [{ text: 'Ich verstehe meine Rolle als einfühlsamer Mental Health Assistent von Rückenwind Eltern. Ich bin bereit, Eltern in schwierigen Situationen zu unterstützen und sie auf unserem Weg zu professioneller Beratung zu begleiten. Wie kann ich Ihnen heute helfen?' }]
+            },
+            // Bestehende Chat-Historie
+            ...geminiHistory,
+            // Aktuelle Nachricht
+            {
+              role: 'user',
+              parts: [{ text: message }]
+            }
+          ],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 1024,
+            topP: 0.9,
+            topK: 40,
+          },
+          safetySettings: [
+            {
+              category: 'HARM_CATEGORY_HARASSMENT',
+              threshold: 'BLOCK_MEDIUM_AND_ABOVE'
+            },
+            {
+              category: 'HARM_CATEGORY_HATE_SPEECH',
+              threshold: 'BLOCK_MEDIUM_AND_ABOVE'
+            },
+            {
+              category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
+              threshold: 'BLOCK_MEDIUM_AND_ABOVE'
+            },
+            {
+              category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+              threshold: 'BLOCK_ONLY_HIGH'
+            }
+          ]
+        }),
+      }
+    );
 
     const data = await response.json();
-    const aiResponse = data.choices[0].message.content;
+
+    // Gemini Response-Format: candidates[0].content.parts[0].text
+    const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text
+      || 'Es tut mir leid, ich konnte keine Antwort generieren. Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt über unsere Kontaktseite.';
 
     // Save user message
     await supabase.from('chat_messages').insert({
@@ -123,7 +171,7 @@ Du bist nicht nur ein Chatbot, sondern der erste Kontaktpunkt zu unserem profess
     });
 
     // German symptom detection (German keyword matching)
-    const symptoms = [];
+    const symptoms: string[] = [];
     const symptomKeywords = [
       'ängstlich', 'angst', 'sorgen', 'panik', 'furcht', 'nervös',
       'traurig', 'deprimiert', 'depression', 'hoffnungslos', 'niedergeschlagen', 'bedrückt',
@@ -161,7 +209,7 @@ Du bist nicht nur ein Chatbot, sondern der erste Kontaktpunkt zu unserem profess
       // Link to relevant ICD-10 conditions
       if (assessment && conditions) {
         const relevantConditions = conditions.filter(condition =>
-          condition.symptoms?.some(symptom =>
+          condition.symptoms?.some((symptom: string) =>
             symptoms.some(userSymptom =>
               symptom.toLowerCase().includes(userSymptom) ||
               userSymptom.includes(symptom.toLowerCase())
@@ -179,18 +227,19 @@ Du bist nicht nur ein Chatbot, sondern der erste Kontaktpunkt zu unserem profess
       }
     }
 
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       response: aiResponse,
-      detectedSymptoms: symptoms 
+      detectedSymptoms: symptoms,
+      model: GEMINI_MODEL
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
     console.error('Error in mental-health-chat function:', error);
-    return new Response(JSON.stringify({ 
+    return new Response(JSON.stringify({
       error: 'Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.',
-      details: error.message 
+      details: error.message
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
