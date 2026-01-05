@@ -76,7 +76,7 @@ jobs:
             libxfixes3 \
             libxrandr2 \
             libgbm1 \
-            libasound2
+            libasound2t64 || sudo apt-get install -y libasound2
 
       - name: Prerender Pages
         if: ${{ github.event.inputs.skip_prerender != 'true' }}
