@@ -32,36 +32,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAdmin, setIsAdmin] = useState(false);
   const { toast } = useToast();
 
-  // Helper function to check admin status
+  // Helper function to check admin status with timeout
   const checkAdminStatus = async (userId: string): Promise<boolean> => {
     try {
       console.log('Checking admin status for user:', userId);
-      const { data, error } = await supabase
+
+      // Add timeout to prevent hanging
+      const timeoutPromise = new Promise<{ data: null; error: Error }>((_, reject) =>
+        setTimeout(() => reject(new Error('Admin check timeout')), 5000)
+      );
+
+      const queryPromise = supabase
         .from('profiles')
         .select('is_admin')
         .eq('id', userId)
         .single();
 
+      const { data, error } = await Promise.race([queryPromise, timeoutPromise]);
+
       console.log('Admin check result:', { data, error });
 
       if (error) {
         console.error('Error checking admin status:', error);
-        // If error is "no rows returned", user might not have a profile yet
-        if (error.code === 'PGRST116') {
-          console.log('No profile found for user, creating one...');
-          // Try to create profile
-          const { error: insertError } = await supabase
-            .from('profiles')
-            .insert({ id: userId, is_admin: false });
-          if (insertError) {
-            console.error('Error creating profile:', insertError);
-          }
-        }
         return false;
       }
       return data?.is_admin || false;
     } catch (error) {
-      console.error('Error in admin check:', error);
+      console.error('Error in admin check (timeout or other):', error);
       return false;
     }
   };
