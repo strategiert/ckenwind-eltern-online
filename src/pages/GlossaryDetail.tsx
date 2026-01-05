@@ -4,8 +4,11 @@ import { useParams, Link } from 'react-router-dom';
 import { useGlossaryTerm, useGlossaryTerms } from '@/hooks/useGlossary';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import SchemaMarkup from '@/components/seo/SchemaMarkup';
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, BookOpen, Loader2 } from 'lucide-react';
+
+const BASE_URL = 'https://rueckenwind-eltern.de';
 
 const GlossaryDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -67,15 +70,59 @@ const GlossaryDetail = () => {
   const contentSections = term.sections?.filter(s => s.section_type === 'content' || !s.section_type) || [];
   const literaryDevices = term.sections?.filter(s => s.section_type === 'literary_device') || [];
 
+  const pageUrl = `${BASE_URL}/glossar/${slug}`;
+  const pageTitle = term.meta_title || `${term.term} | Glossar | Rückenwind Eltern`;
+  const pageDescription = term.meta_description || term.definition;
+
   return (
     <>
       <Helmet>
-        <title>{term.meta_title || `${term.term} | Glossar | Rückenwind Eltern`}</title>
-        <meta
-          name="description"
-          content={term.meta_description || term.definition}
-        />
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <link rel="canonical" href={pageUrl} />
+
+        {/* Open Graph */}
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Rückenwind Eltern" />
+        <meta property="og:locale" content="de_DE" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
       </Helmet>
+
+      {/* Schema.org: Glossar-Begriff (DefinedTerm) */}
+      <SchemaMarkup
+        type="glossary"
+        data={{
+          url: pageUrl,
+          baseUrl: BASE_URL,
+          term: term.term,
+          definition: term.definition,
+          alias: term.alias,
+          tags: term.tags,
+          datePublished: term.created_at,
+          dateModified: term.updated_at,
+          relatedTerms: term.relatedTerms
+        }}
+      />
+
+      {/* Schema.org: Breadcrumb */}
+      <SchemaMarkup
+        type="breadcrumb"
+        data={{
+          items: [
+            { name: 'Startseite', url: BASE_URL },
+            { name: 'Glossar', url: `${BASE_URL}/glossar` },
+            { name: term.term, url: pageUrl }
+          ]
+        }}
+      />
+
       <Navbar />
       <main className="min-h-screen">
         {/* Hero section with term title */}

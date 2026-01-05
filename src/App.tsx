@@ -24,6 +24,7 @@ import BlogArchive from "@/pages/BlogArchive";
 import Auth from "@/pages/Auth";
 import AuthCallback from "@/pages/AuthCallback";
 import BlogAdmin from "@/pages/BlogAdmin";
+import ContentAutomationAdmin from "@/pages/ContentAutomationAdmin";
 import GratisBuch from "@/pages/GratisBuch";
 import Glossar from "@/pages/Glossar";
 import GlossaryDetail from "@/pages/GlossaryDetail";
@@ -57,13 +58,21 @@ const App = () => {
                 <Route path="/blog/archive" element={<BlogArchive />} />
                 <Route path="/auth/login" element={<Auth />} />
                 <Route path="/auth/callback" element={<AuthCallback />} />
-                <Route 
-                  path="/admin/blog" 
+                <Route
+                  path="/admin/blog"
                   element={
                     <ProtectedRoute requireAdmin>
                       <BlogAdmin />
                     </ProtectedRoute>
-                  } 
+                  }
+                />
+                <Route
+                  path="/admin/content-automation"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <ContentAutomationAdmin />
+                    </ProtectedRoute>
+                  }
                 />
                 <Route path="/gratis-buch" element={<GratisBuch />} />
                 <Route path="/glossar" element={<Glossar />} />

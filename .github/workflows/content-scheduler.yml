@@ -1,0 +1,58 @@
+name: Content Scheduler
+
+on:
+  # Manueller Trigger
+  workflow_dispatch:
+    inputs:
+      items_per_run:
+        description: 'Anzahl zu generierender Items'
+        required: false
+        default: '3'
+      dry_run:
+        description: 'Dry Run (keine echte Generierung)'
+        required: false
+        default: 'false'
+        type: boolean
+
+  # Automatischer Schedule - alle 6 Stunden
+  schedule:
+    - cron: '0 */6 * * *'
+
+jobs:
+  trigger-scheduler:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Content Scheduler
+        run: |
+          ITEMS_PER_RUN="${{ github.event.inputs.items_per_run || '3' }}"
+          DRY_RUN="${{ github.event.inputs.dry_run || 'false' }}"
+
+          echo "Triggering Content Scheduler..."
+          echo "Items per run: $ITEMS_PER_RUN"
+          echo "Dry run: $DRY_RUN"
+
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+            "${{ secrets.SUPABASE_URL }}/functions/v1/content-scheduler" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"itemsPerRun\": $ITEMS_PER_RUN, \"dryRun\": $DRY_RUN}")
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "Response Code: $HTTP_CODE"
+          echo "Response Body: $BODY"
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "Error: Scheduler returned non-200 status code"
+            exit 1
+          fi
+
+          # Parse und zeige Ergebnis
+          echo "$BODY" | jq '.'
+
+      - name: Report Status
+        if: always()
+        run: |
+          echo "Scheduler run completed at $(date)"
