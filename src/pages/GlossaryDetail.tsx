@@ -1,19 +1,33 @@
-
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams, Link } from 'react-router-dom';
-import { getTermBySlug, getRelatedTerms, glossaryData } from '@/data/glossary';
+import { useGlossaryTerm, useGlossaryTerms } from '@/hooks/useGlossary';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, BookOpen } from 'lucide-react';
+import { ArrowLeft, BookOpen, Loader2 } from 'lucide-react';
 
 const GlossaryDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const term = getTermBySlug(slug || '');
-  
+  const { data: term, isLoading, error } = useGlossaryTerm(slug || '');
+  const { data: allTerms } = useGlossaryTerms();
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <>
+        <Navbar />
+        <div className="container-custom py-20 min-h-screen flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-rueckenwind-purple" />
+          <span className="ml-3 text-gray-600">Begriff wird geladen...</span>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
   // If term not found, render a "not found" message
-  if (!term) {
+  if (!term || error) {
     return (
       <>
         <Navbar />
@@ -33,30 +47,33 @@ const GlossaryDetail = () => {
     );
   }
 
-  // Get related terms if available
-  const relatedTerms = term.content?.relatedTerms ? getRelatedTerms(term.content.relatedTerms) : [];
-
   // Replace glossary term links in text
   const createTermLinks = (text: string) => {
     let processedText = text;
-    glossaryData.forEach(item => {
-      const regex = new RegExp(`\\b${item.term}\\b`, 'gi');
-      processedText = processedText.replace(regex, `<a href="/glossar/${item.slug}" class="text-rueckenwind-purple hover:underline">${item.term}</a>`);
-      if (item.alias) {
-        const aliasRegex = new RegExp(`\\b${item.alias}\\b`, 'gi');
-        processedText = processedText.replace(aliasRegex, `<a href="/glossar/${item.slug}" class="text-rueckenwind-purple hover:underline">${item.alias}</a>`);
-      }
-    });
+    if (allTerms) {
+      allTerms.forEach(item => {
+        const regex = new RegExp(`\\b${item.term}\\b`, 'gi');
+        processedText = processedText.replace(regex, `<a href="/glossar/${item.slug}" class="text-rueckenwind-purple hover:underline">${item.term}</a>`);
+        if (item.alias) {
+          const aliasRegex = new RegExp(`\\b${item.alias}\\b`, 'gi');
+          processedText = processedText.replace(aliasRegex, `<a href="/glossar/${item.slug}" class="text-rueckenwind-purple hover:underline">${item.alias}</a>`);
+        }
+      });
+    }
     return processedText;
   };
+
+  // Separate sections by type
+  const contentSections = term.sections?.filter(s => s.section_type === 'content' || !s.section_type) || [];
+  const literaryDevices = term.sections?.filter(s => s.section_type === 'literary_device') || [];
 
   return (
     <>
       <Helmet>
-        <title>{term.term} | Glossar | Rückenwind Eltern</title>
-        <meta 
-          name="description" 
-          content={term.definition}
+        <title>{term.meta_title || `${term.term} | Glossar | Rückenwind Eltern`}</title>
+        <meta
+          name="description"
+          content={term.meta_description || term.definition}
         />
       </Helmet>
       <Navbar />
@@ -73,14 +90,14 @@ const GlossaryDetail = () => {
               {term.alias && <span className="text-2xl md:text-3xl font-normal text-gray-600 ml-4">({term.alias})</span>}
             </h1>
             <div className="flex flex-wrap gap-2 mb-6">
-              {term.tags.map((tag, index) => (
+              {term.tags?.map((tag, index) => (
                 <Badge key={index} variant="outline" className="bg-rueckenwind-light-purple text-rueckenwind-purple border-none">
                   {tag}
                 </Badge>
               ))}
             </div>
             <p className="text-xl text-gray-700 max-w-3xl">
-              {term.content?.teaser || term.definition}
+              {term.teaser || term.definition}
             </p>
           </div>
         </section>
@@ -92,34 +109,34 @@ const GlossaryDetail = () => {
               {/* Main content */}
               <div className="lg:col-span-2 space-y-12">
                 {/* Table of contents */}
-                {term.content?.sections && term.content.sections.length > 0 && (
+                {contentSections.length > 0 && (
                   <div className="bg-gray-50 p-6 rounded-lg border border-gray-100 mb-8">
                     <h2 className="text-lg font-medium mb-4">Inhaltsverzeichnis</h2>
                     <ul className="space-y-2">
-                      {term.content.sections.map((section, index) => (
-                        <li key={index}>
-                          <a 
-                            href={`#section-${index}`} 
+                      {contentSections.map((section, index) => (
+                        <li key={section.id || index}>
+                          <a
+                            href={`#section-${index}`}
                             className="text-rueckenwind-purple hover:underline"
                           >
                             {section.title}
                           </a>
                         </li>
                       ))}
-                      {term.content.literaryDevices && term.content.literaryDevices.length > 0 && (
+                      {literaryDevices.length > 0 && (
                         <li>
-                          <a 
-                            href="#literary-devices" 
+                          <a
+                            href="#literary-devices"
                             className="text-rueckenwind-purple hover:underline"
                           >
                             Bildhafte Erklärungen
                           </a>
                         </li>
                       )}
-                      {term.content.references && term.content.references.length > 0 && (
+                      {term.references && term.references.length > 0 && (
                         <li>
-                          <a 
-                            href="#references" 
+                          <a
+                            href="#references"
                             className="text-rueckenwind-purple hover:underline"
                           >
                             Einzelnachweise
@@ -131,10 +148,10 @@ const GlossaryDetail = () => {
                 )}
 
                 {/* Main content sections */}
-                {term.content?.sections && term.content.sections.map((section, index) => (
-                  <div key={index} id={`section-${index}`} className="scroll-mt-20">
+                {contentSections.map((section, index) => (
+                  <div key={section.id || index} id={`section-${index}`} className="scroll-mt-20">
                     <h2 className="text-2xl font-semibold mb-4">{section.title}</h2>
-                    <div 
+                    <div
                       className="prose max-w-none"
                       dangerouslySetInnerHTML={{ __html: createTermLinks(section.content) }}
                     />
@@ -142,14 +159,14 @@ const GlossaryDetail = () => {
                 ))}
 
                 {/* Literary devices section */}
-                {term.content?.literaryDevices && term.content.literaryDevices.length > 0 && (
+                {literaryDevices.length > 0 && (
                   <div id="literary-devices" className="scroll-mt-20 bg-rueckenwind-soft-gray p-6 rounded-lg">
                     <h2 className="text-2xl font-semibold mb-4">Bildhafte Erklärungen</h2>
                     <div className="space-y-6">
-                      {term.content.literaryDevices.map((device, index) => (
-                        <div key={index} className="border-l-4 border-rueckenwind-light-purple pl-4">
+                      {literaryDevices.map((device, index) => (
+                        <div key={device.id || index} className="border-l-4 border-rueckenwind-light-purple pl-4">
                           <h3 className="text-lg font-medium mb-2">{device.title}</h3>
-                          <div 
+                          <div
                             className="prose max-w-none text-gray-700 italic"
                             dangerouslySetInnerHTML={{ __html: createTermLinks(device.content) }}
                           />
@@ -160,13 +177,19 @@ const GlossaryDetail = () => {
                 )}
 
                 {/* References section */}
-                {term.content?.references && term.content.references.length > 0 && (
+                {term.references && term.references.length > 0 && (
                   <div id="references" className="scroll-mt-20">
                     <h2 className="text-2xl font-semibold mb-4">Einzelnachweise</h2>
                     <ol className="list-decimal pl-5 space-y-2">
-                      {term.content.references.map((reference, index) => (
-                        <li key={index} className="text-gray-700">
-                          {reference}
+                      {term.references.map((reference, index) => (
+                        <li key={reference.id || index} className="text-gray-700">
+                          {reference.url ? (
+                            <a href={reference.url} target="_blank" rel="noopener noreferrer" className="text-rueckenwind-purple hover:underline">
+                              {reference.reference_text}
+                            </a>
+                          ) : (
+                            reference.reference_text
+                          )}
                         </li>
                       ))}
                     </ol>
@@ -177,13 +200,13 @@ const GlossaryDetail = () => {
               {/* Sidebar */}
               <div className="lg:col-span-1">
                 {/* Related terms */}
-                {relatedTerms.length > 0 && (
+                {term.relatedTerms && term.relatedTerms.length > 0 && (
                   <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm mb-8">
                     <h3 className="text-lg font-medium mb-4">Verwandte Begriffe</h3>
                     <div className="space-y-3">
-                      {relatedTerms.map((relatedTerm, index) => (
-                        <Link 
-                          key={index} 
+                      {term.relatedTerms.map((relatedTerm, index) => (
+                        <Link
+                          key={relatedTerm.id || index}
                           to={`/glossar/${relatedTerm.slug}`}
                           className="block p-3 bg-gray-50 hover:bg-rueckenwind-light-purple rounded-md transition-colors"
                         >
@@ -199,7 +222,7 @@ const GlossaryDetail = () => {
                 <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
                   <h3 className="text-lg font-medium mb-4">Kategorien & Tags</h3>
                   <div className="flex flex-wrap gap-2">
-                    {term.tags.map((tag, index) => (
+                    {term.tags?.map((tag, index) => (
                       <Link key={index} to={`/glossar?tag=${tag}`}>
                         <Badge variant="outline" className="cursor-pointer hover:bg-gray-100">
                           {tag}

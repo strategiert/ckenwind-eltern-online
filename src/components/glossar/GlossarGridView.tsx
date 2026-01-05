@@ -1,10 +1,10 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { BookOpen } from 'lucide-react';
+import { GlossaryTermBasic } from '@/services/glossaryService';
 
 interface GlossarGridViewProps {
-  items: any[];
+  items: GlossaryTermBasic[];
   onTermClick: (slug: string) => void;
 }
 

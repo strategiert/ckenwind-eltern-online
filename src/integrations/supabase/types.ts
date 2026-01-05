@@ -343,6 +343,342 @@ export type Database = {
           },
         ]
       }
+      glossary_terms: {
+        Row: {
+          id: string
+          term: string
+          slug: string
+          definition: string
+          teaser: string | null
+          alias: string | null
+          tags: string[] | null
+          meta_title: string | null
+          meta_description: string | null
+          is_published: boolean | null
+          view_count: number | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          term: string
+          slug: string
+          definition: string
+          teaser?: string | null
+          alias?: string | null
+          tags?: string[] | null
+          meta_title?: string | null
+          meta_description?: string | null
+          is_published?: boolean | null
+          view_count?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          term?: string
+          slug?: string
+          definition?: string
+          teaser?: string | null
+          alias?: string | null
+          tags?: string[] | null
+          meta_title?: string | null
+          meta_description?: string | null
+          is_published?: boolean | null
+          view_count?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      glossary_sections: {
+        Row: {
+          id: string
+          term_id: string
+          title: string
+          content: string
+          section_type: string | null
+          sort_order: number | null
+          created_at: string | null
+        }
+        Insert: {
+          id?: string
+          term_id: string
+          title: string
+          content: string
+          section_type?: string | null
+          sort_order?: number | null
+          created_at?: string | null
+        }
+        Update: {
+          id?: string
+          term_id?: string
+          title?: string
+          content?: string
+          section_type?: string | null
+          sort_order?: number | null
+          created_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "glossary_sections_term_id_fkey"
+            columns: ["term_id"]
+            isOneToOne: false
+            referencedRelation: "glossary_terms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      glossary_references: {
+        Row: {
+          id: string
+          term_id: string
+          reference_text: string
+          url: string | null
+          sort_order: number | null
+        }
+        Insert: {
+          id?: string
+          term_id: string
+          reference_text: string
+          url?: string | null
+          sort_order?: number | null
+        }
+        Update: {
+          id?: string
+          term_id?: string
+          reference_text?: string
+          url?: string | null
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "glossary_references_term_id_fkey"
+            columns: ["term_id"]
+            isOneToOne: false
+            referencedRelation: "glossary_terms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      glossary_related_terms: {
+        Row: {
+          term_id: string
+          related_term_id: string
+        }
+        Insert: {
+          term_id: string
+          related_term_id: string
+        }
+        Update: {
+          term_id?: string
+          related_term_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "glossary_related_terms_term_id_fkey"
+            columns: ["term_id"]
+            isOneToOne: false
+            referencedRelation: "glossary_terms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "glossary_related_terms_related_term_id_fkey"
+            columns: ["related_term_id"]
+            isOneToOne: false
+            referencedRelation: "glossary_terms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      courses: {
+        Row: {
+          id: string
+          title: string
+          slug: string
+          description: string | null
+          short_description: string | null
+          image_url: string | null
+          price: number | null
+          is_published: boolean | null
+          is_free: boolean | null
+          difficulty_level: Database["public"]["Enums"]["difficulty_level"] | null
+          estimated_duration_minutes: number | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          title: string
+          slug: string
+          description?: string | null
+          short_description?: string | null
+          image_url?: string | null
+          price?: number | null
+          is_published?: boolean | null
+          is_free?: boolean | null
+          difficulty_level?: Database["public"]["Enums"]["difficulty_level"] | null
+          estimated_duration_minutes?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          title?: string
+          slug?: string
+          description?: string | null
+          short_description?: string | null
+          image_url?: string | null
+          price?: number | null
+          is_published?: boolean | null
+          is_free?: boolean | null
+          difficulty_level?: Database["public"]["Enums"]["difficulty_level"] | null
+          estimated_duration_minutes?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      course_lessons: {
+        Row: {
+          id: string
+          course_id: string
+          title: string
+          slug: string
+          content: string | null
+          video_url: string | null
+          sort_order: number | null
+          is_preview: boolean | null
+          is_published: boolean | null
+          duration_minutes: number | null
+          created_at: string | null
+        }
+        Insert: {
+          id?: string
+          course_id: string
+          title: string
+          slug: string
+          content?: string | null
+          video_url?: string | null
+          sort_order?: number | null
+          is_preview?: boolean | null
+          is_published?: boolean | null
+          duration_minutes?: number | null
+          created_at?: string | null
+        }
+        Update: {
+          id?: string
+          course_id?: string
+          title?: string
+          slug?: string
+          content?: string | null
+          video_url?: string | null
+          sort_order?: number | null
+          is_preview?: boolean | null
+          is_published?: boolean | null
+          duration_minutes?: number | null
+          created_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_lessons_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      course_enrollments: {
+        Row: {
+          id: string
+          user_id: string
+          course_id: string
+          payment_status: Database["public"]["Enums"]["payment_status"] | null
+          started_at: string | null
+          completed_at: string | null
+          enrolled_at: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          course_id: string
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          started_at?: string | null
+          completed_at?: string | null
+          enrolled_at?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          course_id?: string
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          started_at?: string | null
+          completed_at?: string | null
+          enrolled_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_enrollments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "course_enrollments_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lesson_progress: {
+        Row: {
+          id: string
+          user_id: string
+          lesson_id: string
+          is_completed: boolean | null
+          progress_percent: number | null
+          completed_at: string | null
+          created_at: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          lesson_id: string
+          is_completed?: boolean | null
+          progress_percent?: number | null
+          completed_at?: string | null
+          created_at?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          lesson_id?: string
+          is_completed?: boolean | null
+          progress_percent?: number | null
+          completed_at?: string | null
+          created_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_progress_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lesson_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "course_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -352,9 +688,15 @@ export type Database = {
         Args: { user_id: string }
         Returns: boolean
       }
+      increment_glossary_view: {
+        Args: { term_slug: string }
+        Returns: undefined
+      }
     }
     Enums: {
       severity_level: "mild" | "moderate" | "severe"
+      difficulty_level: "beginner" | "intermediate" | "advanced"
+      payment_status: "pending" | "completed" | "refunded" | "free"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -471,6 +813,8 @@ export const Constants = {
   public: {
     Enums: {
       severity_level: ["mild", "moderate", "severe"],
+      difficulty_level: ["beginner", "intermediate", "advanced"],
+      payment_status: ["pending", "completed", "refunded", "free"],
     },
   },
 } as const

@@ -1,15 +1,15 @@
-
 import React from 'react';
-import { 
+import {
   Table,
   TableBody,
   TableCell,
   TableRow
 } from "@/components/ui/table";
 import { BookOpen } from 'lucide-react';
+import { GlossaryTermBasic } from '@/services/glossaryService';
 
 interface GlossarTableViewProps {
-  items: any[];
+  items: GlossaryTermBasic[];
   onTermClick: (slug: string) => void;
 }
 
@@ -36,9 +36,9 @@ const GlossarTableView: React.FC<GlossarTableViewProps> = ({ items, onTermClick 
               <div className="space-y-2">
                 <p className="text-sm text-gray-700">{item.definition}</p>
                 <div className="flex flex-wrap gap-1">
-                  {item.tags.map((tag: string, tagIdx: number) => (
-                    <span 
-                      key={tagIdx} 
+                  {item.tags?.map((tag: string, tagIdx: number) => (
+                    <span
+                      key={tagIdx}
                       className="bg-rueckenwind-light-purple text-xs px-2 py-0.5 rounded-full text-rueckenwind-purple"
                     >
                       {tag}

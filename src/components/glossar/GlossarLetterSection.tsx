@@ -1,11 +1,11 @@
-
 import React from 'react';
 import GlossarTableView from './GlossarTableView';
 import GlossarGridView from './GlossarGridView';
+import { GlossaryTermBasic } from '@/services/glossaryService';
 
 interface GlossarLetterSectionProps {
   letter: string;
-  items: any[];
+  items: GlossaryTermBasic[];
   onTermClick: (slug: string) => void;
   view: 'grid' | 'table';
 }
