@@ -1,5 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
-import { glossaryService, GlossaryTermBasic, GlossaryTermWithDetails } from "@/services/glossaryService";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  glossaryService,
+  glossaryAdminService,
+  GlossaryTerm,
+  GlossaryTermBasic,
+  GlossaryTermWithDetails,
+  GlossaryTermInput,
+  GlossarySectionInput,
+  GlossaryReferenceInput,
+} from "@/services/glossaryService";
 
 /**
  * Hook für alle Glossar-Begriffe
@@ -112,5 +121,177 @@ export function useGlossaryRandom(limit = 5) {
     queryKey: ['glossary', 'random', limit],
     queryFn: () => glossaryService.getRandomTerms(limit),
     staleTime: 60 * 1000, // 1 Minute - öfter aktualisieren für Abwechslung
+  });
+}
+
+// ============================================================
+// ADMIN HOOKS
+// ============================================================
+
+/**
+ * Hook für alle Begriffe (Admin - inkl. unveröffentlichte)
+ */
+export function useAllGlossaryTermsAdmin() {
+  return useQuery<GlossaryTerm[], Error>({
+    queryKey: ['glossary', 'admin', 'terms'],
+    queryFn: () => glossaryAdminService.getAllTermsAdmin(),
+    staleTime: 2 * 60 * 1000,
+  });
+}
+
+/**
+ * Hook für einzelnen Begriff mit Details (Admin)
+ */
+export function useGlossaryTermAdmin(id: string) {
+  return useQuery<GlossaryTermWithDetails | null, Error>({
+    queryKey: ['glossary', 'admin', 'term', id],
+    queryFn: () => glossaryAdminService.getTermByIdAdmin(id),
+    enabled: !!id,
+    staleTime: 2 * 60 * 1000,
+  });
+}
+
+/**
+ * Hook für Begriff erstellen
+ */
+export function useCreateGlossaryTerm() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (input: GlossaryTermInput) => glossaryAdminService.createTerm(input),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['glossary'] });
+    },
+  });
+}
+
+/**
+ * Hook für Begriff aktualisieren
+ */
+export function useUpdateGlossaryTerm() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, updates }: { id: string; updates: Partial<GlossaryTermInput> }) =>
+      glossaryAdminService.updateTerm(id, updates),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['glossary'] });
+      queryClient.invalidateQueries({ queryKey: ['glossary', 'admin', 'term', variables.id] });
+    },
+  });
+}
+
+/**
+ * Hook für Begriff löschen
+ */
+export function useDeleteGlossaryTerm() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => glossaryAdminService.deleteTerm(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['glossary'] });
+    },
+  });
+}
+
+/**
+ * Hook für Sektion erstellen
+ */
+export function useCreateGlossarySection() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (input: GlossarySectionInput) => glossaryAdminService.createSection(input),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['glossary', 'admin', 'term', variables.term_id] });
+    },
+  });
+}
+
+/**
+ * Hook für Sektion aktualisieren
+ */
+export function useUpdateGlossarySection() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, updates }: { id: string; updates: Partial<GlossarySectionInput> }) =>
+      glossaryAdminService.updateSection(id, updates),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['glossary'] });
+    },
+  });
+}
+
+/**
+ * Hook für Sektion löschen
+ */
+export function useDeleteGlossarySection() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => glossaryAdminService.deleteSection(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['glossary'] });
+    },
+  });
+}
+
+/**
+ * Hook für Referenz erstellen
+ */
+export function useCreateGlossaryReference() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (input: GlossaryReferenceInput) => glossaryAdminService.createReference(input),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['glossary', 'admin', 'term', variables.term_id] });
+    },
+  });
+}
+
+/**
+ * Hook für Referenz löschen
+ */
+export function useDeleteGlossaryReference() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => glossaryAdminService.deleteReference(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['glossary'] });
+    },
+  });
+}
+
+/**
+ * Hook für verwandten Begriff hinzufügen
+ */
+export function useAddRelatedTerm() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ termId, relatedTermId }: { termId: string; relatedTermId: string }) =>
+      glossaryAdminService.addRelatedTerm(termId, relatedTermId),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['glossary', 'admin', 'term', variables.termId] });
+    },
+  });
+}
+
+/**
+ * Hook für verwandten Begriff entfernen
+ */
+export function useRemoveRelatedTerm() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ termId, relatedTermId }: { termId: string; relatedTermId: string }) =>
+      glossaryAdminService.removeRelatedTerm(termId, relatedTermId),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['glossary', 'admin', 'term', variables.termId] });
+    },
   });
 }

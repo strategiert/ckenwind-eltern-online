@@ -308,4 +308,288 @@ export const glossaryService = {
   },
 };
 
+// ============================================================
+// ADMIN FUNKTIONEN (erfordern Admin-Rechte)
+// ============================================================
+
+export interface GlossaryTermInput {
+  term: string;
+  slug: string;
+  definition: string;
+  teaser?: string | null;
+  alias?: string | null;
+  tags?: string[];
+  meta_title?: string | null;
+  meta_description?: string | null;
+  is_published?: boolean;
+}
+
+export interface GlossarySectionInput {
+  term_id: string;
+  title: string;
+  content: string;
+  section_type?: 'content' | 'literary_device' | 'example' | 'warning';
+  sort_order?: number;
+}
+
+export interface GlossaryReferenceInput {
+  term_id: string;
+  reference_text: string;
+  url?: string | null;
+  sort_order?: number;
+}
+
+export const glossaryAdminService = {
+  /**
+   * Alle Begriffe laden (auch unveröffentlichte) - für Admin
+   */
+  async getAllTermsAdmin(): Promise<GlossaryTerm[]> {
+    const { data, error } = await supabase
+      .from('glossary_terms')
+      .select('*')
+      .order('term', { ascending: true });
+
+    if (error) throw error;
+    return data || [];
+  },
+
+  /**
+   * Begriff mit Details laden (auch unveröffentlichte) - für Admin
+   */
+  async getTermByIdAdmin(id: string): Promise<GlossaryTermWithDetails | null> {
+    const { data: term, error: termError } = await supabase
+      .from('glossary_terms')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (termError) {
+      if (termError.code === 'PGRST116') return null;
+      throw termError;
+    }
+
+    // Sektionen laden
+    const { data: sections, error: sectionsError } = await supabase
+      .from('glossary_sections')
+      .select('*')
+      .eq('term_id', term.id)
+      .order('sort_order', { ascending: true });
+
+    if (sectionsError) throw sectionsError;
+
+    // Referenzen laden
+    const { data: references, error: referencesError } = await supabase
+      .from('glossary_references')
+      .select('*')
+      .eq('term_id', term.id)
+      .order('sort_order', { ascending: true });
+
+    if (referencesError) throw referencesError;
+
+    // Verwandte Begriffe laden
+    const { data: relatedIds, error: relatedError } = await supabase
+      .from('glossary_related_terms')
+      .select('related_term_id')
+      .eq('term_id', term.id);
+
+    if (relatedError) throw relatedError;
+
+    let relatedTerms: Pick<GlossaryTerm, 'id' | 'term' | 'slug' | 'definition'>[] = [];
+    if (relatedIds && relatedIds.length > 0) {
+      const { data: related, error: relatedTermsError } = await supabase
+        .from('glossary_terms')
+        .select('id, term, slug, definition')
+        .in('id', relatedIds.map(r => r.related_term_id));
+
+      if (relatedTermsError) throw relatedTermsError;
+      relatedTerms = related || [];
+    }
+
+    return {
+      ...term,
+      sections: sections || [],
+      references: references || [],
+      relatedTerms,
+    };
+  },
+
+  /**
+   * Neuen Begriff erstellen
+   */
+  async createTerm(input: GlossaryTermInput): Promise<GlossaryTerm> {
+    const { data, error } = await supabase
+      .from('glossary_terms')
+      .insert({
+        ...input,
+        tags: input.tags || [],
+        is_published: input.is_published ?? false,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  /**
+   * Begriff aktualisieren
+   */
+  async updateTerm(id: string, updates: Partial<GlossaryTermInput>): Promise<GlossaryTerm> {
+    const { data, error } = await supabase
+      .from('glossary_terms')
+      .update({
+        ...updates,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  /**
+   * Begriff löschen
+   */
+  async deleteTerm(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('glossary_terms')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+  },
+
+  /**
+   * Sektion erstellen
+   */
+  async createSection(input: GlossarySectionInput): Promise<GlossarySection> {
+    const { data, error } = await supabase
+      .from('glossary_sections')
+      .insert({
+        ...input,
+        section_type: input.section_type || 'content',
+        sort_order: input.sort_order || 0,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  /**
+   * Sektion aktualisieren
+   */
+  async updateSection(id: string, updates: Partial<GlossarySectionInput>): Promise<GlossarySection> {
+    const { data, error } = await supabase
+      .from('glossary_sections')
+      .update({
+        ...updates,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  /**
+   * Sektion löschen
+   */
+  async deleteSection(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('glossary_sections')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+  },
+
+  /**
+   * Referenz erstellen
+   */
+  async createReference(input: GlossaryReferenceInput): Promise<GlossaryReference> {
+    const { data, error } = await supabase
+      .from('glossary_references')
+      .insert({
+        ...input,
+        sort_order: input.sort_order || 0,
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  /**
+   * Referenz aktualisieren
+   */
+  async updateReference(id: string, updates: Partial<GlossaryReferenceInput>): Promise<GlossaryReference> {
+    const { data, error } = await supabase
+      .from('glossary_references')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  /**
+   * Referenz löschen
+   */
+  async deleteReference(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('glossary_references')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+  },
+
+  /**
+   * Verwandten Begriff hinzufügen
+   */
+  async addRelatedTerm(termId: string, relatedTermId: string): Promise<void> {
+    const { error } = await supabase
+      .from('glossary_related_terms')
+      .insert({ term_id: termId, related_term_id: relatedTermId });
+
+    if (error) throw error;
+  },
+
+  /**
+   * Verwandten Begriff entfernen
+   */
+  async removeRelatedTerm(termId: string, relatedTermId: string): Promise<void> {
+    const { error } = await supabase
+      .from('glossary_related_terms')
+      .delete()
+      .eq('term_id', termId)
+      .eq('related_term_id', relatedTermId);
+
+    if (error) throw error;
+  },
+
+  /**
+   * Slug aus Begriff generieren
+   */
+  generateSlug(term: string): string {
+    return term
+      .toLowerCase()
+      .replace(/ä/g, 'ae')
+      .replace(/ö/g, 'oe')
+      .replace(/ü/g, 'ue')
+      .replace(/ß/g, 'ss')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+  },
+};
+
 export default glossaryService;
