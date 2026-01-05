@@ -15,9 +15,6 @@ const GlossaryDetail = () => {
   const { data: term, isLoading, error } = useGlossaryTerm(slug || '');
   const { data: allTerms } = useGlossaryTerms();
 
-  // Debug logging
-  console.log('GlossaryDetail render:', { slug, term, isLoading, error });
-
   // Loading state
   if (isLoading) {
     return (
@@ -53,19 +50,49 @@ const GlossaryDetail = () => {
     );
   }
 
-  // Replace glossary term links in text
+  // Replace glossary term links in text (avoiding the current term and already linked text)
   const createTermLinks = (text: string) => {
+    if (!allTerms || allTerms.length === 0) return text;
+
+    // Filter out the current term to avoid self-linking
+    const otherTerms = allTerms.filter(item => item.slug !== slug);
+
+    // Sort by length (longest first) to avoid partial replacements
+    const sortedTerms = [...otherTerms].sort((a, b) => {
+      const aLen = Math.max(a.term.length, a.alias?.length || 0);
+      const bLen = Math.max(b.term.length, b.alias?.length || 0);
+      return bLen - aLen;
+    });
+
     let processedText = text;
-    if (allTerms) {
-      allTerms.forEach(item => {
-        const regex = new RegExp(`\\b${item.term}\\b`, 'gi');
-        processedText = processedText.replace(regex, `<a href="/glossar/${item.slug}" class="text-rueckenwind-purple hover:underline">${item.term}</a>`);
-        if (item.alias) {
-          const aliasRegex = new RegExp(`\\b${item.alias}\\b`, 'gi');
-          processedText = processedText.replace(aliasRegex, `<a href="/glossar/${item.slug}" class="text-rueckenwind-purple hover:underline">${item.alias}</a>`);
+    const linkedTerms = new Set<string>(); // Track which terms we've already linked
+
+    sortedTerms.forEach(item => {
+      // Skip if we already linked this term
+      if (linkedTerms.has(item.slug)) return;
+
+      // Escape special regex characters in the term
+      const escapeTerm = (t: string) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+      // Only match terms that are not inside HTML tags (negative lookbehind for < and positive lookahead for not being followed by =)
+      // This regex matches word boundaries but avoids matching inside href="..." or class="..."
+      const termRegex = new RegExp(`(?<![<"\\/])\\b(${escapeTerm(item.term)})\\b(?![^<]*>)(?!=)`, 'gi');
+
+      if (termRegex.test(processedText)) {
+        processedText = processedText.replace(termRegex, `<a href="/glossar/${item.slug}" class="text-rueckenwind-purple hover:underline">$1</a>`);
+        linkedTerms.add(item.slug);
+      }
+
+      // Also try alias if it exists and term wasn't linked yet
+      if (item.alias && !linkedTerms.has(item.slug)) {
+        const aliasRegex = new RegExp(`(?<![<"\\/])\\b(${escapeTerm(item.alias)})\\b(?![^<]*>)(?!=)`, 'gi');
+        if (aliasRegex.test(processedText)) {
+          processedText = processedText.replace(aliasRegex, `<a href="/glossar/${item.slug}" class="text-rueckenwind-purple hover:underline">$1</a>`);
+          linkedTerms.add(item.slug);
         }
-      });
-    }
+      }
+    });
+
     return processedText;
   };
 
