@@ -35,14 +35,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Helper function to check admin status
   const checkAdminStatus = async (userId: string): Promise<boolean> => {
     try {
+      console.log('Checking admin status for user:', userId);
       const { data, error } = await supabase
         .from('profiles')
         .select('is_admin')
         .eq('id', userId)
         .single();
 
+      console.log('Admin check result:', { data, error });
+
       if (error) {
         console.error('Error checking admin status:', error);
+        // If error is "no rows returned", user might not have a profile yet
+        if (error.code === 'PGRST116') {
+          console.log('No profile found for user, creating one...');
+          // Try to create profile
+          const { error: insertError } = await supabase
+            .from('profiles')
+            .insert({ id: userId, is_admin: false });
+          if (insertError) {
+            console.error('Error creating profile:', insertError);
+          }
+        }
         return false;
       }
       return data?.is_admin || false;
@@ -57,8 +71,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Check for existing session first
     const initializeAuth = async () => {
+      console.log('Initializing auth...');
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+        console.log('Session result:', { session: session?.user?.email, error: sessionError });
 
         if (!isMounted) return;
 
@@ -68,11 +85,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Check admin status on initial load
         if (session?.user) {
           const adminStatus = await checkAdminStatus(session.user.id);
+          console.log('Admin status:', adminStatus);
           if (isMounted) setIsAdmin(adminStatus);
         }
       } catch (error) {
         console.error('Error initializing auth:', error);
       } finally {
+        console.log('Auth initialization complete, setting loading to false');
         if (isMounted) setLoading(false);
       }
     };
