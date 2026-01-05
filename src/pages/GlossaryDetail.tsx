@@ -15,6 +15,9 @@ const GlossaryDetail = () => {
   const { data: term, isLoading, error } = useGlossaryTerm(slug || '');
   const { data: allTerms } = useGlossaryTerms();
 
+  // Debug logging
+  console.log('GlossaryDetail render:', { slug, term, isLoading, error });
+
   // Loading state
   if (isLoading) {
     return (
@@ -29,8 +32,8 @@ const GlossaryDetail = () => {
     );
   }
 
-  // If term not found, render a "not found" message
-  if (!term || error) {
+  // If term not found (null returned from service, or error occurred)
+  if (term === null || error) {
     return (
       <>
         <Navbar />
