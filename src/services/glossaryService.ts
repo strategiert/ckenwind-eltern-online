@@ -139,7 +139,11 @@ export const glossaryService = {
     }
 
     // View Count erhöhen (fire and forget)
-    supabase.rpc('increment_glossary_view', { term_slug: slug }).catch(console.error);
+    try {
+      supabase.rpc('increment_glossary_view', { term_slug: slug });
+    } catch (e) {
+      console.error('Failed to increment view count:', e);
+    }
 
     return {
       ...term,
