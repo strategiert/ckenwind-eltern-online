@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import AdminLayout from '@/components/admin/AdminLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -21,9 +22,8 @@ import {
   ListTodo,
   Lightbulb,
   Link2,
-  ArrowLeft
+  Sparkles
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import contentAutomationService, {
   QueueItem,
   TopicSuggestion,
@@ -171,28 +171,29 @@ export default function ContentAutomationAdmin() {
   const failedCount = queueItems.filter(i => i.status === 'failed').length;
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <Link to="/admin/blog" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 mb-2">
-            <ArrowLeft className="h-4 w-4" /> Zurück zum Admin
-          </Link>
-          <h1 className="text-3xl font-bold">Content Automation</h1>
-          <p className="text-muted-foreground">Automatische Wiki-Content-Generierung</p>
+    <AdminLayout title="Content Automation">
+      <div className="p-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-3">
+              <Sparkles className="h-8 w-8 text-amber-500" />
+              Content Automation
+            </h1>
+            <p className="text-muted-foreground mt-2">Automatische Wiki-Content-Generierung</p>
+          </div>
+          <Button
+            onClick={() => triggerSchedulerMutation.mutate()}
+            disabled={triggerSchedulerMutation.isPending}
+          >
+            {triggerSchedulerMutation.isPending ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <Play className="h-4 w-4 mr-2" />
+            )}
+            Scheduler starten
+          </Button>
         </div>
-        <Button
-          onClick={() => triggerSchedulerMutation.mutate()}
-          disabled={triggerSchedulerMutation.isPending}
-        >
-          {triggerSchedulerMutation.isPending ? (
-            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-          ) : (
-            <Play className="h-4 w-4 mr-2" />
-          )}
-          Scheduler starten
-        </Button>
-      </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
@@ -552,7 +553,8 @@ export default function ContentAutomationAdmin() {
             </Card>
           </div>
         </TabsContent>
-      </Tabs>
-    </div>
+        </Tabs>
+      </div>
+    </AdminLayout>
   );
 }
