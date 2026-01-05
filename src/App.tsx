@@ -24,6 +24,7 @@ import BlogArchive from "@/pages/BlogArchive";
 import Auth from "@/pages/Auth";
 import AuthCallback from "@/pages/AuthCallback";
 import BlogAdmin from "@/pages/BlogAdmin";
+import GlossaryAdmin from "@/pages/GlossaryAdmin";
 import ContentAutomationAdmin from "@/pages/ContentAutomationAdmin";
 import GratisBuch from "@/pages/GratisBuch";
 import Glossar from "@/pages/Glossar";
@@ -63,6 +64,14 @@ const App = () => {
                   element={
                     <ProtectedRoute requireAdmin>
                       <BlogAdmin />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/glossary"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <GlossaryAdmin />
                     </ProtectedRoute>
                   }
                 />
