@@ -32,6 +32,7 @@ import Glossar from "@/pages/Glossar";
 import GlossaryDetail from "@/pages/GlossaryDetail";
 import Kontakt from "@/pages/Kontakt";
 import MentalHealthChat from "@/pages/MentalHealthChat";
+import JanikeBeratung from "@/pages/JanikeBeratung";
 import Impressum from "@/pages/Impressum";
 import NotFound from "@/pages/NotFound";
 
@@ -97,6 +98,8 @@ const App = () => {
                 <Route path="/glossar/:slug" element={<GlossaryDetail />} />
                 <Route path="/kontakt" element={<Kontakt />} />
                 <Route path="/mental-health-chat" element={<MentalHealthChat />} />
+                <Route path="/janike" element={<JanikeBeratung />} />
+                <Route path="/beratung" element={<JanikeBeratung />} />
                 <Route path="/impressum" element={<Impressum />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
