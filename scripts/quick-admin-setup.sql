@@ -1,62 +1,55 @@
--- Quick Fix: Admin Setup für neue Datenbank
+-- Quick Admin Fix: Arbeitet mit existierender profiles Tabelle
 -- Führe dieses Script im Supabase SQL Editor aus
 
--- 1. Profiles Tabelle erstellen (falls nicht vorhanden)
-CREATE TABLE IF NOT EXISTS public.profiles (
-  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  email TEXT,
-  full_name TEXT,
-  is_admin BOOLEAN DEFAULT false,
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now()
-);
-
--- 2. RLS aktivieren
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-
--- 3. RLS Policies für profiles
--- Jeder kann sein eigenes Profil lesen
-DROP POLICY IF EXISTS "Users can view own profile" ON public.profiles;
-CREATE POLICY "Users can view own profile" ON public.profiles
-  FOR SELECT
-  USING (auth.uid() = id);
-
--- Jeder kann sein eigenes Profil aktualisieren (aber nicht is_admin)
-DROP POLICY IF EXISTS "Users can update own profile" ON public.profiles;
-CREATE POLICY "Users can update own profile" ON public.profiles
-  FOR UPDATE
-  USING (auth.uid() = id)
-  WITH CHECK (auth.uid() = id);
-
--- Service Role kann alles (für automatische Profile-Erstellung)
-DROP POLICY IF EXISTS "Service role can manage profiles" ON public.profiles;
-CREATE POLICY "Service role can manage profiles" ON public.profiles
-  FOR ALL
-  TO service_role
-  USING (true)
-  WITH CHECK (true);
-
--- 4. Trigger: Profil automatisch erstellen bei User-Registrierung
-CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
+-- 1. Prüfe und erstelle fehlende Spalten in profiles
+DO $$
 BEGIN
-  INSERT INTO public.profiles (id, email, full_name)
-  VALUES (
-    NEW.id,
-    NEW.email,
-    NEW.raw_user_meta_data->>'full_name'
-  );
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+  -- Füge full_name hinzu falls nicht vorhanden
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+    AND table_name = 'profiles'
+    AND column_name = 'full_name'
+  ) THEN
+    ALTER TABLE public.profiles ADD COLUMN full_name TEXT;
+    RAISE NOTICE 'Added full_name column to profiles';
+  END IF;
 
-DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-CREATE TRIGGER on_auth_user_created
-  AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+  -- Füge is_admin hinzu falls nicht vorhanden
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+    AND table_name = 'profiles'
+    AND column_name = 'is_admin'
+  ) THEN
+    ALTER TABLE public.profiles ADD COLUMN is_admin BOOLEAN DEFAULT false;
+    RAISE NOTICE 'Added is_admin column to profiles';
+  END IF;
 
--- 5. WICHTIG: Deinen Benutzer als Admin markieren
--- Ersetze 'klausarentde@gmail.com' mit deiner E-Mail, falls anders
+  -- Füge updated_at hinzu falls nicht vorhanden
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+    AND table_name = 'profiles'
+    AND column_name = 'updated_at'
+  ) THEN
+    ALTER TABLE public.profiles ADD COLUMN updated_at TIMESTAMPTZ DEFAULT now();
+    RAISE NOTICE 'Added updated_at column to profiles';
+  END IF;
+END $$;
+
+-- 2. Zeige die aktuelle Tabellenstruktur
+SELECT
+  column_name,
+  data_type,
+  is_nullable,
+  column_default
+FROM information_schema.columns
+WHERE table_schema = 'public'
+AND table_name = 'profiles'
+ORDER BY ordinal_position;
+
+-- 3. WICHTIG: Setze Admin-Status für deinen Benutzer
 DO $$
 DECLARE
   admin_user_id UUID;
@@ -68,35 +61,46 @@ BEGIN
   LIMIT 1;
 
   IF admin_user_id IS NOT NULL THEN
-    -- Erstelle/aktualisiere das Profil
-    INSERT INTO public.profiles (id, email, is_admin, full_name)
-    VALUES (
-      admin_user_id,
-      'klausarentde@gmail.com',
-      true,
-      'Klaus Arent'
-    )
+    -- Erstelle/aktualisiere das Profil (ohne full_name falls es Probleme gibt)
+    INSERT INTO public.profiles (id, is_admin)
+    VALUES (admin_user_id, true)
     ON CONFLICT (id)
     DO UPDATE SET
       is_admin = true,
-      updated_at = now();
+      updated_at = COALESCE(now(), EXCLUDED.updated_at);
 
-    RAISE NOTICE 'Admin user created/updated: %', admin_user_id;
+    RAISE NOTICE 'Admin user set: % (ID: %)', 'klausarentde@gmail.com', admin_user_id;
   ELSE
-    RAISE NOTICE 'User not found with email: klausarentde@gmail.com';
+    RAISE WARNING 'User not found with email: klausarentde@gmail.com';
+    RAISE NOTICE 'Please check if you are logged in with the correct email';
   END IF;
 END $$;
 
--- 6. Überprüfung: Zeige alle Admin-Benutzer an
+-- 4. Überprüfung: Zeige den Admin-Benutzer
 SELECT
   p.id,
-  p.email,
-  p.full_name,
+  u.email,
+  p.is_admin,
+  p.created_at,
+  p.updated_at
+FROM public.profiles p
+LEFT JOIN auth.users u ON u.id = p.id
+WHERE p.is_admin = true;
+
+-- 5. Falls KEIN Ergebnis: Zeige alle Profile
+SELECT
+  p.id,
+  u.email,
   p.is_admin,
   p.created_at
 FROM public.profiles p
-WHERE p.is_admin = true;
+LEFT JOIN auth.users u ON u.id = p.id
+LIMIT 5;
 
--- FERTIG! Nach Ausführung dieses Scripts:
--- 1. Neu laden der Webseite (Strg+Shift+R / Cmd+Shift+R)
--- 2. Versuche /admin erneut aufzurufen
+-- FERTIG!
+-- Nach Ausführung solltest du einen Admin-Benutzer sehen.
+-- Falls nicht, führe folgendes aus um manuell Admin zu werden:
+--
+-- UPDATE public.profiles
+-- SET is_admin = true
+-- WHERE id = (SELECT id FROM auth.users WHERE email = 'klausarentde@gmail.com');

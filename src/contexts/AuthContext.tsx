@@ -32,35 +32,52 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAdmin, setIsAdmin] = useState(false);
   const { toast } = useToast();
 
-  // Helper function to check admin status with timeout
-  const checkAdminStatus = async (userId: string): Promise<boolean> => {
-    try {
-      console.log('Checking admin status for user:', userId);
+  // Helper function to check admin status with timeout and retry
+  const checkAdminStatus = async (userId: string, retries = 3): Promise<boolean> => {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        console.log(`Checking admin status for user (attempt ${attempt}/${retries}):`, userId);
 
-      // Add timeout to prevent hanging
-      const timeoutPromise = new Promise<{ data: null; error: Error }>((_, reject) =>
-        setTimeout(() => reject(new Error('Admin check timeout')), 5000)
-      );
+        // Increase timeout to 10 seconds
+        const timeoutPromise = new Promise<{ data: null; error: Error }>((_, reject) =>
+          setTimeout(() => reject(new Error('Admin check timeout')), 10000)
+        );
 
-      const queryPromise = supabase
-        .from('profiles')
-        .select('is_admin')
-        .eq('id', userId)
-        .single();
+        const queryPromise = supabase
+          .from('profiles')
+          .select('is_admin')
+          .eq('id', userId)
+          .single();
 
-      const { data, error } = await Promise.race([queryPromise, timeoutPromise]);
+        const { data, error } = await Promise.race([queryPromise, timeoutPromise]);
 
-      console.log('Admin check result:', { data, error });
+        console.log('Admin check result:', { data, error, attempt });
 
-      if (error) {
-        console.error('Error checking admin status:', error);
+        if (error) {
+          console.error('Error checking admin status:', error);
+          // If this is not the last retry, wait 1 second before retrying
+          if (attempt < retries) {
+            console.log(`Retrying in 1 second...`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            continue;
+          }
+          return false;
+        }
+
+        // Success - return the admin status
+        return data?.is_admin || false;
+      } catch (error) {
+        console.error(`Error in admin check (attempt ${attempt}/${retries}):`, error);
+        // If this is not the last retry, wait 1 second before retrying
+        if (attempt < retries) {
+          console.log(`Retrying in 1 second...`);
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          continue;
+        }
         return false;
       }
-      return data?.is_admin || false;
-    } catch (error) {
-      console.error('Error in admin check (timeout or other):', error);
-      return false;
     }
+    return false;
   };
 
   useEffect(() => {
