@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -30,35 +30,51 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const adminCacheRef = useRef<{ userId: string; isAdmin: boolean } | null>(null);
   const { toast } = useToast();
 
-  // Helper function to check admin status with timeout
-  const checkAdminStatus = async (userId: string): Promise<boolean> => {
+  // Get admin status - first from JWT claims, then fallback to DB
+  const getAdminStatus = async (currentSession: Session | null, userId: string): Promise<boolean> => {
+    // Check cache first
+    if (adminCacheRef.current?.userId === userId) {
+      console.log('Using cached admin status:', adminCacheRef.current.isAdmin);
+      return adminCacheRef.current.isAdmin;
+    }
+
+    // Try JWT claims first (instant, no network request)
+    const jwtAdmin = currentSession?.user?.app_metadata?.is_admin;
+    if (typeof jwtAdmin === 'boolean') {
+      console.log('Admin status from JWT claims:', jwtAdmin);
+      adminCacheRef.current = { userId, isAdmin: jwtAdmin };
+      return jwtAdmin;
+    }
+
+    // Fallback: Check database with timeout
+    console.log('JWT claims not available, checking database...');
     try {
-      console.log('Checking admin status for user:', userId);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-      // Add timeout to prevent hanging
-      const timeoutPromise = new Promise<{ data: null; error: Error }>((_, reject) =>
-        setTimeout(() => reject(new Error('Admin check timeout')), 5000)
-      );
-
-      const queryPromise = supabase
+      const { data, error } = await supabase
         .from('profiles')
         .select('is_admin')
         .eq('id', userId)
-        .single();
+        .single()
+        .abortSignal(controller.signal);
 
-      const { data, error } = await Promise.race([queryPromise, timeoutPromise]);
-
-      console.log('Admin check result:', { data, error });
+      clearTimeout(timeoutId);
 
       if (error) {
-        console.error('Error checking admin status:', error);
+        console.error('Error checking admin status from DB:', error);
         return false;
       }
-      return data?.is_admin || false;
+
+      const adminStatus = data?.is_admin || false;
+      console.log('Admin status from DB:', adminStatus);
+      adminCacheRef.current = { userId, isAdmin: adminStatus };
+      return adminStatus;
     } catch (error) {
-      console.error('Error in admin check (timeout or other):', error);
+      console.error('Admin check failed:', error);
       return false;
     }
   };
@@ -66,7 +82,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     let isMounted = true;
 
-    // Check for existing session first
     const initializeAuth = async () => {
       console.log('Initializing auth...');
       try {
@@ -79,23 +94,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSession(session);
         setUser(session?.user ?? null);
 
-        // Check admin status on initial load
+        // Check admin status
         if (session?.user) {
-          const adminStatus = await checkAdminStatus(session.user.id);
-          console.log('Admin status:', adminStatus);
+          const adminStatus = await getAdminStatus(session, session.user.id);
           if (isMounted) setIsAdmin(adminStatus);
         }
       } catch (error) {
         console.error('Error initializing auth:', error);
       } finally {
-        console.log('Auth initialization complete, setting loading to false');
+        console.log('Auth initialization complete');
         if (isMounted) setLoading(false);
       }
     };
 
     initializeAuth();
 
-    // Set up auth state listener for future changes
+    // Auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.email);
@@ -105,12 +119,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSession(session);
         setUser(session?.user ?? null);
 
-        // Check admin status when user changes
         if (session?.user) {
-          const adminStatus = await checkAdminStatus(session.user.id);
+          const adminStatus = await getAdminStatus(session, session.user.id);
           if (isMounted) setIsAdmin(adminStatus);
         } else {
           setIsAdmin(false);
+          adminCacheRef.current = null;
         }
 
         setLoading(false);
@@ -226,6 +240,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(null);
         setSession(null);
         setIsAdmin(false);
+        adminCacheRef.current = null;
         toast({
           title: "Erfolgreich abgemeldet",
           description: "Auf Wiedersehen!",
