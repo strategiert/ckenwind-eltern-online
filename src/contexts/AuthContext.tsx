@@ -77,6 +77,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('Admin check failed:', error);
       return false;
     }
+    return false;
   };
 
   useEffect(() => {
